@@ -1,8 +1,14 @@
 <?php
 
 
+/* Starting class implementing basic algorithm functions */
+
+
 class MammalClassifier
 {
+
+    /* Unused for now */
+
     const CONSECUTIVE_EXPECTED = 10;
 
     /**
@@ -23,7 +29,7 @@ class MammalClassifier
 
             /* Did we already record some vote of the same type? */
 
-            if(isset($table[i])){
+            if(isset($table[$classification])){
 
                 /* If yes just increase the vote count for that animal */
 
