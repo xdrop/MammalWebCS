@@ -3,6 +3,7 @@
 
 class MammalClassifier
 {
+    const CONSECUTIVE_EXPECTED = 10;
 
     /**
      * Returns a table with vote counts for each animal classification
@@ -10,7 +11,7 @@ class MammalClassifier
      * @param array $classifications A list of classifications
      * @return array A table with the vote counts of each animal
      */
-    public function tallyVotes(array $classifications){
+    private function tallyVotes(array $classifications){
 
         /* Create a table to record the vote counts */
 
@@ -38,6 +39,48 @@ class MammalClassifier
         /* Return the results */
 
         return $table;
+    }
+
+    /**
+     * Checks if there are x number of consecutive classifications
+     *
+     * @param array $classifications A list with classifications
+     * @param $x The number of consecutive elements required
+     * @return bool True if x consecutive, false otherwise
+     */
+    private function checkConsecutive(array $classifications, $x){
+
+        /* Get the length of the array */
+
+        $length = count($classifications);
+
+        /* If we don't have enough to each x consecutive then
+         * return false */
+
+        if($length < $x){
+            return false;
+        } else{
+
+            /* Remember the last classification
+             * seen starting with null */
+
+            $last = null;
+            foreach ($classifications as $current){
+
+                /* If current is not same as last with the exception
+                 * of the first one then return false */
+
+                if($last != null || $last != $current){
+                    return false;
+                }
+                $last = $current;
+            }
+        }
+
+        /* If we've reached this stage then the first x classifications
+         * are equal */
+
+        return true;
     }
 
     public function onVote()
