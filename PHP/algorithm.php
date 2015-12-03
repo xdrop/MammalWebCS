@@ -34,6 +34,7 @@ class MammalClassifier
                 /* If yes just increase the vote count for that animal */
 
                 $table[$classification] += 1;
+
             } else{
 
                 /* Else initialize it to one*/
@@ -79,6 +80,9 @@ class MammalClassifier
                 if($last != null || $last != $current){
                     return false;
                 }
+
+                /* Set the last to current */
+
                 $last = $current;
             }
         }
@@ -87,6 +91,64 @@ class MammalClassifier
          * are equal */
 
         return true;
+    }
+
+    /**
+     * Aggregates the species counts
+     *
+     * @param array $classifications A list of classifications [[species,numberIdentified],[species,numberIdentified]]
+     * @return array list Classification->[Number of species], example: Giraffe => [1,2,2,2,1]
+     */
+    public function getSpeciesCounts(array $classifications){
+        $table = [];
+
+        /* Loop through the list of classifications getting tuples in the form of
+         * (typeOfSpecies,numberIdentified) */
+
+        foreach ($classifications as $classification){
+
+            /* Extract the type and number */
+
+            $species= $classification[0];
+            $number = $classification[1];
+
+            /* Check if we've stored anything for this type of animal before before */
+
+            if(!isset($table[$species])){
+
+                /* If not assign to a list with the classifications */
+
+                $table[$species] = [$number];
+
+            } else{
+
+                /* Get the current list of number identified for that species */
+
+                $results = &$table[$species];
+
+                /* Append to the end */
+
+                $results[] = $number;
+            }
+
+        }
+        return $table;
+    }
+
+    /**
+     * @param array $list A list of true / false values
+     * @return float The percentage of truth values
+     */
+    public function getPercentageOfTrueFalse(array $list){
+        $numberOfTrue = 0;
+        $total = 0;
+        foreach($list as $truthvalue){
+            if($truthvalue){
+                $numberOfTrue++;
+            }
+            $total++;
+        }
+        return ($numberOfTrue/$total);
     }
 
     public function onVote()
