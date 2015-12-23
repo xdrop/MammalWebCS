@@ -7,9 +7,32 @@
 class MammalClassifier
 {
 
+    private $result;
+
+    private $imageId;
+
+    private $dbIntegrator;
+
+    private $dataset;
+
     /* Unused for now */
 
     const CONSECUTIVE_EXPECTED = 10;
+
+    const NOTHING_HERE_IDENTIFIER = 0;
+
+    const NOT_ENOUGH_TO_CLASSIFY = -1;
+
+    /**
+     * MammalClassifier constructor.
+     */
+    public function __construct()
+    {
+        $this->result = null;
+        $this->imageId = null;
+//      $this->dbIntegrator = new DBIntegration();
+    }
+
 
     /**
      * Returns a table with vote counts for each animal classification
@@ -159,47 +182,82 @@ class MammalClassifier
         return ($numberOfTrue / count($truthvalue));
     }
 
+    /**
+     * @param $dataset -> The data set in the format [[[species => number],[species => number]...], ...]
+     * @param $consecutiveLim -> The number of consecutive we need
+     * @param $type -> The type to evaluate consecutive for
+     *              eg. 'nothing_here' will check evaluate that the first
+     *              $consecutiveLim entries are 'nothing_here'
+     * @return bool True if they are consecutive false otherwise
+     */
+    public function checkConsecutive($dataset, $consecutiveLim, $type)
+    {
+        $lastVote = null;
 
-    public function onVote($imageid)
+        foreach ($dataset as $vote) {
+            if ($consecutiveLim > 0) {
+                if ($lastVote == null || $vote == $lastVote) {
+                    $lastVote = $vote;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        }
+    }
+
+    public function getResult()
     {
 
     }
 
+    public function store()
+    {
+        // TODO: Complete when db integration is done
+//      $this->dbIntegrator->store($this->result);
+    }
+
+    public function on($imageId)
+    {
+        $this->imageId = $imageId;
+        //$this->dataset = $this->dbIntegrator->fetch($imageId);
+        $this->dataset = [
+            [['buffalo' => 3],['giraffe' => 2]],
+            [['giraffe' => 3]],
+            [['elephant' => 2]],
+            [['giraffe' => 3],['buffalo' => 2] ]
+        ];
+        // TODO: This is just a testing example until database intergration is complete
+        $this->result = null;
+        return $this;
+    }
+
     /*
-     * [ [user_classification] => [ [species => number], [species => number], ... ], ... ]
+     * [ [[species => number], [species => number], ... ], ... ]
      *
      * */
-    public function run($dataset)
+    public function classify()
     {
+        $dataset = $this->dataset;
         $numberOfVotes = count($dataset);
         if ($numberOfVotes >= 5) {
 
+            /* If first five consecutive were nothing here */
 
-            foreach ($dataset as $currentUserClassification) {
+            if ($this->checkConsecutive($dataset, 5, self::NOTHING_HERE_IDENTIFIER)) {
+                $this->result = self::NOTHING_HERE_IDENTIFIER;
 
-            }
+            } else {
+                $speciesCounts = $this->getSpeciesCounts($dataset);
 
-            if ($dataset[0][0][0] === "blank") {
-                // classify as nothing here
             }
         } else {
-
+            $this->result = self::NOT_ENOUGH_TO_CLASSIFY;
         }
+
+        return $this;
     }
 
 }
 
-
-
-
-
-
-// Buffalo 1, Elephant 2
-// Buffalo 1, Elephant 2
-// Buffalo 1, Elephant 2
-// Buffalo 1, Elephant 2
-// Buffalo 1, Elephant 2
-// Buffalo 1, Elephant 2
-// Buffalo 1, Elephant 2
-// Buffalo 1, Elephant 2
-// Buffalo 1, Elephant 2
