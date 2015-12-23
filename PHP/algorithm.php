@@ -8,7 +8,6 @@ class MammalClassifier
 {
 
     private $result;
-
     private $imageId;
 
     private $dbIntegrator;
@@ -22,6 +21,12 @@ class MammalClassifier
     const NOTHING_HERE_IDENTIFIER = 0;
 
     const NOT_ENOUGH_TO_CLASSIFY = -1;
+
+    const VOTES_BEFORE_CONSENSUS = 25;
+
+    const EVENNESS_THRESHOLD = 12;
+
+    const FLAGGED_FOR_SCIENTIST = 1;
 
     /**
      * MammalClassifier constructor.
@@ -53,7 +58,7 @@ class MammalClassifier
 
             /* Did we already record some vote of the same type? */
 
-            if (isset($table[$classification])) {
+            if (isset($table[$classification->hashed()])) {
 
                 /* If yes just increase the vote count for that animal */
 
@@ -65,6 +70,8 @@ class MammalClassifier
 
                 $table[$classification] = 1;
             }
+
+
         }
 
         /* Return the results */
@@ -75,8 +82,8 @@ class MammalClassifier
     /**
      * Checks if there are x number of consecutive classifications
      *
-     * @param array $classifications A list with classifications
-     * @param $nonConsecutiveCount The number of consecutive elements required
+     * @param array $classifications / A list with classifications
+     * @param $nonConsecutiveCount / The number of consecutive elements required
      * @return bool True if x consecutive, false otherwise
      */
 
@@ -91,12 +98,13 @@ class MammalClassifier
 
         foreach ($classifications as $current) {
 
+            $currentClassificationKey = $current->hashed();
             /* If current is not same as last with the exception
              * of the first one then return false */
 
 
-            if (isset($consecutiveCountMap[$current])) {
-                $mapVal = $consecutiveCountMap[$current];
+            if (isset($consecutiveCountMap[$currentClassificationKey])) {
+                $mapVal = $consecutiveCountMap[$currentClassificationKey];
 
                 /* If we found 10 consecutive */
                 if ($mapVal >= $nonConsecutiveCount - 1) {
@@ -108,13 +116,13 @@ class MammalClassifier
 
                     /* Increment the number of times we've seen this one */
 
-                    $consecutiveCountMap[$current] += 1;
+                    $consecutiveCountMap[$currentClassificationKey] += 1;
                 }
             } else {
 
                 /* This is the first time we've seen this */
 
-                $consecutiveCountMap[$current] = 1;
+                $consecutiveCountMap[$currentClassificationKey] = 1;
             }
 
         }
@@ -124,48 +132,6 @@ class MammalClassifier
 
     }
 
-    /**
-     * Aggregates the species counts
-     *
-     * @param array $classifications A list of classifications [[species,numberIdentified],[species,numberIdentified]]
-     * @return array list Classification->[Number of species], example: Giraffe => [1,2,2,2,1]
-     */
-    public function getSpeciesCounts(array $classifications)
-    {
-        $table = [];
-
-        /* Loop through the list of classifications getting tuples in the form of
-         * (typeOfSpecies,numberIdentified) */
-
-        foreach ($classifications as $classification) {
-
-            /* Extract the type and number */
-
-            $species = $classification[0];
-            $number = $classification[1];
-
-            /* Check if we've stored anything for this type of animal before before */
-
-            if (!isset($table[$species])) {
-
-                /* If not assign to a list with the classifications */
-
-                $table[$species] = [$number];
-
-            } else {
-
-                /* Get the current list of number identified for that species */
-
-                $results = &$table[$species];
-
-                /* Append to the end */
-
-                $results[] = $number;
-            }
-
-        }
-        return $table;
-    }
 
     /**
      * @param array $list A list of true / false values
@@ -209,7 +175,7 @@ class MammalClassifier
 
     public function getResult()
     {
-
+        return $this->result;
     }
 
     public function store()
@@ -222,15 +188,47 @@ class MammalClassifier
     {
         $this->imageId = $imageId;
         //$this->dataset = $this->dbIntegrator->fetch($imageId);
-        $this->dataset = [
-            [['buffalo' => 3],['giraffe' => 2]],
-            [['giraffe' => 3]],
-            [['elephant' => 2]],
-            [['giraffe' => 3],['buffalo' => 2] ]
-        ];
+
         // TODO: This is just a testing example until database intergration is complete
+        $this->dataset = [];
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['buffalo' => 3,'giraffe' => 2]);
+        $this->dataset[] = new Classification(['giraffe' => 3]);
+        $this->dataset[] = new Classification(['giraffe' => 3]);
+        $this->dataset[] = new Classification(['elephant' => 3]);
+        $this->dataset[] = new Classification(['giraffe' => 2,'buffalo' => 3]);
+        $this->dataset[] = new Classification(['giraffe' => 3,'buffalo' => 2]);
+
         $this->result = null;
         return $this;
+    }
+
+    private function filterBlankVotes(){
+        foreach($this->dataset as $classification){
+            if(isset($classification[self::NOTHING_HERE_IDENTIFIER])){
+                unset($classification[self::NOTHING_HERE_IDENTIFIER]);
+            }
+        }
+    }
+
+
+    private function evenness(){
+        $this->filterBlankVotes();
+
+
+        return 10;
+    }
+
+
+    private function plurality(){
+        return 'Antelope,3';
     }
 
     /*
@@ -249,7 +247,27 @@ class MammalClassifier
                 $this->result = self::NOTHING_HERE_IDENTIFIER;
 
             } else {
-                $speciesCounts = $this->getSpeciesCounts($dataset);
+
+                /* We check that we have 10 matching classifications of any kind */
+
+                $consecutiveMatch = $this->checkForNonConsecutive($this->dataset, self::CONSECUTIVE_EXPECTED);
+
+                /* If 10 matching found then classify */
+
+                if($consecutiveMatch){
+                    $this->result = $consecutiveMatch;
+                } else{
+                    if($numberOfVotes >= self::VOTES_BEFORE_CONSENSUS){
+                        $evenness = $this->evenness();
+
+                        // If evenness greater than the threshold run plurality else flag for scientist;
+                        $this->result = $evenness > self::EVENNESS_THRESHOLD ? $this->plurality()
+                                                                             : self::FLAGGED_FOR_SCIENTIST;
+
+                    } else{
+                        $this->result = self::NOT_ENOUGH_TO_CLASSIFY;
+                    }
+                }
 
             }
         } else {
