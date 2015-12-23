@@ -43,6 +43,23 @@ class MammalClassifier
 //      $this->dbIntegrator = new DBIntegration();
     }
 
+    /**
+     * Allows the classifier to operate on an explicit dataset
+     * @param $dataset / The dataset
+     * @return $this
+     */
+    public function onDataSet(&$dataset){
+        if($dataset instanceof Classification){
+            $this->dataset = $dataset;
+        } else{
+            $arr = [];
+            foreach($dataset as $item){
+                $arr[] = new Classification($item);
+            }
+            $this->dataset = &$arr;
+        }
+        return $this;
+    }
 
     public function on($imageId)
     {
