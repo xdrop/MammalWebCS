@@ -47,6 +47,7 @@ $ git clone https://github.com/xdrop/MammalWebCS.git
 ```sh
 $ cd MammalWebCS
 $ cd PHP
+$ cd src
 $ php run.php
 ```
 
