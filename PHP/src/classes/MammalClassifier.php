@@ -259,9 +259,11 @@ class MammalClassifier
         $counts = [];
 
         foreach ($this->dataset as $classifications) {
+            $currentTotal = 0;
             foreach ($classifications as $species => $numberOf) {
-                $counts[] = $numberOf;
+                $currentTotal += $numberOf;
             }
+            $counts[] = $currentTotal;
         }
 
         return $counts;
