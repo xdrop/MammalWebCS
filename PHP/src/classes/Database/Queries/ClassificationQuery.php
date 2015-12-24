@@ -57,7 +57,7 @@ class ClassificationQuery extends Query
             $currentNumberOf = $entry[self::NUMBER_OF_ANIMALS_IN_PIC_FIELD];
 
             if(isset($formatted[$currentUser])){
-                $specificUserClassification = $formatted[$currentUser];
+                $specificUserClassification = &$formatted[$currentUser];
                 if(isset($specificUserClassification[$currentSpecies])){
                     $specificUserClassification[$currentSpecies] += $currentNumberOf;
                 } else{

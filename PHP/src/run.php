@@ -16,7 +16,7 @@ $classifier = new MammalClassifier();
     Order is (most of the time) important!
 */
 
-$res = $classifier->on('512')->classify()->getResult();
+$res = $classifier->on('867')->classify()->getResult();
 
 
 print_r($res);
