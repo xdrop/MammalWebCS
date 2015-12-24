@@ -11,7 +11,7 @@ class MammalClassifier
 
     private $imageId;
 
-    private $dbIntegrator;
+    private $db;
 
     private $dataset;
 
@@ -21,17 +21,18 @@ class MammalClassifier
 
     const CONSECUTIVE_EXPECTED = 10;
 
-    const NOTHING_HERE_IDENTIFIER = "nothing_here";
+    // 86 is the species used in the database for nothing here
+    const NOTHING_HERE_IDENTIFIER = "86";
 
     // TODO: eventually switch these to numbers to store in a field in database
 
     const NOT_ENOUGH_TO_CLASSIFY = "not enough for classification";
 
-    const FLAGGED_FOR_SCIENTIST = "High evenness flagging for scientist";
+    const FLAGGED_FOR_SCIENTIST = "High disagreement flag for scientist";
 
     const VOTES_BEFORE_CONSENSUS = 25;
 
-    const EVENNESS_THRESHOLD = 0.1;
+    const EVENNESS_THRESHOLD = 0.6;
 
     /**
      * MammalClassifier constructor.
@@ -40,7 +41,7 @@ class MammalClassifier
     {
         $this->result = null;
         $this->imageId = null;
-//      $this->dbIntegrator = new DBIntegration();
+        $this->db = new ClassificationQuery();
     }
 
     /**
@@ -64,42 +65,7 @@ class MammalClassifier
     public function on($imageId)
     {
         $this->imageId = $imageId;
-        //$this->dataset = $this->dbIntegrator->fetch($imageId);
-
-        // TODO: This is just a testing example until database integration is complete
-        $this->dataset = [];
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 1, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 2, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3, 'buffalo' => 2]);
-
+        $this->dataset = $this->db->with(['imageId' => $imageId])->fetch();
         $this->result = null;
         return $this;
     }
@@ -195,12 +161,17 @@ class MammalClassifier
 
         foreach ($dataset as $vote) {
             if ($consecutiveLim > 0) {
-                if ($lastVote == null || $vote->hashed() == $lastVote) {
-                    $lastVote = $vote->hashed();
-                    $consecutiveLim--;
-                } else {
+                if($vote->hashed() === $type . '=0'){
+                    if ($lastVote == null || $vote->hashed() == $lastVote) {
+                        $lastVote = $vote->hashed();
+                        $consecutiveLim--;
+                    } else {
+                        return false;
+                    }
+                } else{
                     return false;
                 }
+
             } else {
                 return true;
             }
@@ -222,7 +193,7 @@ class MammalClassifier
             throw new RuntimeException('You need to call classify before storing the results!');
         }
         // TODO: Complete when db integration is done
-//      $this->dbIntegrator->store($this->result);
+//      $this->db->store(['classification' => $this->result);
     }
 
     /**
@@ -260,12 +231,8 @@ class MammalClassifier
     {
         $counts = [];
 
-        foreach ($this->dataset as $classifications) {
-            $currentTotal = 0;
-            foreach ($classifications as $species => $numberOf) {
-                $currentTotal += $numberOf;
-            }
-            $counts[] = $currentTotal;
+        foreach ($this->dataset as $classification) {
+            $counts[] = count($classification);
         }
 
         return $counts;
@@ -292,6 +259,11 @@ class MammalClassifier
 
 
         $S = count($map);
+
+        if($S == 1){
+            // all in agreement return 0
+            return 0;
+        }
 
 
         /* Total votes are the total votes for all species */
@@ -390,7 +362,7 @@ class MammalClassifier
                         print("Evenness calculated: " . $evenness . "\n");
 
                         // If evenness greater than the threshold run plurality else flag for scientist;
-                        $this->result = $evenness > self::EVENNESS_THRESHOLD ? $this->plurality()
+                        $this->result = $evenness < self::EVENNESS_THRESHOLD ? $this->plurality()
                                                                              : self::FLAGGED_FOR_SCIENTIST;
 
                     } else {

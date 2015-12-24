@@ -1,6 +1,6 @@
 <?php
 
-require('includes.php');
+require('core.php');
 
 $classifier = new MammalClassifier();
 
@@ -16,7 +16,17 @@ $classifier = new MammalClassifier();
     Order is (most of the time) important!
 */
 
-$res = $classifier->on('imageidexample')->classify()->getResult();
+$id = 0;
+
+while($id < 3000){
+    $res = $classifier->on($id)->classify()->getResult();
+    $id++;
+    print("id: ". $id . " =>");
+    print_r($res);
+    print("\n");
+}
 
 
-print_r($res);
+
+
+
