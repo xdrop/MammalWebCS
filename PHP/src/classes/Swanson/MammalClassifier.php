@@ -160,12 +160,17 @@ class MammalClassifier
 
         foreach ($dataset as $vote) {
             if ($consecutiveLim > 0) {
-                if ($lastVote == null || $vote->hashed() == $lastVote) {
-                    $lastVote = $vote->hashed();
-                    $consecutiveLim--;
-                } else {
+                if($vote->hashed() === $type . '=0'){
+                    if ($lastVote == null || $vote->hashed() == $lastVote) {
+                        $lastVote = $vote->hashed();
+                        $consecutiveLim--;
+                    } else {
+                        return false;
+                    }
+                } else{
                     return false;
                 }
+
             } else {
                 return true;
             }
