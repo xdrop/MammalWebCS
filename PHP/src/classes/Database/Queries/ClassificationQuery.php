@@ -50,23 +50,26 @@ class ClassificationQuery extends Query
      */
     protected function reformat(&$results)
     {
+        $map = [];
         $formatted = [];
         foreach($results as $entry){
             $currentUser = $entry[self::USER_ID_FIELD_NAME];
             $currentSpecies = $entry[self::SPECIES_FIELD_NAME];
             $currentNumberOf = $entry[self::NUMBER_OF_ANIMALS_IN_PIC_FIELD];
 
-            if(isset($formatted[$currentUser])){
-                $specificUserClassification = &$formatted[$currentUser];
+            if(isset($map[$currentUser])){
+                $specificUserClassification = &$map[$currentUser];
                 if(isset($specificUserClassification[$currentSpecies])){
                     $specificUserClassification[$currentSpecies] += $currentNumberOf;
                 } else{
                     $specificUserClassification[$currentSpecies] = $currentNumberOf;
                 }
             } else{
-                $formatted[$currentUser][$currentSpecies] = $currentNumberOf;
+                $map[$currentUser][$currentSpecies] = $currentNumberOf;
             }
+
+            $formatted[] = new Classification($map[$currentUser]);
         }
-        print_r($formatted);
+        return $formatted;
     }
 }
