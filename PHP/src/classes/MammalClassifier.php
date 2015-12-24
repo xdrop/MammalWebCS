@@ -21,7 +21,7 @@ class MammalClassifier
 
     const CONSECUTIVE_EXPECTED = 10;
 
-    const NOTHING_HERE_IDENTIFIER = 0;
+    const NOTHING_HERE_IDENTIFIER = "nothing_here";
 
     // TODO: eventually switch these to numbers to store in a field in database
 
@@ -195,8 +195,8 @@ class MammalClassifier
 
         foreach ($dataset as $vote) {
             if ($consecutiveLim > 0) {
-                if ($lastVote == null || $vote == $lastVote) {
-                    $lastVote = $vote;
+                if ($lastVote == null || $vote->hashed() == $lastVote) {
+                    $lastVote = $vote->hashed();
                 } else {
                     return false;
                 }
@@ -204,6 +204,7 @@ class MammalClassifier
                 return true;
             }
         }
+        return true;
     }
 
     public function getResult()
@@ -271,8 +272,6 @@ class MammalClassifier
 
     private function evenness()
     {
-        print "Running evenness \n";
-
         /* Disregard any blank votes as we no longer need them */
 
         $this->filterBlankVotes();
