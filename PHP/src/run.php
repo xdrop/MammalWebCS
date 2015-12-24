@@ -16,8 +16,19 @@ $classifier = new MammalClassifier();
     Order is (most of the time) important!
 */
 
-$res = $classifier->on('867')->classify()->getResult();
+$id = 0;
 
+//while($id < 1000){
+//    $res = $classifier->on($id)->classify()->getResult();
+//    $id++;
+//    print("id: ". $id . " =>");
+//    print_r($res);
+//    print("\n");
+//}
 
+$res = $classifier->on('228')->classify()->getResult();
 print_r($res);
+
+
+
 

@@ -187,7 +187,7 @@ class MammalClassifier
             throw new RuntimeException('You need to call classify before storing the results!');
         }
         // TODO: Complete when db integration is done
-//      $this->dbIntegrator->store($this->result);
+//      $this->db->store(['classification' => $this->result);
     }
 
     /**
@@ -225,12 +225,8 @@ class MammalClassifier
     {
         $counts = [];
 
-        foreach ($this->dataset as $classifications) {
-            $currentTotal = 0;
-            foreach ($classifications as $species => $numberOf) {
-                $currentTotal += $numberOf;
-            }
-            $counts[] = $currentTotal;
+        foreach ($this->dataset as $classification) {
+            $counts[] = count($classification);
         }
 
         return $counts;
@@ -257,6 +253,10 @@ class MammalClassifier
 
 
         $S = count($map);
+
+        if($S == 1){
+            return 1;
+        }
 
 
         /* Total votes are the total votes for all species */
@@ -325,7 +325,11 @@ class MammalClassifier
     public function classify()
     {
         $dataset = $this->dataset;
+        foreach($dataset as $data){
+            echo $data ."\n";
+        }
         $numberOfVotes = count($dataset);
+        print($numberOfVotes . " ");
         if ($numberOfVotes >= 5) {
 
             /* If first five consecutive were nothing here */
