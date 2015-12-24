@@ -21,7 +21,8 @@ class MammalClassifier
 
     const CONSECUTIVE_EXPECTED = 10;
 
-    const NOTHING_HERE_IDENTIFIER = "nothing_here";
+    // 86 is the species used in the database for nothing here
+    const NOTHING_HERE_IDENTIFIER = "86";
 
     // TODO: eventually switch these to numbers to store in a field in database
 

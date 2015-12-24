@@ -70,6 +70,7 @@ class ClassificationQuery extends Query
 
             $formatted[] = new Classification($map[$currentUser]);
         }
+
         return $formatted;
     }
 }

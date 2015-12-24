@@ -29,11 +29,11 @@ class Classification extends ArrayObject
 
     public function __toString()
     {
-        $string = "";
+        $string = "{";
         foreach($this->data as $key  => $val){
-            $string = $string . ($key . " => " . $val . ',');
+            $string = $string . ("Species: " .$key . " => " . "Number: " . $val . ',');
         }
-        return $string;
+        return $string ."}";
     }
 
 }
