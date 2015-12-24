@@ -18,16 +18,16 @@ $classifier = new MammalClassifier();
 
 $id = 0;
 
-//while($id < 1000){
-//    $res = $classifier->on($id)->classify()->getResult();
-//    $id++;
-//    print("id: ". $id . " =>");
-//    print_r($res);
-//    print("\n");
-//}
+while($id < 1000){
+    $res = $classifier->on($id)->classify()->getResult();
+    $id++;
+    print("id: ". $id . " =>");
+    print_r($res);
+    print("\n");
+}
 
-$res = $classifier->on('228')->classify()->getResult();
-print_r($res);
+//$res = $classifier->on('228')->classify()->getResult();
+//print_r($res);
 
 
 

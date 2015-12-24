@@ -27,11 +27,11 @@ class MammalClassifier
 
     const NOT_ENOUGH_TO_CLASSIFY = "not enough for classification";
 
-    const FLAGGED_FOR_SCIENTIST = "High evenness flagging for scientist";
+    const FLAGGED_FOR_SCIENTIST = "Low evenness flagging for scientist";
 
     const VOTES_BEFORE_CONSENSUS = 25;
 
-    const EVENNESS_THRESHOLD = 0.1;
+    const EVENNESS_THRESHOLD = 0.5;
 
     /**
      * MammalClassifier constructor.
@@ -325,11 +325,7 @@ class MammalClassifier
     public function classify()
     {
         $dataset = $this->dataset;
-        foreach($dataset as $data){
-            echo $data ."\n";
-        }
         $numberOfVotes = count($dataset);
-        print($numberOfVotes . " ");
         if ($numberOfVotes >= 5) {
 
             /* If first five consecutive were nothing here */
