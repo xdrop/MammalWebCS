@@ -255,7 +255,8 @@ class MammalClassifier
         $S = count($map);
 
         if($S == 1){
-            return 1;
+            // all in agreement return 0
+            return 0;
         }
 
 
@@ -355,7 +356,7 @@ class MammalClassifier
                         print("Evenness calculated: " . $evenness . "\n");
 
                         // If evenness greater than the threshold run plurality else flag for scientist;
-                        $this->result = $evenness > self::EVENNESS_THRESHOLD ? $this->plurality()
+                        $this->result = $evenness < self::EVENNESS_THRESHOLD ? $this->plurality()
                                                                              : self::FLAGGED_FOR_SCIENTIST;
 
                     } else {
