@@ -23,6 +23,10 @@ class Classification extends ArrayObject
         return http_build_query($this->data,'','|');
     }
 
+    public function toArray(){
+        return $this->data;
+    }
+
     public function __toString()
     {
         $string = "";

@@ -161,7 +161,7 @@ class MammalClassifier
 
                     /* Just return consecutive classification */
 
-                    return $current;
+                    return $current->toArray();
                 } else {
 
                     /* Increment the number of times we've seen this one */
