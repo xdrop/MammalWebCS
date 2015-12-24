@@ -197,6 +197,7 @@ class MammalClassifier
             if ($consecutiveLim > 0) {
                 if ($lastVote == null || $vote->hashed() == $lastVote) {
                     $lastVote = $vote->hashed();
+                    $consecutiveLim--;
                 } else {
                     return false;
                 }
