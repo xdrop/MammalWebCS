@@ -3,11 +3,12 @@
 
 class Utils
 {
-    public static function findMedian(array $list){
+    public static function findMedian(array $list)
+    {
         rsort($list);
         $middle = round(count($list) / 2);
 
-        return $list[(int)$middle-1];
+        return $list[(int)$middle - 1];
     }
 
     /**
@@ -23,5 +24,19 @@ class Utils
             }
         }
         return ($numberOfTrue / count($truthvalue));
+    }
+
+
+    /**
+     * @param array $required The required keys
+     * @param array $data The array that should contain the keys
+     * @return bool True if all keys exist, false otherwise
+     */
+    public static function keysExist($required, $data)
+    {
+        foreach ($required as $field) {
+            if (!array_key_exists($field, $data)) return false;
+        }
+        return true;
     }
 }

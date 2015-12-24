@@ -11,7 +11,7 @@ class MammalClassifier
 
     private $imageId;
 
-    private $dbIntegrator;
+    private $db;
 
     private $dataset;
 
@@ -40,7 +40,7 @@ class MammalClassifier
     {
         $this->result = null;
         $this->imageId = null;
-//      $this->dbIntegrator = new DBIntegration();
+        $this->db = new ClassificationQuery();
     }
 
     /**
@@ -64,42 +64,7 @@ class MammalClassifier
     public function on($imageId)
     {
         $this->imageId = $imageId;
-        //$this->dataset = $this->dbIntegrator->fetch($imageId);
-
-        // TODO: This is just a testing example until database integration is complete
-        $this->dataset = [];
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 1, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 2, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3, 'buffalo' => 2]);
-
+        $this->dataset = $this->db->with(['imageId' => $imageId])->fetch();
         $this->result = null;
         return $this;
     }

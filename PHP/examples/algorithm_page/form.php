@@ -1,6 +1,6 @@
 <?php
 
-require('../../src/includes.php');
+require('../../src/core.php');
 
 $classifier = new MammalClassifier();
 
