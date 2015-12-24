@@ -27,11 +27,11 @@ class MammalClassifier
 
     const NOT_ENOUGH_TO_CLASSIFY = "not enough for classification";
 
-    const FLAGGED_FOR_SCIENTIST = "Low evenness flagging for scientist";
+    const FLAGGED_FOR_SCIENTIST = "High disagreement flag for scientist";
 
     const VOTES_BEFORE_CONSENSUS = 25;
 
-    const EVENNESS_THRESHOLD = 0.5;
+    const EVENNESS_THRESHOLD = 0.6;
 
     /**
      * MammalClassifier constructor.

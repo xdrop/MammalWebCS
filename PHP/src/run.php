@@ -18,7 +18,7 @@ $classifier = new MammalClassifier();
 
 $id = 0;
 
-while($id < 1000){
+while($id < 3000){
     $res = $classifier->on($id)->classify()->getResult();
     $id++;
     print("id: ". $id . " =>");
@@ -26,8 +26,6 @@ while($id < 1000){
     print("\n");
 }
 
-//$res = $classifier->on('228')->classify()->getResult();
-//print_r($res);
 
 
 
