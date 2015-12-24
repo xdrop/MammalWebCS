@@ -3,7 +3,9 @@
 
 class ClassificationQuery extends Query
 {
-    const CLASSIFICATION_TABLES_NAME = 'animal';
+    const CLASSIFICATION_TABLE_NAME = 'animal';
+    const CLASSIFIED_TABLE_NAME = 'classified';
+    const EVENNESS_TABLE_NAME = 'evenness';
 
     const IMAGE_ID_FIELD_NAME = 'photo_id';
     const USER_ID_FIELD_NAME = 'person_id';
@@ -15,21 +17,79 @@ class ClassificationQuery extends Query
         if(!Utils::keysExist(['imageId'],$params)){
             throw new BadMethodCallException("You need to provide a value to imageId before using this method.");
         }
-        $this->internalFetchQuery = $this->db->from(self::CLASSIFICATION_TABLES_NAME)
-            ->where(self::CLASSIFICATION_TABLES_NAME.'.' . self::IMAGE_ID_FIELD_NAME . ' = ?',$params['imageId'])
-            ->orderBy(self::USER_ID_FIELD_NAME.  ' DESC');
+
+        /*
+          Query equivalent to:
+            SELECT animal.*
+            FROM animal
+            WHERE animal.photo_id = ?
+            ORDER BY person_id DESC
+         */
+
+        $this->internalFetchQueries =
+            $this->db->from(self::CLASSIFICATION_TABLE_NAME)
+                     ->where(self::CLASSIFICATION_TABLE_NAME.'.' .
+                       self::IMAGE_ID_FIELD_NAME . ' = ?',$params['imageId'])
+                     ->orderBy(self::USER_ID_FIELD_NAME.  ' DESC');
     }
 
 
     protected function storeQuery(&$params)
     {
-        if(!Utils::keysExist(['imageId','classification'],$params)){
+        if(!Utils::keysExist(['imageId','result'],$params)){
             throw new BadMethodCallException("You need to provide a value to imageId and the" .
-                " classification result before using this method.");
+                " result result before using this method.");
+        }
+
+        $result = $params['result'];
+
+
+
+        $values = [];
+
+        if($result != MammalClassifier::NOT_ENOUGH_TO_CLASSIFY){
+            if($result != MammalClassifier::FLAGGED_FOR_SCIENTIST){
+                foreach($result['classification'] as $species  => $numberOf){
+                    $values[] = [
+                        'id' => null,
+                        'photo_id' => $params['imageId'],
+                        'species' => $species,
+                        'count' => $numberOf,
+                        'flagged' => false
+                    ];
+                }
+            } else{
+                $values = [
+                    'id' => null,
+                    'photo_id' => $params['imageId'],
+                    'species' => '0',
+                    'numberOf' => '0',
+                    'flagged' => true
+                ];
+            }
+            $evenness = [
+                'id' => null,
+                'photo_id' => $params['imageId'],
+                'evenness_species' => $params['result']['evenness_species'],
+                'evenness_count' => $params['result']['evenness_count']
+            ];
+
+            /* Query
+                INSERT INTO classified (id, photo_id, species, count, flagged)
+                VALUES (NULL, 221, 22, '1', 0)
+            */
+
+            $this->internalStoreQueries[] = $this->db->insertInto(self::CLASSIFIED_TABLE_NAME)->values($values);
+
+            /* Query
+                INSERT INTO evenness (id, photo_id, evenness_species, evenness_count)
+                VALUES (...)
+             */
+
+            $this->internalStoreQueries[] = $this->db->insertInto(self::EVENNESS_TABLE_NAME)->values($evenness);
         }
 
 
-        $this->internalStoreQuery = $this->db;
 
     }
 

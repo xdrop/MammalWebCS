@@ -7,10 +7,10 @@ class DatabaseConnector
 
     public static function getDatabase()
     {
-        $settings = Environment::databaseSettings();
-        $PDO = new PDO($settings['driver'] .":host=" . $settings['host'] . ";port=". $settings['port']
-            .";dbname=" . $settings['name'], $settings['username'], $settings['password']);
         if(is_null(self::$pdo)){
+            $settings = Environment::databaseSettings();
+            $PDO = new PDO($settings['driver'] .":host=" . $settings['host'] . ";port=". $settings['port']
+                .";dbname=" . $settings['name'], $settings['username'], $settings['password']);
             self::$pdo = new FluentPDO($PDO);
         }
         return self::$pdo;

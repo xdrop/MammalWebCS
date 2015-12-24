@@ -19,7 +19,7 @@ class MammalClassifier
 
     /* Unused for now */
 
-    const CONSECUTIVE_EXPECTED = 10;
+    const CONSECUTIVE_EXPECTED = 8;
 
     // 86 is the species used in the database for nothing here
     const NOTHING_HERE_IDENTIFIER = "86";
@@ -30,7 +30,7 @@ class MammalClassifier
 
     const FLAGGED_FOR_SCIENTIST = "High disagreement flag for scientist";
 
-    const VOTES_BEFORE_CONSENSUS = 25;
+    const VOTES_BEFORE_CONSENSUS = 15;
     const UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE = 10;
 
     const EVENNESS_THRESHOLD_SPECIES = 0.69;
@@ -195,8 +195,8 @@ class MammalClassifier
         if ($this->result == null) {
             throw new RuntimeException('You need to call classify before storing the results!');
         }
-        // TODO: Complete when db integration is done
-//      $this->db->store(['classification' => $this->result);
+        $this->db->with(['imageId' => $this->imageId, 'result' => $this->result])->store();
+        return $this;
     }
 
     /**
@@ -384,7 +384,7 @@ class MammalClassifier
             /* If first five consecutive were nothing here */
 
             if ($this->checkConsecutive($dataset, 5, self::NOTHING_HERE_IDENTIFIER)) {
-                $this->result = self::NOTHING_HERE_IDENTIFIER;
+                $this->result = [self::NOTHING_HERE_IDENTIFIER => 0];
 
             } else {
 
@@ -392,25 +392,32 @@ class MammalClassifier
 
                 $consecutiveMatch = $this->checkForNonConsecutive($this->dataset, self::CONSECUTIVE_EXPECTED);
 
+                /* Calculate evenness */
+
+                $evenness = $this->evenness();
+
                 /* If 10 matching found then classify */
 
                 if ($consecutiveMatch) {
-                    $this->result = $consecutiveMatch;
+                    $this->result = [
+                        'classification' => $consecutiveMatch,
+                        'evenness_species' => $evenness['speciesEvenness'],
+                        'evenness_count' => $evenness['countEvenness']
+                    ];
                 } else {
 
                     /* Wait until we have 25 (VOTES_BEFORE_CONSENSUS) */
 
                     if ($numberOfVotes >= self::VOTES_BEFORE_CONSENSUS) {
 
-                        /* Calculate evenness */
-
-                        $evenness = $this->evenness();
-                        print("Evenness calculated: " . implode('|',$evenness) . "\n");
-
                         // If evenness greater than the threshold run plurality else flag for scientist;
                         $this->result = $evenness['speciesEvenness'] < self::EVENNESS_THRESHOLD_SPECIES &&
                                         $evenness['countEvenness'] < self::EVENNESS_THRESHOLD_COUNT
-                                                ? $this->plurality()
+                                                ? [
+                                                    'classification' => $this->plurality(),
+                                                    'evenness_species' => $evenness['speciesEvenness'],
+                                                    'evenness_count' => $evenness['countEvenness']
+                                                  ]
                                                 : self::FLAGGED_FOR_SCIENTIST;
 
                     } else {

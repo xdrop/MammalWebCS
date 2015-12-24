@@ -4,10 +4,10 @@
 abstract class Query
 {
     protected $db;
-    protected $internalFetchQuery;
-    protected $internalStoreQuery;
-    protected $internalUpdateQuery;
-    protected $internalDeleteQuery;
+    protected $internalFetchQueries;
+    protected $internalStoreQueries;
+    protected $internalUpdateQueries;
+    protected $internalDeleteQueries;
     protected $params;
 
     public function __construct()
@@ -15,35 +15,40 @@ abstract class Query
         $this->db = DatabaseConnector::getDatabase();
     }
 
-    public function with($params){
+    public function with($params)
+    {
         $this->params = $params;
+        $this->internalFetchQueries = null;
+        $this->internalStoreQueries = null;
+        $this->internalUpdateQueries = null;
+        $this->internalDeleteQueries = null;
         return $this;
     }
 
 
     /**
-     * Creates the SQL query to fetch the data required and stores it in the appropriate internal query
+     * Creates the SQL queries to fetch the data required and stores it in the appropriate internal query
      * @param array $params The parameters of the query
      * @return mixed
      */
     protected abstract function fetchQuery(&$params);
 
     /**
-     * Creates the SQL query to store the data required and stores it in the appropriate internal query
+     * Creates the SQL queries to store the data required and stores it in the appropriate internal query
      * @param array $params The parameters of the query
      * @return mixed
      */
     protected abstract function storeQuery(&$params);
 
     /**
-     * Creates the SQL query to update the data required and stores it in the appropriate internal query
+     * Creates the SQL queries to update the data required and stores it in the appropriate internal query
      * @param array $params The parameters of the query
      * @return mixed
      */
     protected abstract function updateQuery(&$params);
 
     /**
-     * Creates the SQL query to delete the data required and stores it in the appropriate internal query
+     * Creates the SQL queries to delete the data required and stores it in the appropriate internal query
      * @param array $params The parameters of the query
      * @return mixed
      */
@@ -57,24 +62,61 @@ abstract class Query
     protected abstract function reformat(&$results);
 
 
-    public function fetch(){
+    public function fetch()
+    {
         $this->fetchQuery($this->params);
-        return $this->reformat($this->internalFetchQuery->fetchAll());
+        $queries = &$this->internalFetchQueries;
+        if (!is_null($this->internalFetchQueries)) {
+            return $this->reformat($this->internalFetchQueries->fetchAll());
+        }
     }
 
-    public function store(){
+    public function store()
+    {
         $this->storeQuery($this->params);
-        $this->internalStoreQuery->execute();
+        $queries = &$this->internalStoreQueries;
+        if (!is_null($queries)) {
+            if(is_array($queries)){
+                foreach($this->internalStoreQueries as $query){
+                    $query->execute();
+                }
+            } else{
+                $queries.execute();
+            }
+
+        }
     }
 
-    public function update(){
+    public function update()
+    {
         $this->updateQuery($this->params);
-        $this->internalUpdateQuery->execute();
+        $queries = &$this->internalUpdateQueries;
+        if (!is_null($queries)) {
+            if(is_array($queries)){
+                foreach($this->internalUpdateQueries as $query){
+                    $query->execute();
+                }
+            } else{
+                $queries.execute();
+            }
+
+        }
     }
 
-    public function delete(){
+    public function delete()
+    {
         $this->deleteQuery($this->params);
-        $this->internalDeleteQuery->execute();
+        $queries = &$this->internalDeleteQueries;
+        if (!is_null($queries)) {
+            if(is_array($queries)){
+                foreach($this->internalDeleteQueries as $query){
+                    $query->execute();
+                }
+            } else{
+                $queries.execute();
+            }
+            
+        }
     }
 
 }
