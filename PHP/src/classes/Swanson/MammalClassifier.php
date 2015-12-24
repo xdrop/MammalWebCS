@@ -31,8 +31,10 @@ class MammalClassifier
     const FLAGGED_FOR_SCIENTIST = "High disagreement flag for scientist";
 
     const VOTES_BEFORE_CONSENSUS = 25;
+    const UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE = 10;
 
-    const EVENNESS_THRESHOLD = 0.6;
+    const EVENNESS_THRESHOLD_SPECIES = 0.69;
+    const EVENNESS_THRESHOLD_COUNT = 0.7;
 
     /**
      * MammalClassifier constructor.
@@ -49,12 +51,13 @@ class MammalClassifier
      * @param $dataset / The dataset
      * @return $this
      */
-    public function onDataSet(&$dataset){
-        if($dataset instanceof Classification){
+    public function onDataSet(&$dataset)
+    {
+        if ($dataset instanceof Classification) {
             $this->dataset = $dataset;
-        } else{
+        } else {
             $arr = [];
-            foreach($dataset as $item){
+            foreach ($dataset as $item) {
                 $arr[] = new Classification($item);
             }
             $this->dataset = &$arr;
@@ -161,14 +164,14 @@ class MammalClassifier
 
         foreach ($dataset as $vote) {
             if ($consecutiveLim > 0) {
-                if($vote->hashed() === $type . '=0'){
+                if ($vote->hashed() === $type . '=0') {
                     if ($lastVote == null || $vote->hashed() == $lastVote) {
                         $lastVote = $vote->hashed();
                         $consecutiveLim--;
                     } else {
                         return false;
                     }
-                } else{
+                } else {
                     return false;
                 }
 
@@ -189,7 +192,7 @@ class MammalClassifier
      */
     public function store()
     {
-        if($this->result == null){
+        if ($this->result == null) {
             throw new RuntimeException('You need to call classify before storing the results!');
         }
         // TODO: Complete when db integration is done
@@ -201,11 +204,21 @@ class MammalClassifier
      */
     private function filterBlankVotes()
     {
-        foreach ($this->dataset as $classification) {
-            if (isset($classification[self::NOTHING_HERE_IDENTIFIER])) {
-                unset($classification[self::NOTHING_HERE_IDENTIFIER]);
+        for ($i = 0; $i < count($this->dataset); ++$i) {
+            if(isset($this->dataset[$i][self::NOTHING_HERE_IDENTIFIER])){
+                $this->dataset[$i]->remove(self::NOTHING_HERE_IDENTIFIER);
             }
         }
+    }
+
+
+    private function filterUnreasonableVotes(){
+        for ($i = 0; $i < count($this->dataset); ++$i) {
+            if($this->dataset[$i]->sum() > self::UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE){
+                unset($this->dataset[$i]);
+            }
+        }
+        $this->dataset = array_values($this->dataset);
     }
 
     private function getVotesPerSpecies()
@@ -227,6 +240,26 @@ class MammalClassifier
         return $mapSpeciesToVotes;
     }
 
+    private function getNumberOfAnimalsFrequency()
+    {
+
+        $mapNumberToFrequency = [];
+
+        foreach ($this->dataset as $classification) {
+            $sum = $classification->sum();
+            if (isset($mapNumberToFrequency[$sum])) {
+                $mapNumberToFrequency[$sum] += 1;
+            } else {
+                $mapNumberToFrequency[$sum] = 1;
+            }
+        }
+
+        if(isset($mapNumberToFrequency[0])) unset($mapNumberToFrequency[0]);
+
+
+        return $mapNumberToFrequency;
+    }
+
     private function listOfAnimalCounts()
     {
         $counts = [];
@@ -238,29 +271,26 @@ class MammalClassifier
         return $counts;
     }
 
-    private function evenness()
+    /**
+     * @param bool $evennessType True for evenness of species type / false for
+     * @return float|int
+     */
+    private function pielousEvenness($evennessType)
     {
-        /* Disregard any blank votes as we no longer need them */
-
-        $this->filterBlankVotes();
-
-        /* Get a map in the form of Species => Number of users who classified that species */
-
-        $this->votesPerSpecies = &$this->getVotesPerSpecies();
-
-
-        /* $map is an alias for that */
-
-
-        $map = &$this->votesPerSpecies;
-
+        /* Get a map in the form of Species/NumberOfAnimals => Number of times it appears */
+        if($evennessType) {
+            $map = &$this->getVotesPerSpecies();
+            $this->votesPerSpecies = $map;
+        } else {
+            $map = &$this->getNumberOfAnimalsFrequency();
+        }
 
         /* S is the different number of species */
 
 
         $S = count($map);
 
-        if($S == 1){
+        if ($S == 1) {
             // all in agreement return 0
             return 0;
         }
@@ -284,6 +314,21 @@ class MammalClassifier
         }
 
         return -$sum / log($S);
+    }
+
+
+    private function evenness()
+    {
+        /* Disregard any blank votes as we no longer need them */
+
+        $this->filterBlankVotes();
+
+        $evennessOnSpecies = $this->pielousEvenness(true);
+
+        $evennessOnAnimalCount = $this->pielousEvenness(false);
+
+        return ['countEvenness' => $evennessOnAnimalCount, 'speciesEvenness' => $evennessOnSpecies];
+
     }
 
 
@@ -331,7 +376,8 @@ class MammalClassifier
 
     public function classify()
     {
-        $dataset = $this->dataset;
+        $dataset = &$this->dataset;
+        $this->filterUnreasonableVotes();
         $numberOfVotes = count($dataset);
         if ($numberOfVotes >= 5) {
 
@@ -359,11 +405,13 @@ class MammalClassifier
                         /* Calculate evenness */
 
                         $evenness = $this->evenness();
-                        print("Evenness calculated: " . $evenness . "\n");
+                        print("Evenness calculated: " . implode('|',$evenness) . "\n");
 
                         // If evenness greater than the threshold run plurality else flag for scientist;
-                        $this->result = $evenness < self::EVENNESS_THRESHOLD ? $this->plurality()
-                                                                             : self::FLAGGED_FOR_SCIENTIST;
+                        $this->result = $evenness['speciesEvenness'] < self::EVENNESS_THRESHOLD_SPECIES &&
+                                        $evenness['countEvenness'] < self::EVENNESS_THRESHOLD_COUNT
+                                                ? $this->plurality()
+                                                : self::FLAGGED_FOR_SCIENTIST;
 
                     } else {
                         $this->result = self::NOT_ENOUGH_TO_CLASSIFY;

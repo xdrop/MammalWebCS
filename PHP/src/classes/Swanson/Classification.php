@@ -8,13 +8,18 @@ class Classification extends ArrayObject
 
     public function __construct(array $data)
     {
-        $this->data = $data;
+        $this->data = &$data;
         parent::__construct($this->data);
     }
 
 
-    public function getNumOfDiffAnimals(){
-        return count($this->data);
+    public function sum(){
+        return array_sum($this->data);
+    }
+
+    public function remove($name){
+        $this->offsetUnset($name);
+        unset($this->data[$name]);
     }
 
 
