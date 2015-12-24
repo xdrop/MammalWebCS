@@ -384,7 +384,11 @@ class MammalClassifier
             /* If first five consecutive were nothing here */
 
             if ($this->checkConsecutive($dataset, 5, self::NOTHING_HERE_IDENTIFIER)) {
-                $this->result = [self::NOTHING_HERE_IDENTIFIER => 0];
+                $this->result = [
+                    'classification' => [self::NOTHING_HERE_IDENTIFIER => 0],
+                    'evenness_species' => 0,
+                    'evenness_count' => 0
+                ];
 
             } else {
 

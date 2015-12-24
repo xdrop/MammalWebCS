@@ -38,7 +38,7 @@ class ClassificationQuery extends Query
     {
         if(!Utils::keysExist(['imageId','result'],$params)){
             throw new BadMethodCallException("You need to provide a value to imageId and the" .
-                " result result before using this method.");
+                " query result before using this method.");
         }
 
         $result = $params['result'];

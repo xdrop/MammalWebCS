@@ -25,11 +25,16 @@ print_r($result);
 
 Output:
 ```php
-Array
 (
-    [giraffe] => 2
-    [buffalo] => 3
-    [dog] => 3
+    [classification] => Array
+        (
+            [giraffe] => 2,
+            [buffalo] => 3,
+            [dog] => 3
+        )
+
+    [evenness_species] => 0
+    [evenness_count] => 0.61938219467876
 )
 ```
 As in there are 2 giraffes, 3 buffalos and 3 dogs in the image.
@@ -52,39 +57,38 @@ $ php run.php
 ```
 
 ### Remarks
-Since database integration is not complete yet you may change the test data in the `on()` method
-```php
-        $this->dataset = [];
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 5, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 4, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 1, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 2, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['buffalo' => 3, 'giraffe' => 2]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['dog' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['elephant' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 2, 'buffalo' => 3]);
-        $this->dataset[] = new Classification(['giraffe' => 3, 'buffalo' => 2]);
+To integrate this with your database first edit `src/config/db_settings.env.ini` with your database settings:
+```ini
+[database]
+; update for actual database used
+driver=mysql
+host=localhost
+port=3306
+name=testdatabase
+username=root
+password=whatever
+```
 
+There are two new added tables on the given mammalweb database for the code to work:
+
+One named `evenness`:
+```sql
+CREATE TABLE `evenness` (
+  `id` int(11) NOT NULL,
+  `photo_id` int(11) NOT NULL,
+  `evenness_species` float NOT NULL,
+  `evenness_count` float NOT NULL
+)
+```
+
+and `classified`:
+```sql
+CREATE TABLE `classified` (
+  `id` int(11) NOT NULL,
+  `photo_id` int(11) NOT NULL,
+  `species` int(11) NOT NULL,
+  `count` int(11) NOT NULL,
+  `flagged` tinyint(1) DEFAULT '0',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
 ```
