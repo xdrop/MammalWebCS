@@ -43,7 +43,12 @@ class MammalClassifier
     {
         $this->result = null;
         $this->imageId = null;
-        $this->db = new ClassificationQuery();
+        try{
+            $this->db = new ClassificationQuery();
+        } catch(PDOException $exception){
+            trigger_error("Failure to create a database connection." .
+                " Possibly database settings provided are wrong", E_USER_WARNING);
+        }
     }
 
     /**
@@ -53,7 +58,7 @@ class MammalClassifier
      */
     public function onDataSet(&$dataset)
     {
-        if ($dataset instanceof Classification) {
+        if ($dataset[0] instanceof Classification) {
             $this->dataset = $dataset;
         } else {
             $arr = [];
@@ -153,13 +158,13 @@ class MammalClassifier
      *              $consecutiveLim entries are 'nothing_here'
      * @return bool -> True if they are consecutive false otherwise
      */
-    public function checkConsecutive($dataset, $consecutiveLim, $type)
+    private function checkConsecutive($dataset, $consecutiveLim, $type)
     {
         $lastVote = null;
 
         foreach ($dataset as $vote) {
             if ($consecutiveLim > 0) {
-                if ($vote->hashed() === $type . '=0') {
+                if (substr($vote->hashed(),0,strlen($type . '=')) === ($type . '=')) {
                     if ($lastVote == null || $vote->hashed() == $lastVote) {
                         $lastVote = $vote->hashed();
                         $consecutiveLim--;
@@ -187,8 +192,11 @@ class MammalClassifier
      */
     public function store()
     {
-        if ($this->result == null) {
+        if ($this->result === null) {
             throw new RuntimeException('You need to call classify before storing the results!');
+        }
+        if ($this->db === null){
+            throw new RuntimeException('You cannot store without an active database connection');
         }
         $this->db->with(['imageId' => $this->imageId, 'result' => $this->result])->store();
         return $this;
@@ -254,7 +262,7 @@ class MammalClassifier
         return $mapNumberToFrequency;
     }
 
-    private function listOfAnimalCounts()
+    private function listOfSpeciesCounts()
     {
         $counts = [];
 
@@ -326,7 +334,7 @@ class MammalClassifier
     {
         /* Find the median of animal counts */
 
-        $n = Utils::findMedian($this->listOfAnimalCounts());
+        $n = Utils::findMedian($this->listOfSpeciesCounts());
 
         /* Get a map in the form of Species => Number of users who classified that species */
 
