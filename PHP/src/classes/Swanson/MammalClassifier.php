@@ -419,7 +419,12 @@ class MammalClassifier
                                 'evenness_species' => $evenness['speciesEvenness'],
                                 'evenness_count' => $evenness['countEvenness']
                             ]
-                            : self::FLAGGED_FOR_SCIENTIST;
+                            :
+                            [
+                                'classification' => self::FLAGGED_FOR_SCIENTIST,
+                                'evenness_species' => $evenness['speciesEvenness'],
+                                'evenness_count' => $evenness['countEvenness']
+                            ];
 
                     } else {
                         $this->result = self::NOT_ENOUGH_TO_CLASSIFY;

@@ -48,7 +48,7 @@ class ClassificationQuery extends Query
         $values = [];
 
         if($result != MammalClassifier::NOT_ENOUGH_TO_CLASSIFY){
-            if($result != MammalClassifier::FLAGGED_FOR_SCIENTIST){
+            if($result['classification'] != MammalClassifier::FLAGGED_FOR_SCIENTIST){
                 foreach($result['classification'] as $species  => $numberOf){
                     $values[] = [
                         'id' => null,
