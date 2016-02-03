@@ -1,0 +1,36 @@
+#chart {
+    height: 500px;
+    position: relative;
+    width: 560px;
+}
+
+.legend {
+    font-size: 12px;
+}
+
+rect {
+    stroke-width: 2;
+}
+
+.g-tooltip{
+    background: #eee;
+    box-shadow: 0 0 5px #999999;
+    color: #333;
+    display: none;
+    font-size: 12px;
+    left: 130px;
+    padding: 10px;
+    position: absolute;
+    text-align: center;
+    top: 95px;
+    width: 80px;
+    z-index: 10;
+}
+
+body {
+    padding-top: 50px;
+}
+.starter-template {
+    padding: 40px 15px;
+    text-align: center;
+}
