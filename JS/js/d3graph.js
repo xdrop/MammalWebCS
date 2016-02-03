@@ -89,6 +89,7 @@ function renderPie(data){
         .attr("dy",".35em")
         .attr('style','fill:white;')
         .attr('class','g-percentage')
+        .style("text-anchor","middle")
         .text(function(datum,index){
             var total = d3.sum(dataset.map(function(d){
                 return d.count;
@@ -114,7 +115,7 @@ function renderPie(data){
         // set from none to block
         tooltip.style('display', 'block')
                 .style("left", width / 2  - 40 + "px")
-                .style("top", height /2  + 40 + "px");
+                .style("top", height /2  + 50 + "px");
 
     });
 
