@@ -79,6 +79,11 @@ CREATE TABLE `evenness` (
   `evenness_species` float NOT NULL,
   `evenness_count` float NOT NULL
 )
+ALTER TABLE `evenness`
+  ADD PRIMARY KEY (`id`);
+  
+ALTER TABLE `evenness`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 ```
 
 and `classified`:
@@ -91,4 +96,11 @@ CREATE TABLE `classified` (
   `flagged` tinyint(1) DEFAULT '0',
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )
+
+ALTER TABLE `classified`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `classified`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 ```
