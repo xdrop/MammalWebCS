@@ -281,10 +281,10 @@ class MammalClassifier
     {
         /* Get a map in the form of Species/NumberOfAnimals => Number of times it appears */
         if ($evennessType) {
-            $map = &$this->getVotesPerSpecies();
+            $map = $this->getVotesPerSpecies();
             $this->votesPerSpecies = $map;
         } else {
-            $map = &$this->getNumberOfAnimalsFrequency();
+            $map = $this->getNumberOfAnimalsFrequency();
         }
 
         /* S is the different number of species */

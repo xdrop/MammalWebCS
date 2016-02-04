@@ -108,7 +108,7 @@ class ClassificationQuery extends Query
      * @param $results - The raw results of the query
      * @return mixed
      */
-    protected function reformat(&$results)
+    protected function reformat($results)
     {
         $map = [];
         $formatted = [];

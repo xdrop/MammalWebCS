@@ -59,13 +59,13 @@ abstract class Query
      * @param $results - The raw results of the query
      * @return mixed
      */
-    protected abstract function reformat(&$results);
+    protected abstract function reformat($results);
 
 
     public function fetch()
     {
         $this->fetchQuery($this->params);
-        $queries = &$this->internalFetchQueries;
+        $queries = $this->internalFetchQueries;
         if (!is_null($this->internalFetchQueries)) {
             return $this->reformat($this->internalFetchQueries->fetchAll());
         }
@@ -74,7 +74,7 @@ abstract class Query
     public function store()
     {
         $this->storeQuery($this->params);
-        $queries = &$this->internalStoreQueries;
+        $queries = $this->internalStoreQueries;
         if (!is_null($queries)) {
             if(is_array($queries)){
                 foreach($this->internalStoreQueries as $query){
@@ -90,7 +90,7 @@ abstract class Query
     public function update()
     {
         $this->updateQuery($this->params);
-        $queries = &$this->internalUpdateQueries;
+        $queries = $this->internalUpdateQueries;
         if (!is_null($queries)) {
             if(is_array($queries)){
                 foreach($this->internalUpdateQueries as $query){
@@ -106,7 +106,7 @@ abstract class Query
     public function delete()
     {
         $this->deleteQuery($this->params);
-        $queries = &$this->internalDeleteQueries;
+        $queries = $this->internalDeleteQueries;
         if (!is_null($queries)) {
             if(is_array($queries)){
                 foreach($this->internalDeleteQueries as $query){
