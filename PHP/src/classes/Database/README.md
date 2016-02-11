@@ -71,7 +71,7 @@ To set a fetch query for example you need to call `$this->addFetchQuery()` in th
 		$query = $this->db->from('options')
 					 ->select('options_name')
 					 ->select('options_id');
-					 ->where('options_id ', $params['optionId']) // assuming whoever calls this passes an optionsId in the params query
+					 ->where('options_id ', $params['optionId']) // assuming whoever calls this passes an optionsId in the params array
 
 		/* Add the query */
 		$this->addFetchQuery($query);
