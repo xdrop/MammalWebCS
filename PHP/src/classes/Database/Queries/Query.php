@@ -62,6 +62,38 @@ abstract class Query
     protected abstract function reformat($results);
 
 
+    protected function addFetchQuery(&$query){
+        $this->internalFetchQueries = $query;
+    }
+
+    protected function addStoreQuery(&$query){
+        if(is_array($this->internalStoreQueries) || 
+            !is_null($this->internalStoreQueries)){
+            $this->internalStoreQueries[] = $query;
+        } else{
+            $this->internalStoreQueries = $query;
+        }
+    }
+
+    protected function addUpdateQuery(&$query){
+        if(is_array($this->internalUpdateQueries) || 
+            !is_null($this->internalUpdateQueries)){
+            $this->internalUpdateQueries[] = $query;
+        } else{
+            $this->internalUpdateQueries = $query;
+        }
+    }
+
+    protected function addDeleteQuery(&$query){
+        if(is_array($this->internalDeleteQueries) || 
+            !is_null($this->internalDeleteQueries)){
+            $this->internalDeleteQueries[] = $query;
+        } else{
+            $this->internalDeleteQueries = $query;
+        }        
+    }
+
+
     public function fetch()
     {
         $this->fetchQuery($this->params);

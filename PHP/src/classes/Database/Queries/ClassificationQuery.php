@@ -26,11 +26,14 @@ class ClassificationQuery extends Query
             ORDER BY person_id DESC
          */
 
-        $this->internalFetchQueries =
-            $this->db->from(self::CLASSIFICATION_TABLE_NAME)
+        $imageId = $params['imageId'];
+
+        $query = $this->db->from(self::CLASSIFICATION_TABLE_NAME)
                      ->where(self::CLASSIFICATION_TABLE_NAME.'.' .
-                       self::IMAGE_ID_FIELD_NAME . ' = ?',$params['imageId'])
+                       self::IMAGE_ID_FIELD_NAME . ' = ?',$imageId)
                      ->orderBy(self::USER_ID_FIELD_NAME.  ' DESC');
+
+        $this->addFetchQuery($query);
     }
 
 
@@ -79,14 +82,14 @@ class ClassificationQuery extends Query
                 VALUES (NULL, 221, 22, '1', 0)
             */
 
-            $this->internalStoreQueries[] = $this->db->insertInto(self::CLASSIFIED_TABLE_NAME)->values($values);
+            $this->addStoreQuery($this->db->insertInto(self::CLASSIFIED_TABLE_NAME)->values($values));
 
             /* Query
                 INSERT INTO evenness (id, photo_id, evenness_species, evenness_count)
                 VALUES (...)
              */
 
-            $this->internalStoreQueries[] = $this->db->insertInto(self::EVENNESS_TABLE_NAME)->values($evenness);
+            $this->addStoreQuery($this->db->insertInto(self::EVENNESS_TABLE_NAME)->values($evenness));
         }
 
 
