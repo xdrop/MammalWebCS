@@ -4,7 +4,7 @@ Database Interaction Documentation
 
 To interact with the database you can create new classes extending the `Query` class.
 
-```
+```php
 class MyNewQuery extends Query {
 }
 ```
@@ -113,9 +113,7 @@ Using our query
 To use your query either in another class or to test all you need to do is create an instance your query, pass in the arguments using `with()` and call the method you wish to use on it (`fetch()`,`store()`,`update()`,`delete()`).
 
 ```php
-
 $myQuery = new MyNewQuery();
 
 $results = $myQuery->with(['id' => 2] /* Some parameters to the query */)->fetch();
-
 ```
