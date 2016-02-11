@@ -2,7 +2,7 @@ Database Interaction Documentation
 ===================
 
 
-To interact with the database you can create new classes extending the `Query` class.
+To interact with the database you can create new classes extending the `Query` class. These "queries" are not really queries themselves, they are sets of real sql queries describing how we obtain data for a specific purpose.
 
 ```php
 class MyNewQuery extends Query {
@@ -15,7 +15,7 @@ Queries can run four operations:
 - Update *(Updates data in the database)*
 - Delete *(Deletes data from the database)*
 
-You may choose to implement any that you need for any given query. As `Query` is abstract you need to implement five methods:
+You may choose to implement any that you need for any given query. As `Query` is abstract you need to implement all five methods (however fill only the ones you need):
 
 ```php
 class MyNewQuery extends Query {
@@ -65,11 +65,13 @@ To set a fetch query for example you need to call `$this->addFetchQuery()` in th
 
 	    /* Query
 	        SELECT (options_name,options_id) FROM options
+	            WHERE 'options_id' = ? (The parameter provided)
 	     */
 
-		$query = $this->db->from(self::OPTIONS_TABLE_NAME)
-					 ->select(self::OPTION_NAME)
-					 ->select(self::OPTION_ID);
+		$query = $this->db->from('options')
+					 ->select('options_name')
+					 ->select('options_id');
+					 ->where('options_id ', $params['optionId']) // assuming whoever calls this passes an optionsId in the params query
 
 		/* Add the query */
 		$this->addFetchQuery($query);
