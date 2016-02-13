@@ -84,7 +84,7 @@ Similarly for `store()`, `update()` etc. there are `addStoreQuery`, `addUpdateQu
 
 > **Note:**
 
-For creating the actual query you can access the database using `$this->db` and then use methods on it. (See [FluentPDO](http://lichtner.github.io/fluentpdo/) on how exactly).
+For creating the actual query you can access the database using `$this->db` and then use methods on it. (See [FluentPDO](http://fpdo.github.io/fluentpdo/) on how exactly).
 
 Reformat
 -------------
