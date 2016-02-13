@@ -17,8 +17,9 @@ class SpeciesNameQuery extends Query {
 	     */
 
 		$query = $this->db->from(self::OPTIONS_TABLE_NAME)
-					 ->select(self::OPTION_NAME)
-					 ->select(self::OPTION_ID);
+                          ->select(null)
+			              ->select([self::OPTION_NAME,self::OPTION_ID])
+                          ->where('struc', ['mammal','bird','noanimal']);
 
 		/* Add the query */
 		$this->addFetchQuery($query);
@@ -46,6 +47,8 @@ class SpeciesNameQuery extends Query {
     		foreach($results as $entry){
     			$map[$entry[self::OPTION_ID]] = $entry[self::OPTION_NAME];
     		}
+
+            return $map;
 
     	}
     }
