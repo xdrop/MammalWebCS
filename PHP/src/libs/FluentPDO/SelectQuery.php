@@ -19,18 +19,21 @@ class SelectQuery extends CommonQuery implements Countable {
 	private $fromTable, $fromAlias;
 
 	function __construct(FluentPDO $fpdo, $from) {
-		$clauses = array(
-			'SELECT' => ', ',
-			'FROM' => null,
-			'JOIN' => array($this, 'getClauseJoin'),
-			'WHERE' => ' AND ',
-			'GROUP BY' => ',',
-			'HAVING' => ' AND ',
-			'ORDER BY' => ', ',
-			'LIMIT' => null,
-			'OFFSET' => null,
-			"\n--" => "\n--",
-		);
+            $clauses = array(
+                'SELECT' => ', ',
+                'SELECT DISTINCT' => ', ',
+                'FROM' => null,
+                'JOIN' => array($this, 'getClauseJoin'),
+                'WHERE' => ' AND ',
+                'GROUP BY' => ',',
+                'HAVING' => ' AND ',
+                'ORDER BY' => ', ',
+                'LIMIT' => null,
+                'OFFSET' => null,
+                "\n--" => "\n--",
+            );
+
+
 		parent::__construct($fpdo, $clauses);
 
 		# initialize statements
@@ -39,9 +42,15 @@ class SelectQuery extends CommonQuery implements Countable {
 		$this->fromAlias = end($fromParts);
 
 		$this->statements['FROM'] = $from;
-		$this->statements['SELECT'][] = $this->fromAlias . '.*';
+        $this->statements['SELECT'][] = $this->fromAlias . '.*';
 		$this->joins[] = $this->fromAlias;
 	}
+
+    public function selectDistinct($fields){
+        $this->resetClause("SELECT");
+        $this->addStatement("SELECT DISTINCT", $fields);
+        return $this;
+    }
 
 	/** Return table name from FROM clause
 	 * @internal
