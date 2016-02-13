@@ -15,7 +15,7 @@ Queries can run four operations:
 - Update *(Updates data in the database)*
 - Delete *(Deletes data from the database)*
 
-You may choose to implement any that you need for any given query. As `Query` is abstract you need to implement all five methods (however fill only the ones you need):
+You may choose to implement any that you need for any given query. As `Query` is abstract you need to implement all four methods (however fill only the ones you need):
 
 ```php
 class MyNewQuery extends Query {
@@ -36,11 +36,6 @@ class MyNewQuery extends Query {
     protected function deleteQuery(&$params)
     {
         // TODO: Implement deleteQuery() method.
-    }
-
-    protected function reformat($results)
-    {
-		// TODO: Implement reformat() method.
     }
 
 }
@@ -93,7 +88,8 @@ For creating the actual query you can access the database using `$this->db` and 
 
 Reformat
 -------------
-The last method `reformat()` you need to implement takes the results from your query as input and reformats them in some way you specify in the method and then returns them. It's not nessecary to fill it in if you feel that the results are already in the correct format.
+The last method `reformat()` you can reimplement (override) takes the results from your query as input and reformats them in some way you specify in the method and then returns them. 
+It's not necessary to override it if you feel that the results are already in the correct format.
 
 Example:
 ```php

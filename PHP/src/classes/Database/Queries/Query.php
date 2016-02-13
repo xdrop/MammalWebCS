@@ -59,7 +59,12 @@ abstract class Query
      * @param $results - The raw results of the query
      * @return mixed
      */
-    protected abstract function reformat($results);
+    protected function reformat($results){
+        return $results;
+    }
+
+
+
 
 
     protected function addFetchQuery(&$query){

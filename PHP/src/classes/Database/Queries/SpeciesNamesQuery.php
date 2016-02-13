@@ -50,15 +50,8 @@ class SpeciesNameQuery extends Query {
 
             return $map;
 
-    	}
+    	} else{
+            return [];
+        }
     }
-
-
-
-
-
-
-
-
-
 }
