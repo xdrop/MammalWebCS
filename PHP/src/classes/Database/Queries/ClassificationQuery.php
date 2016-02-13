@@ -10,6 +10,7 @@ class ClassificationQuery extends Query
     const IMAGE_ID_FIELD_NAME = 'photo_id';
     const USER_ID_FIELD_NAME = 'person_id';
     const SPECIES_FIELD_NAME = 'species';
+    const TIMESTAMP_FIELD_NAME = 'timestamp';
     const NUMBER_OF_ANIMALS_IN_PIC_FIELD = 'number';
 
     protected function fetchQuery(&$params)
@@ -18,20 +19,25 @@ class ClassificationQuery extends Query
             throw new BadMethodCallException("You need to provide a value to imageId before using this method.");
         }
 
-        /*
-          Query equivalent to:
-            SELECT animal.*
-            FROM animal
-            WHERE animal.photo_id = ?
-            ORDER BY person_id DESC
-         */
 
         $imageId = $params['imageId'];
 
-        $query = $this->db->from(self::CLASSIFICATION_TABLE_NAME)
-                     ->where(self::CLASSIFICATION_TABLE_NAME.'.' .
+        /*
+          Query equivalent to:
+            SELECT DISTINCT animal.person_id, animal.species, animal.number
+            FROM animal
+            WHERE animal.photo_id = ?
+            ORDER BY timestamp ASC
+         */
+
+        $query = $this->db
+                    ->from(self::CLASSIFICATION_TABLE_NAME)
+                    ->selectDistinct([self::USER_ID_FIELD_NAME,
+                        self::SPECIES_FIELD_NAME,
+                        self::NUMBER_OF_ANIMALS_IN_PIC_FIELD])
+                    ->where(self::CLASSIFICATION_TABLE_NAME.'.' .
                        self::IMAGE_ID_FIELD_NAME . ' = ?',$imageId)
-                     ->orderBy(self::USER_ID_FIELD_NAME.  ' DESC');
+                    ->orderBy(self::TIMESTAMP_FIELD_NAME.  ' ASC');
 
         $this->addFetchQuery($query);
     }
@@ -45,8 +51,6 @@ class ClassificationQuery extends Query
         }
 
         $result = $params['result'];
-
-
 
         $values = [];
 
