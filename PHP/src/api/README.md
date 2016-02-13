@@ -3,6 +3,9 @@ API Reference
 
 Get a list of species and ids
 
+(For now) 
+`GET ./internal/animals.php?action=list`
+
 ```JSON
 {
 
