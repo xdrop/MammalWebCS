@@ -1,36 +1,39 @@
 <?php
 
 
-class SpeciesNameQuery extends Query {
+class SpeciesNameQuery extends Query
+{
 
-	const OPTIONS_TABLE_NAME = 'options';
+    const OPTIONS_TABLE_NAME = 'options';
 
-	const OPTION_NAME = 'option_name';
+    const OPTION_NAME = 'option_name';
 
-	const OPTION_ID = 'option_id';
+    const OPTION_ID = 'option_id';
 
 
-	protected function fetchQuery(&$params){
+    protected function fetchQuery(&$params)
+    {
 
-	    /* Query
-	        SELECT (options_name,options_id) FROM options
-	     */
+        /* Query
+            SELECT (options_name,options_id) FROM options
+         */
 
-		$query = $this->db->from(self::OPTIONS_TABLE_NAME)
-                          ->select(null)
-			              ->select([self::OPTION_NAME,self::OPTION_ID])
-                          ->where('struc', ['mammal','bird','noanimal']);
+        $query = $this->db->from(self::OPTIONS_TABLE_NAME)
+            ->select(null)
+            ->select([self::OPTION_NAME, self::OPTION_ID])
+            ->where('struc', ['mammal', 'bird', 'noanimal']);
 
-		/* Add the query */
-		$this->addFetchQuery($query);
+        /* Add the query */
+        $this->addFetchQuery($query);
 
-	}
+    }
 
-	protected function storeQuery(&$params){
-		// TODO: Implement storeQuery() method
-	}
+    protected function storeQuery(&$params)
+    {
+        // TODO: Implement storeQuery() method
+    }
 
-	protected function updateQuery(&$params)
+    protected function updateQuery(&$params)
     {
         // TODO: Implement updateQuery() method.
     }
@@ -42,15 +45,14 @@ class SpeciesNameQuery extends Query {
 
     protected function reformat($results)
     {
-    	if(!is_null($results)){
-    		$map = [];
-    		foreach($results as $entry){
-    			$map[$entry[self::OPTION_ID]] = $entry[self::OPTION_NAME];
-    		}
-
+        if (!is_null($results)) {
+            $map = [];
+            foreach ($results as $entry) {
+                $map[$entry[self::OPTION_ID]] = $entry[self::OPTION_NAME];
+            }
             return $map;
 
-    	} else{
+        } else {
             return [];
         }
     }

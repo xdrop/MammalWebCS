@@ -15,7 +15,7 @@ class ClassificationQuery extends Query
 
     protected function fetchQuery(&$params)
     {
-        if(!Utils::keysExist(['imageId'],$params)){
+        if (!Utils::keysExist(['imageId'], $params)) {
             throw new BadMethodCallException("You need to provide a value to imageId before using this method.");
         }
 
@@ -31,13 +31,13 @@ class ClassificationQuery extends Query
          */
 
         $query = $this->db
-                    ->from(self::CLASSIFICATION_TABLE_NAME)
-                    ->selectDistinct([self::USER_ID_FIELD_NAME,
-                        self::SPECIES_FIELD_NAME,
-                        self::NUMBER_OF_ANIMALS_IN_PIC_FIELD])
-                    ->where(self::CLASSIFICATION_TABLE_NAME.'.' .
-                       self::IMAGE_ID_FIELD_NAME . ' = ?',$imageId)
-                    ->orderBy(self::TIMESTAMP_FIELD_NAME.  ' ASC');
+            ->from(self::CLASSIFICATION_TABLE_NAME)
+            ->selectDistinct([self::USER_ID_FIELD_NAME,
+                self::SPECIES_FIELD_NAME,
+                self::NUMBER_OF_ANIMALS_IN_PIC_FIELD])
+            ->where(self::CLASSIFICATION_TABLE_NAME . '.' .
+                self::IMAGE_ID_FIELD_NAME . ' = ?', $imageId)
+            ->orderBy(self::TIMESTAMP_FIELD_NAME . ' ASC');
 
         $this->addFetchQuery($query);
     }
@@ -45,7 +45,7 @@ class ClassificationQuery extends Query
 
     protected function storeQuery(&$params)
     {
-        if(!Utils::keysExist(['imageId','result'],$params)){
+        if (!Utils::keysExist(['imageId', 'result'], $params)) {
             throw new BadMethodCallException("You need to provide a value to imageId and the" .
                 " query result before using this method.");
         }
@@ -54,9 +54,9 @@ class ClassificationQuery extends Query
 
         $values = [];
 
-        if($result != MammalClassifier::NOT_ENOUGH_TO_CLASSIFY){
-            if($result['classification'] != MammalClassifier::FLAGGED_FOR_SCIENTIST){
-                foreach($result['classification'] as $species  => $numberOf){
+        if ($result != MammalClassifier::NOT_ENOUGH_TO_CLASSIFY) {
+            if ($result['classification'] != MammalClassifier::FLAGGED_FOR_SCIENTIST) {
+                foreach ($result['classification'] as $species => $numberOf) {
                     $values[] = [
                         'id' => null,
                         'photo_id' => $params['imageId'],
@@ -65,7 +65,7 @@ class ClassificationQuery extends Query
                         'flagged' => false
                     ];
                 }
-            } else{
+            } else {
                 $values = [
                     'id' => null,
                     'photo_id' => $params['imageId'],
@@ -97,7 +97,6 @@ class ClassificationQuery extends Query
         }
 
 
-
     }
 
     protected function updateQuery(&$params)
@@ -119,19 +118,19 @@ class ClassificationQuery extends Query
     {
         $map = [];
         $formatted = [];
-        foreach($results as $entry){
+        foreach ($results as $entry) {
             $currentUser = $entry[self::USER_ID_FIELD_NAME];
             $currentSpecies = $entry[self::SPECIES_FIELD_NAME];
             $currentNumberOf = $entry[self::NUMBER_OF_ANIMALS_IN_PIC_FIELD];
 
-            if(isset($map[$currentUser])){
+            if (isset($map[$currentUser])) {
                 $specificUserClassification = &$map[$currentUser];
-                if(isset($specificUserClassification[$currentSpecies])){
+                if (isset($specificUserClassification[$currentSpecies])) {
                     $specificUserClassification[$currentSpecies] += $currentNumberOf;
-                } else{
+                } else {
                     $specificUserClassification[$currentSpecies] = $currentNumberOf;
                 }
-            } else{
+            } else {
                 $map[$currentUser][$currentSpecies] = $currentNumberOf;
             }
 

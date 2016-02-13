@@ -59,43 +59,48 @@ abstract class Query
      * @param $results - The raw results of the query
      * @return mixed
      */
-    protected function reformat($results){
+    protected function reformat($results)
+    {
         return $results;
     }
 
 
-
-
-
-    protected function addFetchQuery(&$query){
+    protected function addFetchQuery(&$query)
+    {
         $this->internalFetchQueries = $query;
     }
 
-    protected function addStoreQuery(&$query){
-        if(is_array($this->internalStoreQueries) || 
-            !is_null($this->internalStoreQueries)){
+    protected function addStoreQuery(&$query)
+    {
+        if (is_array($this->internalStoreQueries) ||
+            !is_null($this->internalStoreQueries)
+        ) {
             $this->internalStoreQueries[] = $query;
-        } else{
+        } else {
             $this->internalStoreQueries = $query;
         }
     }
 
-    protected function addUpdateQuery(&$query){
-        if(is_array($this->internalUpdateQueries) || 
-            !is_null($this->internalUpdateQueries)){
+    protected function addUpdateQuery(&$query)
+    {
+        if (is_array($this->internalUpdateQueries) ||
+            !is_null($this->internalUpdateQueries)
+        ) {
             $this->internalUpdateQueries[] = $query;
-        } else{
+        } else {
             $this->internalUpdateQueries = $query;
         }
     }
 
-    protected function addDeleteQuery(&$query){
-        if(is_array($this->internalDeleteQueries) || 
-            !is_null($this->internalDeleteQueries)){
+    protected function addDeleteQuery(&$query)
+    {
+        if (is_array($this->internalDeleteQueries) ||
+            !is_null($this->internalDeleteQueries)
+        ) {
             $this->internalDeleteQueries[] = $query;
-        } else{
+        } else {
             $this->internalDeleteQueries = $query;
-        }        
+        }
     }
 
 
@@ -113,12 +118,12 @@ abstract class Query
         $this->storeQuery($this->params);
         $queries = $this->internalStoreQueries;
         if (!is_null($queries)) {
-            if(is_array($queries)){
-                foreach($this->internalStoreQueries as $query){
+            if (is_array($queries)) {
+                foreach ($this->internalStoreQueries as $query) {
                     $query->execute();
                 }
-            } else{
-                $queries.execute();
+            } else {
+                $queries . execute();
             }
 
         }
@@ -129,12 +134,12 @@ abstract class Query
         $this->updateQuery($this->params);
         $queries = $this->internalUpdateQueries;
         if (!is_null($queries)) {
-            if(is_array($queries)){
-                foreach($this->internalUpdateQueries as $query){
+            if (is_array($queries)) {
+                foreach ($this->internalUpdateQueries as $query) {
                     $query->execute();
                 }
-            } else{
-                $queries.execute();
+            } else {
+                $queries . execute();
             }
 
         }
@@ -145,14 +150,14 @@ abstract class Query
         $this->deleteQuery($this->params);
         $queries = $this->internalDeleteQueries;
         if (!is_null($queries)) {
-            if(is_array($queries)){
-                foreach($this->internalDeleteQueries as $query){
+            if (is_array($queries)) {
+                foreach ($this->internalDeleteQueries as $query) {
                     $query->execute();
                 }
-            } else{
-                $queries.execute();
+            } else {
+                $queries . execute();
             }
-            
+
         }
     }
 
