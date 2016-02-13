@@ -100,7 +100,10 @@ protected function reformat($results)
     		foreach($results as $entry){
     			$map[$entry[self::OPTION_ID]] = $entry[self::OPTION_NAME];
     		}
-
+    		
+    		return $map; // don't forget to return back the results!
+    	} else{
+    	    return []; 
     	}
     }
 ```
