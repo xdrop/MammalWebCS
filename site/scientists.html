@@ -17,6 +17,83 @@
 <div class="ui item">Users</div>
 <div class="ui item">Scientists</div>
 </div>
+<div class = "ui container segment">
+<select id ="animal_drop" class="ui  search dropdown" multiple="">
+  <option value="">Animal</option>
+</select>
+<select id ="users_drop" class="ui  search dropdown" multiple="">
+  <option value="">Users</option>
+</select>
+<select id ="time_drop" class="ui  search dropdown" multiple="">
+  <option value="">Select Time Period</option>
+</select>
+<select id ="site_drop" class="ui  search dropdown" multiple="">
+  <option value="">Sites</option>
+</select>
+<select id ="habitat_drop" class="ui  search dropdown" multiple="">
+  <option value="">Habitat</option>
+</select>
+<select id ="presence_drop" class="ui  search dropdown" multiple="">
+  <option value="">Presence of Humans</option>
+</select>
+<select id ="blank_drop" class="ui  search dropdown" multiple="">
+  <option value="">Blank Images</option>
+</select>
+<select id ="classification_number_drop" class="ui  search dropdown" multiple="">
+  <option value="">Number of classifications</option>
+</select>
+<select id ="flagged_drop" class="ui  search dropdown" multiple="">
+  <option value="">Flagged</option>
+</select>
+<button id="test" class = "ui primary button">Click me</button>
+<div id="test_area"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.ui.dropdown')
+          .dropdown()
+        ;
+        // $.get("../PHP/src/api/internal/animals.php?action=list", function(data){
+        //   $('#test_area').text(JSON.stringify(data));
+        // });
+        var animals = {
+
+    "10": "Badger",
+    "11": "Blackbird",
+    "12": "Domestic cat",
+    "13": "Crow",
+    "14": "Domestic dog",
+    "16": "Grey squirrel",
+    "17": "Horse",
+    "19": "Magpie",
+    "20": "Rabbit",
+    "21": "Red fox",
+    "22": "Roe Deer",
+    "23": "Stoat or Weasel",
+    "24": "Woodpigeon",
+    "34": "Muntjac",
+    "35": "Brown hare",
+    "36": "Hedgehog",
+    "37": "Pheasant",
+    "38": "Jackdaw",
+    "39": "Red deer",
+    "40": "Fallow deer",
+    "41": "Mountain hare",
+    "42": "Small rodent (e.g. mouse, vole, rat)",
+    "43": "Livestock",
+    "44": "Pine marten",
+    "45": "Red squirrel",
+    "86": "Nothing <span class='fa fa-ban'/>",
+    "87": "Human <span class='fa fa-male'/>",
+    "159": "Otter"
+};
+    $.each(animals, function(k, v) {
+  //<option value="">Animal</option>
+
+        $("#animal_drop").prepend("<option value=" + k + "\">" + v + "</option>");
+    });
+    });
+</script>
 </body>
 </html>
 
