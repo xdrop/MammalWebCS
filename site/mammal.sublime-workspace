@@ -51,15 +51,7 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 692,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "users.html",
-			"settings":
-			{
-				"buffer_size": 692,
+				"buffer_size": 1490,
 				"line_ending": "Unix"
 			}
 		},
@@ -67,7 +59,15 @@
 			"file": "scientists.html",
 			"settings":
 			{
-				"buffer_size": 692,
+				"buffer_size": 2195,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/ben/Documents/_uni/GP/MammalWebCS/PHP/src/api/internal/animals.php",
+			"settings":
+			{
+				"buffer_size": 251,
 				"line_ending": "Unix"
 			}
 		}
@@ -96,9 +96,13 @@
 	"command_palette":
 	{
 		"height": 750.0,
-		"last_filter": "re",
+		"last_filter": "close",
 		"selected_items":
 		[
+			[
+				"close",
+				"Project: Close"
+			],
 			[
 				"re",
 				"File: Rename"
@@ -108,7 +112,7 @@
 				"File: Rename"
 			]
 		],
-		"width": 906.0
+		"width": 1158.0
 	},
 	"console":
 	{
@@ -130,6 +134,13 @@
 	},
 	"file_history":
 	[
+		"/home/ben/Documents/_uni/GP/MammalWebCS/site/test.html",
+		"/home/ben/Documents/_uni/GP/MammalWebCS/site/scientists.html",
+		"/home/ben/Documents/_uni/GP/MammalWebCS/site/users.html",
+		"/home/ben/Documents/_uni/GP/MammalWebCS/PHP/src/classes/Database/DatabaseConnector.php",
+		"/home/ben/Documents/_uni/GP/MammalWebCS/site/index.html",
+		"/home/ben/Documents/_uni/GP/MammalWebCS/PHP/src/classes/Database/Queries/Query.php",
+		"/home/ben/Documents/_uni/GP/MammalWebCS/PHP/src/classes/Database/Queries/ClassificationQuery.php",
 		"/home/ben/Documents/_uni/SM/Digital Communications/assignment/output.txt",
 		"/home/ben/Documents/_uni/SM/Digital Communications/assignment/output.tex",
 		"/home/ben/Documents/_uni/SM/Digital Communications/assignment/assignment.py",
@@ -162,6 +173,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"fluid",
 			">>",
 			"modArray",
 			"modInv",
@@ -173,6 +185,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"",
 			"\\gg",
 			"history"
 		],
@@ -185,7 +198,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -194,48 +207,23 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 692,
+						"buffer_size": 1490,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1490,
+								1490
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "users.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 692,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.sublime-syntax"
+							"auto_complete": false,
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -245,24 +233,25 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 1,
 					"file": "scientists.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 692,
+						"buffer_size": 2195,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								461,
-								461
+								748,
+								748
 							]
 						],
 						"settings":
 						{
+							"auto_complete": false,
 							"syntax": "Packages/HTML/HTML.sublime-syntax"
 						},
 						"translation.x": 0.0,
@@ -270,6 +259,34 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/ben/Documents/_uni/GP/MammalWebCS/PHP/src/api/internal/animals.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 251,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -318,7 +335,7 @@
 	"project": "mammal.sublime-project",
 	"replace":
 	{
-		"height": 78.0
+		"height": 118.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -332,12 +349,12 @@
 	},
 	"select_project":
 	{
-		"height": 0.0,
+		"height": 1000.0,
 		"last_filter": "",
 		"selected_items":
 		[
 		],
-		"width": 0.0
+		"width": 760.0
 	},
 	"select_symbol":
 	{
