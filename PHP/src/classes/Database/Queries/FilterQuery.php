@@ -17,7 +17,7 @@ class FilterQuery extends Query
         $query = $this->db->from('classified')
             ->select('id')
             ->select('photo_id')
-            ->where("species = " . $params["species1"] . " OR " . "species = " . $params["species2"]); // assuming whoever calls this passes a species1 and species2 in the params array
+            ->where("species = ? OR species = ?", $params["species1"], $params["species2"]); // assuming whoever calls this passes a species1 and species2 in the params array
 
         /* Add the query */
         $this->addFetchQuery($query);
