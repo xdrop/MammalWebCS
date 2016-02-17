@@ -1,11 +1,11 @@
 <?php
 require('../../../core.php');
 
-$myQuery = new FilterQuery();
-
-$results = $myQuery->with(["species1" => 20, "species2" => 22])->fetch();
-
-print_r($results);
+//$myQuery = new FilterQuery();
+//
+//$results = $myQuery->with(["species1" => 20, "species2" => 22])->fetch();
+//
+//print_r($results);
 
 $newQueryTest = new SpeciesFilterQuery();
 
