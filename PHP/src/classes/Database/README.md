@@ -117,3 +117,5 @@ $myQuery = new MyNewQuery();
 
 $results = $myQuery->with(['id' => 2] /* Some parameters to the query */)->fetch();
 ```
+
+You can also export results in CSV using `fetchCSV()` or in JSON using `fetchJSON()`.

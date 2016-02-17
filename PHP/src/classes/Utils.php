@@ -23,7 +23,7 @@ class Utils
                 $numberOfTrue++;
             }
         }
-        return ($numberOfTrue / count($truthvalue));
+        return ($numberOfTrue / count($list));
     }
 
     /**
