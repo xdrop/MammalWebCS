@@ -8,7 +8,6 @@ class SpeciesFilterQuery extends Query
 
     protected function fetchQuery(&$params)
     {
-
         $usersToInclude = Utils::getValue($params["users_include"], []);
         $usersToExclude = Utils::getValue($params["users_exclude"], []);
 
@@ -27,13 +26,11 @@ class SpeciesFilterQuery extends Query
 
         $hasSiteId = Utils::keysExist("site_id", $params);
 
-        $hasHumans = Utils::keysExist("has_humans", $params);
+        $hasHumans = Utils::keysExist("contains_human", $params);
 
 
         // SELECT * FROM classified
         // WHERE species IN (?,?,?,...) AND NOT IN (?,?,...)
-
-        $this->db->debug=true;
 
         $query = $this->db->from('classified')
             ->select(['classified.photo_id', 'classified.species', 'classified.flagged',
@@ -70,7 +67,7 @@ class SpeciesFilterQuery extends Query
 
         if ($hasFlagged) {
             $flagged = $params['flagged'];
-            $query->where("photo.flagged", $flagged);
+            $query->where("classified.flagged", $flagged);
         }
 
         if ($hasSiteId) {
@@ -79,7 +76,7 @@ class SpeciesFilterQuery extends Query
         }
 
         if($hasHumans){
-            $humans = $params['has_humans'];
+            $humans = $params['contains_human'];
             $query->where("photo.contains_human", $humans);
         }
 
