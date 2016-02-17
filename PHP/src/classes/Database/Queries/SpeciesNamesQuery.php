@@ -19,7 +19,6 @@ class SpeciesNameQuery extends Query
          */
 
         $query = $this->db->from(self::OPTIONS_TABLE_NAME)
-            ->select(null)
             ->select([self::OPTION_NAME, self::OPTION_ID])
             ->where('struc', ['mammal', 'bird', 'noanimal']);
 
