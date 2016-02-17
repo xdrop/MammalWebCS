@@ -4,7 +4,7 @@
 abstract class Query
 {
     protected $db;
-    protected $internalFetchQueries;
+    protected $internalFetchQuery;
     protected $internalStoreQueries;
     protected $internalUpdateQueries;
     protected $internalDeleteQueries;
@@ -18,16 +18,17 @@ abstract class Query
     public function with($params)
     {
         $this->params = $params;
-        $this->internalFetchQueries = null;
-        $this->internalStoreQueries = null;
-        $this->internalUpdateQueries = null;
-        $this->internalDeleteQueries = null;
+        /* Only one fetch query makes sense because otherwise we can't group results */
+        $this->internalFetchQuery = null;
+        $this->internalStoreQueries = [];
+        $this->internalUpdateQueries = [];
+        $this->internalDeleteQueries = [];
         return $this;
     }
 
 
     /**
-     * Creates the SQL queries to fetch the data required and stores it in the appropriate internal query
+     * Creates the SQL query to fetch the data required and stores it in the appropriate internal query
      * @param array $params The parameters of the query
      * @return mixed
      */
@@ -67,50 +68,67 @@ abstract class Query
 
     protected function addFetchQuery(&$query)
     {
-        $this->internalFetchQueries = $query;
+        $this->internalFetchQuery = $query;
     }
 
     protected function addStoreQuery(&$query)
     {
-        if (is_array($this->internalStoreQueries) ||
-            !is_null($this->internalStoreQueries)
-        ) {
+        if (!is_null($query)) {
             $this->internalStoreQueries[] = $query;
-        } else {
-            $this->internalStoreQueries = $query;
         }
     }
 
     protected function addUpdateQuery(&$query)
     {
-        if (is_array($this->internalUpdateQueries) ||
-            !is_null($this->internalUpdateQueries)
-        ) {
+        if (!is_null($query)) {
             $this->internalUpdateQueries[] = $query;
-        } else {
-            $this->internalUpdateQueries = $query;
         }
     }
 
     protected function addDeleteQuery(&$query)
     {
-        if (is_array($this->internalDeleteQueries) ||
-            !is_null($this->internalDeleteQueries)
-        ) {
+        if (!is_null($query)) {
             $this->internalDeleteQueries[] = $query;
-        } else {
-            $this->internalDeleteQueries = $query;
         }
     }
 
 
+    /**
+     * @return mixed|null Fetches the results of the query
+     */
     public function fetch()
     {
         $this->fetchQuery($this->params);
-        $queries = $this->internalFetchQueries;
-        if (!is_null($this->internalFetchQueries)) {
-            return $this->reformat($this->internalFetchQueries->fetchAll());
+
+        if (!is_null($this->internalFetchQuery)) {
+            return $this->reformat($this->internalFetchQuery->fetchAll());
+        } else{
+            return null;
         }
+    }
+
+    /**
+     * @return string Fetches the results of the query in JSON format
+     */
+    public function fetchJSON(){
+        return json_encode($this->fetch());
+    }
+
+    /**
+     * @return string Fetches the results of the query in CSV format
+     */
+    public function fetchCSV(){
+        $result = $this->fetch();
+        $outputBuffer = fopen("php://output", 'w');
+
+        if(is_array($result)){
+            foreach($result as $row){
+                fputcsv($outputBuffer,$row);
+            }
+            fclose($outputBuffer);
+        }
+
+        return $outputBuffer;
     }
 
     public function store()

@@ -9,6 +9,6 @@ print_r($results);
 
 $newQueryTest = new SpeciesFilterQuery();
 
-$results = $newQueryTest->with(["include" => [20,21], "exclude" => [87]])->fetch();
+$results = $newQueryTest->with(["include" => [20,21], "exclude" => [87]])->fetchCSV();
 //currently just print for test purposes
-print_r($results);
+print($results);
