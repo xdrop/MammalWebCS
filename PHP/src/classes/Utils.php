@@ -27,6 +27,17 @@ class Utils
     }
 
     /**
+     * this generates the appropriate number of unbound variables for use in "IN (?,?,?...)"
+     * this unbound variables have to be passed values to through the arguments of the where method
+     * @param $elem array Elements to count
+     * @return string The string containing unbound terms
+     */
+    public static function generateUnknowns($elem)
+    {
+        return count($elem) > 0 ? implode(',', array_fill(0, count($elem), '?')) : '';
+    }
+
+    /**
      * @param $var mixed The value you want to access
      * @param null $default The default value if the key is not set
      * @return null The value or default if not found

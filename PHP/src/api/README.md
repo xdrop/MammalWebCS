@@ -39,3 +39,25 @@ Get a list of species and ids
     "159": "Otter"
 }
 ```
+
+
+Get filtered results
+
+(For now) `POST ./internal/filter.php`, on field 'params' (ie. params=JSON_below)
+(all fields are optional)
+```JSON
+{
+    "species_include": [],
+    "species_exclude": [],
+    "users_include": [],
+    "users_exclude": [],
+    "no_of_classifications": 9,
+    "habitat_id": 104,
+    "flagged": false,
+    "site_id": 2,
+    "taken_start": "2014-04-19 14:55:22",
+    "taken_end": "2015-04-19 14:55:22",
+    "__comment_ignore": "the dates strictly have to be YYYY-MM-DD HH:MM:SS",
+    "contains_human": false
+}
+```
