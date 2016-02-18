@@ -9,6 +9,6 @@ require('../../../core.php');
 
 $newQueryTest = new SpeciesFilterQuery();
 
-$results = $newQueryTest->with(["include" => [20,21], "exclude" => [87]])->fetchCSV();
+$results = $newQueryTest->with(["no_of_classifications" => 10])->fetchCSV();
 //currently just print for test purposes
 print($results);

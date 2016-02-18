@@ -51,6 +51,7 @@ Get filtered results
     "species_exclude": [],
     "users_include": [],
     "users_exclude": [],
+    "no_of_classifications": 9,
     "flagged": false,
     "site_id": 2,
     "taken_start": "2014-04-19 14:55:22",

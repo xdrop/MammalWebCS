@@ -28,6 +28,7 @@ class SpeciesFilterQuery extends Query
 
         $hasHumans = Utils::keysExist("contains_human", $params);
 
+        $hasNumberOfClassifications = Utils::keysExist("no_of_classifications", $params);
 
         // SELECT * FROM classified
         // WHERE species IN (?,?,?,...) AND NOT IN (?,?,...)
@@ -38,6 +39,15 @@ class SpeciesFilterQuery extends Query
             ->leftJoin('photo ON photo.photo_id = classified.photo_id')
             ->select(['photo.taken', 'photo.person_id', 'photo.site_id',
                 'photo.contains_human']);
+
+
+        if($hasNumberOfClassifications){
+            $numberOfClassifications = $params["no_of_classifications"];
+            $query->leftJoin('animal ON animal.photo_id = classified.photo_id')
+                ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
+                ->groupBy('photo_id')
+                ->having("COUNT(DISTINCT animal.person_id) = ?",$numberOfClassifications);
+        }
 
         if ($hasSpeciesToInclude) {
             $unknowns = Utils::generateUnknowns($speciesToInclude);
