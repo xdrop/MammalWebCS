@@ -52,6 +52,7 @@ Get filtered results
     "users_include": [],
     "users_exclude": [],
     "no_of_classifications": 9,
+    "habitat_id": 104,
     "flagged": false,
     "site_id": 2,
     "taken_start": "2014-04-19 14:55:22",

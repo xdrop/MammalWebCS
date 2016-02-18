@@ -30,6 +30,8 @@ class SpeciesFilterQuery extends Query
 
         $hasNumberOfClassifications = Utils::keysExist("no_of_classifications", $params);
 
+        $hasHabitatType = Utils::keysExist("habitat_id",$params);
+
         // SELECT * FROM classified
         // WHERE species IN (?,?,?,...) AND NOT IN (?,?,...)
 
@@ -38,7 +40,9 @@ class SpeciesFilterQuery extends Query
                 'classified.timestamp AS time_classified'])
             ->leftJoin('photo ON photo.photo_id = classified.photo_id')
             ->select(['photo.taken', 'photo.person_id', 'photo.site_id',
-                'photo.contains_human']);
+                'photo.contains_human'])
+            ->leftJoin('site ON site.site_id = photo.site_id')
+            ->select('site.habitat_id');
 
 
         if($hasNumberOfClassifications){
@@ -47,6 +51,11 @@ class SpeciesFilterQuery extends Query
                 ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
                 ->groupBy('photo_id')
                 ->having("COUNT(DISTINCT animal.person_id) = ?",$numberOfClassifications);
+        }
+
+        if($hasHabitatType){
+                $habitatType=  $params["habitat_id"];
+                $query->where('site.habitat_id',$habitatType);
         }
 
         if ($hasSpeciesToInclude) {
