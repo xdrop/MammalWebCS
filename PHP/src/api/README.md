@@ -4,7 +4,7 @@ API Reference
 Get a list of species and ids
 
 (For now) 
-`GET ./internal/animals.php?action=list`
+`GET ./internal/list.php?item=species`
 
 ```JSON
 {
@@ -37,6 +37,52 @@ Get a list of species and ids
     "86": "Nothing <span class='fa fa-ban'/>",
     "87": "Human <span class='fa fa-male'/>",
     "159": "Otter"
+}
+```
+
+`GET ./internal/list.php?item=habitats`
+
+```JSON
+{
+
+    "103": "forest - high density forest more than 60% canopy cover",
+    "104": "woodland - low density forest less than 60% canopy cover",
+    "105": "scrubland - dominated by shrubs, i.e. small to medium woody plants less than 8 m high",
+    "106": "heath - a kind of scrubland characterised by open, low-growing woody plants less than 2 m high",
+    "107": "grassland - dominated by grasses",
+    "108": "marsh - a wetland dominated by herbaceous, i.e. non-woody plants",
+    "109": "bog - a wetland with few/no trees, some shrubs, with lots of peat accumulation",
+    "110": "swamp - a forested wetland",
+    "111": "rocky - lots of bare rocks with little vegetation",
+    "113": "coastal - right on the coast, beach",
+    "114": "riverbank - right on the riverbank",
+    "115": "farmland - pasture, etc.",
+    "116": "garden - like a backyard garden, probably right next to a residence",
+    "117": "park - recreational place",
+    "118": "residential - houses, apartments, etc.",
+    "119": "commercial - stores and offices",
+    "120": "industrial - factories and warehouses"
+}
+```
+
+`GET ./internal/list.php?item=sites`
+
+```JSON
+{
+    "1": "[New site]",
+    "2": "SBBS Little High Wood",
+    "3": "my backyard",
+    "4": "camera 4",
+    "5": "[New site]",
+    "6": "[New site]",
+    "7": "Grey-Science Site",
+    "8": "Ustinov woods",
+    "9": "[New site]",
+    "10": "[New site]",
+    "11": "near Josephine Butler allotment",
+    "12": "woods near my house",
+    "13": "River-cam",
+    ....
 }
 ```
 

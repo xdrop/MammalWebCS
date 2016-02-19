@@ -9,5 +9,7 @@ require_once('classes/Database/Queries/Query.php');
 require_once('classes/Database/Queries/ClassificationQuery.php');
 require_once('classes/Database/Queries/SpeciesNamesQuery.php');
 require_once('classes/Database/Queries/SpeciesFilterQuery.php');
+require_once('classes/Database/Queries/HabitatNamesQuery.php');
+require_once('classes/Database/Queries/SiteNamesQuery.php');
 require_once('classes/Database/Queries/FilterQuery.php');
 require_once('config/Environment.php');
