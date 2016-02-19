@@ -82,7 +82,7 @@ Get a list of species and ids
     "11": "near Josephine Butler allotment",
     "12": "woods near my house",
     "13": "River-cam",
-    ....
+    "...": "....."
 }
 ```
 
