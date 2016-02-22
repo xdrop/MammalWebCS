@@ -9,8 +9,12 @@ class DatabaseConnector
     {
         if(is_null(self::$pdo)){
             $settings = Environment::databaseSettings();
-            $PDO = new PDO($settings['driver'] .":host=" . $settings['host'] . ";port=". $settings['port']
-                .";dbname=" . $settings['name'], $settings['username'], $settings['password']);
+            try {
+                $PDO = new PDO($settings['driver'] . ":host=" . $settings['host'] . ";port=" . $settings['port']
+                    . ";dbname=" . $settings['name'], $settings['username'], $settings['password']);
+            } catch (PDOException $e){
+                throw new DatabaseException();
+            }
             self::$pdo = new FluentPDO($PDO);
         }
         return self::$pdo;
