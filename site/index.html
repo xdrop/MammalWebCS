@@ -49,7 +49,7 @@ $("#test").click(function(){
         $('.ui.dropdown')
           .dropdown()
         ;
-        $.get("../PHP/src/api/internal/animals.php?action=list", function(data){
+        $.get("../PHP/src/api/internal/list.php?item=species", function(data){
           $('#test_area').text(JSON.stringify(data));
         });
         //alert("hello");
