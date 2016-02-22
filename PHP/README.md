@@ -1,5 +1,11 @@
 # Documentation
 
+### Links
+
+- [API Documentation](https://github.com/xdrop/MammalWebCS/tree/dev/PHP/src/api)
+- [Database Documentation](https://github.com/xdrop/MammalWebCS/tree/dev/PHP/src/classes/Database)
+
+
 ### How to use
 To use the MammalClassifier class create an instance of it
 ```php
