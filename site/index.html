@@ -17,7 +17,9 @@
 <div class="ui item">Users</div>
 <div class="ui item">Scientists</div>
 </div>
+<!-- Filter for animal species-->
 <div class = "ui container segment">
+<h2>Animal Species</h2>
 <select id ="dropdown" class="ui fluid search dropdown" multiple="">
   <option value="">Animal</option>
   <option value="20">Rabbit</option>
@@ -26,34 +28,77 @@
   <option value="14">Dog</option>
   <option value="12">Cat</option>
 </select>
-<button id="test" class = "ui primary button">Click me</button>
+<button id="test" class = "ui primary button">Apply filter</button>
 <div id="test_area"></div>
+<!--Results of animal filter-->
+<div class="ui accordion" id="animalAccordion">
+  <div class="title">
+    <i class="dropdown icon"></i>
+    Toggle filter results
+  </div>
+  <div class="content">
+    <p id="animalResults">No results yet</p>
+  </div>
 </div>
+
 <script type="text/javascript">
 $("#test").click(function(){
-	//
-	$.ajax({
-		url:"http://localhost/MammalWebCS/PHP/src/classes/Database/Queries/runQuery.php",
-		type: "GET",
-		data:{"query":$("#dropdown").val()},
-		success: function(response) {
-			$("#test_area").html(response);
-		},
-		error: function(){
-			alert("It does not work...");
-		}
-		});
+	if($("#dropdown").val() != null)
+	{
+		$.ajax({
+			url:"http://localhost/MammalWebCS/PHP/src/classes/Database/Queries/runQuery.php",
+			type: "GET",
+			data:{"query":$("#dropdown").val()},
+			success: function(response) {
+				var results = ""
+				var parsed = JSON.parse(response)["filterResults"];
+				for(var i = 0 ; i < parsed.length ; i++)
+				{
+					results += "<b>Image " + (i+1) + "</b><br/>"; 
+					for(var j in parsed[i])
+					{
+						results += j.toString() + ": " + parsed[i][j] + "<br/>"; //Write the results
+					}
+					results += "<br/>";
+				}
+				if(results != "")
+				{
+					$("#animalResults").html(results);
+				}
+				else
+				{
+					$("#animalResults").html("No results");
+				}
+
+			},
+			error: function(){
+				alert("It does not work...");
+			}
+			});
+	}
+	else
+	{
+		$("#animalResults").html("");
+	}
 });
 
     $(document).ready(function(){
         $('.ui.dropdown')
           .dropdown()
         ;
+		$('.ui.accordion')
+			.accordion()
+		;
         $.get("../PHP/src/api/internal/list.php?item=species", function(data){
-          $('#test_area').text(JSON.stringify(data));
+			var options = ""
+			for(var i in data)
+			{
+				options += "<option value=" + i + ">" + data[i] + "</option>"; //Make each option in html format
+			}
+			$("#dropdown").html(options); //Put the options in the dropdown as html 
         });
-        //alert("hello");
     });
 </script>
 </body>
 </html>
+
