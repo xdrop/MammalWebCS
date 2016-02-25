@@ -1,0 +1,7 @@
+{
+  "consecutive_expected" : 8,
+  "votes_before_consensus" : 15,
+  "unreasonable_number_of_species_in_image" : 10,
+  "evenness_threshhold_species" : 0.69,
+  "evenness_threshold_count" : 0.7
+}
