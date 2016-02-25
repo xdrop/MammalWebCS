@@ -6,7 +6,8 @@ class SettingsStorage
 
 
     public static function settings(){
-        $data = json_decode(file_get_contents(self::filename));
+        $fileData = file_get_contents(dirname(__FILE__). "/" .self::filename);
+        $data = json_decode($fileData,true);
         return $data;
     }
 

@@ -56,7 +56,7 @@ class MammalClassifier
         $this->VOTES_BEFORE_CONSENSUS = $settings['votes_before_consensus'];
         $this->UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE = $settings['unreasonable_number_of_species_in_image'];
         $this->EVENNESS_THRESHOLD_COUNT = $settings['evenness_threshold_count'];
-        $this->EVENNESS_THRESHOLD_COUNT = $settings['evenness_threshold_species'];
+        $this->EVENNESS_THRESHOLD_SPECIES = $settings['evenness_threshold_species'];
 
     }
 
