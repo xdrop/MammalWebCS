@@ -46,18 +46,17 @@ $("#test").click(function(){
 	if($("#dropdown").val() != null)
 	{
 		$.ajax({
-			url:"http://localhost/MammalWebCS/PHP/src/classes/Database/Queries/runQuery.php",
-			type: "GET",
-			data:{"query":$("#dropdown").val()},
+			url:"../PHP/src/api/internal/filter.php",
+			type: "POST",
+			data:{"params": JSON.stringify({"species_include" : $("#dropdown").val()})},
 			success: function(response) {
-				var results = ""
-				var parsed = JSON.parse(response)["filterResults"];
-				for(var i = 0 ; i < parsed.length ; i++)
+				var results = "";
+				for(var i = 0 ; i < response.length ; i++)
 				{
 					results += "<b>Image " + (i+1) + "</b><br/>"; 
-					for(var j in parsed[i])
+					for(var j in response[i])
 					{
-						results += j.toString() + ": " + parsed[i][j] + "<br/>"; //Write the results
+						results += j.toString() + ": " + response[i][j] + "<br/>"; //Write the results
 					}
 					results += "<br/>";
 				}
