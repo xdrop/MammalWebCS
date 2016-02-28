@@ -23,7 +23,7 @@ class SettingsStorage
      * @param $settings array The new settings array
      */
     public static function update($settings){
-        file_put_contents(self::filename, json_encode($settings));
+        file_put_contents(dirname(__FILE__). "/" .self::filename, json_encode($settings));
     }
 
     /**
