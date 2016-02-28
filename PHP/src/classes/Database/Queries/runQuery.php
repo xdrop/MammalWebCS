@@ -1,7 +1,7 @@
 <?php
 require('../../../core.php');
 
-$query = $_GET["query"];
+//$query = $_GET["query"];
 //$query = json_decode($query, true);
 //$myQuery = new FilterQuery();
 //
@@ -11,7 +11,7 @@ $query = $_GET["query"];
 
 $newQueryTest = new SpeciesFilterQuery();
 
-$results = $newQueryTest->with(["species_include" => $query])->fetch();
+$results = $newQueryTest->with([])->fetch();
 
 //$newNameQuery = new HabitatNameQuery();
 
@@ -20,5 +20,3 @@ $results = $newQueryTest->with(["species_include" => $query])->fetch();
 //currently just print for test purposes
 //print_r($results);
 echo json_encode(array("filterResults" => $results));
-
-?>
