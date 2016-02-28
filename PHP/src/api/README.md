@@ -115,7 +115,8 @@ Getting the settings:
 
 Updating the settings (need to set two post fields 'action' and 'settings')
 
-``` POST ./internal/settings.php
+```JSON
+    POST ./internal/settings.php
     action=store
     setttings= 
     {
