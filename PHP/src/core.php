@@ -13,4 +13,5 @@ require_once('classes/Database/Queries/HabitatNamesQuery.php');
 require_once('classes/Database/Queries/SiteNamesQuery.php');
 require_once('classes/Database/Queries/FilterQuery.php');
 require_once('classes/Exceptions/DatabaseException.php');
+require_once('config/SettingsStorage.php');
 require_once('config/Environment.php');

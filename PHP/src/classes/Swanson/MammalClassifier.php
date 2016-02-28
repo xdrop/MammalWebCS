@@ -19,22 +19,22 @@ class MammalClassifier
 
     /* Unused for now */
 
-    const CONSECUTIVE_EXPECTED = 8;
-
     // 86 is the species used in the database for nothing here
-    const NOTHING_HERE_IDENTIFIER = "86";
 
+    const NOTHING_HERE_IDENTIFIER = "86";
     // TODO: eventually switch these to numbers to store in a field in database
 
     const NOT_ENOUGH_TO_CLASSIFY = "not enough for classification";
 
     const FLAGGED_FOR_SCIENTIST = "High disagreement flag for scientist";
 
-    const VOTES_BEFORE_CONSENSUS = 15;
-    const UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE = 10;
+    private $CONSECUTIVE_EXPECTED = 8;
 
-    const EVENNESS_THRESHOLD_SPECIES = 0.69;
-    const EVENNESS_THRESHOLD_COUNT = 0.7;
+    private $VOTES_BEFORE_CONSENSUS = 15;
+    private $UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE = 10;
+
+    private $EVENNESS_THRESHOLD_SPECIES = 0.69;
+    private $EVENNESS_THRESHOLD_COUNT = 0.7;
 
     /**
      * MammalClassifier constructor.
@@ -49,6 +49,15 @@ class MammalClassifier
             trigger_error("Failure to create a database connection." .
                 " Possibly database settings provided are wrong", E_USER_WARNING);
         }
+
+        $settings = SettingsStorage::settings();
+
+        $this->CONSECUTIVE_EXPECTED = $settings['consecutive_expected'];
+        $this->VOTES_BEFORE_CONSENSUS = $settings['votes_before_consensus'];
+        $this->UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE = $settings['unreasonable_number_of_species_in_image'];
+        $this->EVENNESS_THRESHOLD_COUNT = $settings['evenness_threshold_count'];
+        $this->EVENNESS_THRESHOLD_SPECIES = $settings['evenness_threshold_species'];
+
     }
 
     /**
@@ -218,7 +227,7 @@ class MammalClassifier
     private function filterUnreasonableVotes()
     {
         for ($i = 0; $i < count($this->dataset); ++$i) {
-            if ($this->dataset[$i]->sum() > self::UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE) {
+            if ($this->dataset[$i]->sum() > $this->UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE) {
                 unset($this->dataset[$i]);
             }
         }
@@ -391,7 +400,7 @@ class MammalClassifier
 
                 /* We check that we have 10 matching classifications of any kind */
 
-                $consecutiveMatch = $this->checkForNonConsecutive($this->dataset, self::CONSECUTIVE_EXPECTED);
+                $consecutiveMatch = $this->checkForNonConsecutive($this->dataset, $this->CONSECUTIVE_EXPECTED);
 
                 /* Calculate evenness */
 
@@ -409,11 +418,11 @@ class MammalClassifier
 
                     /* Wait until we have 25 (VOTES_BEFORE_CONSENSUS) */
 
-                    if ($numberOfVotes >= self::VOTES_BEFORE_CONSENSUS) {
+                    if ($numberOfVotes >= $this->VOTES_BEFORE_CONSENSUS) {
 
                         // If evenness greater than the threshold run plurality else flag for scientist;
-                        $this->result = $evenness['speciesEvenness'] < self::EVENNESS_THRESHOLD_SPECIES &&
-                        $evenness['countEvenness'] < self::EVENNESS_THRESHOLD_COUNT
+                        $this->result = $evenness['speciesEvenness'] < $this->EVENNESS_THRESHOLD_SPECIES &&
+                        $evenness['countEvenness'] < $this->EVENNESS_THRESHOLD_COUNT
                             ? [
                                 'classification' => $this->plurality(),
                                 'evenness_species' => $evenness['speciesEvenness'],

@@ -107,3 +107,22 @@ Get filtered results
     "contains_human": false
 }
 ```
+
+
+Getting the settings:
+
+`GET ./internal/settings.php?action=get`
+
+Updating the settings (need to set two post fields 'action' and 'settings')
+
+``` POST ./internal/settings.php
+    action=store
+    setttings= 
+    {
+    	"consecutive_expected": 12,
+    	"votes_before_consensus": 15,
+    	"unreasonable_number_of_species_in_image": 10,
+    	"evenness_threshold_species": 0.69,
+    	"evenness_threshold_count": 0.7
+    }
+```
