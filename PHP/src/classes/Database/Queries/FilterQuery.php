@@ -29,15 +29,10 @@ class FilterQuery extends Query
         $hasHumans = Utils::keysExist("contains_human", $params);
 
         $hasNumberOfClassifications = Utils::keysExist("no_of_classifications", $params);
-<<<<<<< HEAD
 
         $hasHabitatType = Utils::keysExist("habitat_id",$params);
 
-=======
 
-        $hasHabitatType = Utils::keysExist("habitat_id",$params);
-
->>>>>>> dev
         // SELECT * FROM classified
         // WHERE species IN (?,?,?,...) AND NOT IN (?,?,...)
 
@@ -46,11 +41,8 @@ class FilterQuery extends Query
                 'classified.timestamp AS time_classified'])
             ->leftJoin('photo ON photo.photo_id = classified.photo_id')
             ->select(['photo.taken', 'photo.person_id', 'photo.site_id',
-<<<<<<< HEAD
                 'photo.filename', 'photo.contains_human'])
-=======
-                'photo.contains_human'])
->>>>>>> dev
+
             ->leftJoin('site ON site.site_id = photo.site_id')
             ->select('site.habitat_id');
 
@@ -136,7 +128,6 @@ class FilterQuery extends Query
 
     }
 
-<<<<<<< HEAD
     protected function reformat($results)
     {
         foreach($results as &$element){
@@ -151,7 +142,5 @@ class FilterQuery extends Query
         return $results;
     }
 
-=======
->>>>>>> dev
 
 }
