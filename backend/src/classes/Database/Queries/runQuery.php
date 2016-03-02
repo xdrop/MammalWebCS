@@ -9,7 +9,7 @@ require('../../../core.php');
 //
 //print_r($results);
 
-$newQueryTest = new SpeciesFilterQuery();
+$newQueryTest = new FilterQuery();
 
 $results = $newQueryTest->with([])->fetch();
 
