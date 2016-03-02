@@ -1,7 +1,7 @@
 <?php
 
 
-class ImageLoader
+class ImageURL
 {
 
     public static function getURLFromId($imageId)
