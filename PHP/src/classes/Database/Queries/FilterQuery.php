@@ -1,7 +1,7 @@
 <?php
 
 
-class FilterQuery extends Query
+class SpeciesFilterQuery extends Query
 {
 
     const CLASSIFICATION_RESULTS_TABLE_NAME = 'classified';
@@ -40,7 +40,7 @@ class FilterQuery extends Query
                 'classified.timestamp AS time_classified'])
             ->leftJoin('photo ON photo.photo_id = classified.photo_id')
             ->select(['photo.taken', 'photo.person_id', 'photo.site_id',
-                'photo.filename', 'photo.contains_human'])
+                'photo.contains_human'])
             ->leftJoin('site ON site.site_id = photo.site_id')
             ->select('site.habitat_id');
 
@@ -70,12 +70,12 @@ class FilterQuery extends Query
 
         if($hasUsersToInclude){
             $unknowns = Utils::generateUnknowns($usersToInclude);
-            $query->where("species IN ($unknowns)", ['expand' => $usersToInclude]);
+            $query->where("photo.person_id IN ($unknowns)", ['expand' => $usersToInclude]);
         }
 
         if($hasUsersToExclude){
             $unknowns = Utils::generateUnknowns($usersToExclude);
-            $query->where("species NOT IN ($unknowns)", ['expand' => $usersToExclude]);
+            $query->where("photo.person_id NOT IN ($unknowns)", ['expand' => $usersToExclude]);
         }
 
         if ($hasTimeStamps) {
@@ -124,20 +124,6 @@ class FilterQuery extends Query
     protected function deleteQuery(&$params)
     {
 
-    }
-
-    protected function reformat($results)
-    {
-        foreach($results as &$element){
-
-            $person_id = $element["person_id"];
-            $site_id = $element["site_id"];
-            $filename = $element["filename"];
-            $element['url'] = ImageLoader::getURL($person_id,$site_id,$filename);
-            unset($element['filename']);
-        }
-
-        return $results;
     }
 
 
