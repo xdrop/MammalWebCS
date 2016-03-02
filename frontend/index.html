@@ -13,8 +13,8 @@
 <body>
 <div class="ui top attached menu">
 <div class="ui header item">MammalWeb</div>
-<a class="ui item" href="http://localhost/MammalWebCS/site/index.html">Users</a>
-<a class="ui item" href="http://localhost/MammalWebCS/site/scientists.html">Scientists</a>
+<a class="ui item" href="index.html">Users</a>
+<a class="ui item" href="scientists.html">Scientists</a>
 </div>
 
 <div class = "ui container segment">
@@ -244,7 +244,7 @@
 		if(chosenFilters != "") //If some filters chosen
 		{	
 			$.ajax({
-				url:"http://localhost/MammalWebCS/PHP/src/api/internal/filter.php",
+				url:"../backend/src/api/internal/filter.php",
 				type: "POST",
 				data: {"params": JSON.stringify(JSON.parse('{' + chosenFilters + '}'))} , //JSON.stringify({"species_include":$("#dropdownAnimal").val(), "habitat_id":$("#dropdownHabitat").val(), "site_id":$("#dropdownSite").val()})
 				success: function(response) {
@@ -311,7 +311,7 @@
 		function fromAPI(name, num)
 		{
 			//console.log("ONE"); //This is left here as I dont know why logs ONE, THREE, FOUR j times the TWO j times - $.get executes after for loop has finished
-			$.get("../PHP/src/api/internal/list.php?item=" + name[num], function(recvdata){
+			$.get("../backend/src/api/internal/list.php?item=" + name[num], function(recvdata){
 				var options = "";
 				for(var i in recvdata)
 				{
