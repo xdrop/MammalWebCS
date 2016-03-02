@@ -134,6 +134,7 @@ class FilterQuery extends Query
             $site_id = $element["site_id"];
             $filename = $element["filename"];
             $element['url'] = ImageLoader::getURL($person_id,$site_id,$filename);
+            unset($element['filename']);
         }
 
         return $results;
