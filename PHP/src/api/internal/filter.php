@@ -11,7 +11,7 @@ if(isset($_POST['params'])){
             error("Invalid JSON input");
             return;
         }
-        $listNamesQuery = new SpeciesFilterQuery();
+        $listNamesQuery = new FilterQuery();
         echo $listNamesQuery->with($params)->fetchJSON();
     } catch (PDOException $e){
         error("Failure in database connection.");
