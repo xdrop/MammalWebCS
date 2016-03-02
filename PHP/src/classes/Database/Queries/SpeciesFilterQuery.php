@@ -70,12 +70,12 @@ class SpeciesFilterQuery extends Query
 
         if($hasUsersToInclude){
             $unknowns = Utils::generateUnknowns($usersToInclude);
-            $query->where("species IN ($unknowns)", ['expand' => $usersToInclude]);
+            $query->where("photo.person_id IN ($unknowns)", ['expand' => $usersToInclude]);
         }
 
         if($hasUsersToExclude){
             $unknowns = Utils::generateUnknowns($usersToExclude);
-            $query->where("species NOT IN ($unknowns)", ['expand' => $usersToExclude]);
+            $query->where("photo.person_id NOT IN ($unknowns)", ['expand' => $usersToExclude]);
         }
 
         if ($hasTimeStamps) {
