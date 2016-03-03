@@ -32,6 +32,11 @@ class FilterQuery extends Query
 
         $hasHabitatType = Utils::keysExist("habitat_id",$params);
 
+        $hasNumberOfClassificationsFrom = Utils::keysExist("no_of_classifications_from",$params);
+
+        $hasNumberOfClassificationsTo = Utils::keysExist("no_of_classifications_to",$params);
+
+
 
         // SELECT * FROM classified
         // WHERE species IN (?,?,?,...) AND NOT IN (?,?,...)
@@ -47,7 +52,14 @@ class FilterQuery extends Query
             ->select('site.habitat_id');
 
 
-        if($hasNumberOfClassifications){
+        if($hasNumberOfClassificationsFrom && $hasNumberOfClassificationsTo){
+            $classificationsFrom = $params["no_of_classifications_from"];
+            $classificationsTo = $params["no_of_classifications_to"];
+            $query->leftJoin('animal ON animal.photo_id = classified.photo_id')
+                ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
+                ->groupBy('photo_id')
+                ->having("COUNT(DISTINCT animal.person_id) BETWEEN ? AND ?",$classificationsFrom, $classificationsTo);
+        } else if($hasNumberOfClassifications){
             $numberOfClassifications = $params["no_of_classifications"];
             $query->leftJoin('animal ON animal.photo_id = classified.photo_id')
                 ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
@@ -56,8 +68,8 @@ class FilterQuery extends Query
         }
 
         if($hasHabitatType){
-                $habitatType=  $params["habitat_id"];
-                $query->where('site.habitat_id',$habitatType);
+            $habitatType=  $params["habitat_id"];
+            $query->where('site.habitat_id',$habitatType);
         }
 
         if ($hasSpeciesToInclude) {
@@ -100,6 +112,7 @@ class FilterQuery extends Query
             $humans = $params['contains_human'];
             $query->where("photo.contains_human", $humans);
         }
+
 
         /* expand is a special keyword which says take the arguments from the list and bind them to unbound variables
            eg. Query is WHERE NOT IN (?,?)
