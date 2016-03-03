@@ -155,7 +155,16 @@ $("#clearDropdownHabitat").click(function(){
     $("#dropdownHabitat").dropdown('clear');
 });
 
+
 $(document).ready(function(){
+function displayTable(json, callback) {
+    for (var i = 0; i < json.length; i++) {
+        var obj = json[i];
+        // DO AWESOME TABLE MAKING STUFF HERE
+        $("#resultsTable").appendTo();
+    }
+    callback("hello");
+}
     $('.ui.dropdown')
       .dropdown()
     ;
@@ -186,4 +195,11 @@ $(document).ready(function(){
     {
         fromAPI(filterOptions, j);
     }
+    var filterExample;
+    $.getJSON("res/filter_example.json", function(json) {
+        filterExample = json;
+        displayTable(json, function(message){
+            console.log(message);
+        });
+    });
 });

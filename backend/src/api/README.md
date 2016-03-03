@@ -98,6 +98,8 @@ Get filtered results
     "users_include": [],
     "users_exclude": [],
     "no_of_classifications": 9,
+    "no_of_classifications_from": 5,
+    "no_of_classifications_to":10,
     "habitat_id": 104,
     "flagged": false,
     "site_id": 2,
