@@ -191,26 +191,27 @@ function displayTable(json, callback) {
     ;
     var filterOptions = ["species", "species", "habitats", "sites"]; //The possible filters
     var dropdownOptions = ["dropdownAnimal", "dropdownNoAnimal", "dropdownHabitat", "dropdownSite"]; //The ids of the possible filters
-
     function fromAPI(name, num)
     {
-        //console.log("ONE"); //This is left here as I dont know why logs ONE, THREE, FOUR j times the TWO j times - $.get executes after for loop has finished
         $.get("../backend/src/api/internal/list.php?item=" + name[num], function(recvdata){
             var options = "";
+			var done = [];
             for(var i in recvdata)
             {
-                options += "<option value=" + i + ">" + recvdata[i] + "</option>"; //Make each option in html format
+				//console.log(recvdata[i]);
+				if($.inArray(recvdata[i], done) == -1)
+				{
+					options += "<option value=" + i + ">" + recvdata[i] + "</option>"; //Make each option in html format
+					done.push(recvdata[i]);
+				}
             }
             $("#" + dropdownOptions[num]).html(options); //Put the options in the dropdown as html
-            //console.log("TWO");
         });
-        //console.log("THREE");
     }
 
     for(var j = 0 ; j < filterOptions.length ; j++)
     {
         fromAPI(filterOptions, j);
-        //console.log("FOUR");
     }
     var filterExample;
     $.getJSON("res/filter_example.json", function(json) {
