@@ -160,8 +160,26 @@ $(document).ready(function(){
 function displayTable(json, callback) {
     for (var i = 0; i < json.length; i++) {
         var obj = json[i];
-        // DO AWESOME TABLE MAKING STUFF HERE
-        $("#resultsTable").appendTo();
+        var data = "";
+        //Add Preview (empty atm)
+        data += "<tr><td></td>";
+        //Add species
+        data += "<td>" + obj.species_name + "</td>";
+        //Add flagged
+        data += "<td>" + "False" + "</td>";
+        //Add time classified
+        data += "<td>" + "Time classified" + "</td>";
+        //Add time uploaded
+        data += "<td>" + "Time uploaded" + "</td>";
+        //Add person ID
+        data += "<td>" + obj.person_id + "</td>";
+        //Add site ID
+        data += "<td>" + obj.site_name + "</td>";
+        //Add contains human
+        data += "<td>" + "Human" + "</td>";
+        //Habit ID
+        data += "<td>" + obj.habitat_id + "</td>";
+        $(data + "</tr>").appendTo("#resultsTable");
     }
     callback("hello");
 }
