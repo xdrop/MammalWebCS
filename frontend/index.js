@@ -158,6 +158,11 @@ $("#clearDropdownHabitat").click(function(){
 
 $(document).ready(function(){
 function displayTable(json, callback) {
+    for (var i = 0; i < json.length; i++) {
+        var obj = json[i];
+        // DO AWESOME TABLE MAKING STUFF HERE
+        $("#resultsTable").appendTo();
+    }
     callback("hello");
 }
     $('.ui.dropdown')
