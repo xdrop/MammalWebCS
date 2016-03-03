@@ -47,10 +47,12 @@ class FilterQuery extends Query
             ->leftJoin('photo ON photo.photo_id = classified.photo_id')
             ->select(['photo.taken', 'photo.person_id', 'photo.site_id',
                 'photo.filename', 'photo.contains_human'])
-
             ->leftJoin('site ON site.site_id = photo.site_id')
-            ->select('site.habitat_id');
-
+            ->select(['site.habitat_id','site.site_name'])
+            ->leftJoin('options ON options.option_id = classified.species')
+            ->select('options.option_name AS species_name')
+            ->leftJoin('evenness ON evenness.photo_id = classified.photo_id')
+            ->select(['evenness.evenness_species','evenness.evenness_count']);
 
         if($hasNumberOfClassificationsFrom && $hasNumberOfClassificationsTo){
             $classificationsFrom = $params["no_of_classifications_from"];
