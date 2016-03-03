@@ -2,8 +2,8 @@
 
 ### Links
 
-- [API Documentation](https://github.com/xdrop/MammalWebCS/tree/dev/PHP/src/api)
-- [Database Documentation](https://github.com/xdrop/MammalWebCS/tree/dev/PHP/src/classes/Database)
+- [API Documentation](https://github.com/xdrop/MammalWebCS/tree/dev/backend/src/api)
+- [Database Documentation](https://github.com/xdrop/MammalWebCS/tree/dev/backend/src/classes/Database)
 
 
 ### How to use
@@ -57,7 +57,7 @@ $ git clone https://github.com/xdrop/MammalWebCS.git
 
 ```sh
 $ cd MammalWebCS
-$ cd PHP
+$ cd backend
 $ cd src
 $ php run.php
 ```
