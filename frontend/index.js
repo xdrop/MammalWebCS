@@ -53,19 +53,19 @@ function equalArray(arr1, arr2) //Checks if two arrays are equal
 }
 
 $("#applyFilterButton").click(function () {
-    //Animal include/exclude, site, habitat
-    var chosenFilters = ""; //String that stores the selected fillters. Stored as json without the surrounding {}
+    var filters = {};
 
-    var i;
-    for (i = 0; i < possibleFilters.length; i++) {
-        if ($(possibleFilters[i]).val() != null) //If a filter has some values chosen
-        {
-            if (chosenFilters != "") {
-                chosenFilters += ","; //Only put a comma if there is already some filter options chosen
-            }
-            chosenFilters += '"' + filterNames[i] + '"' + ":" + "[" + '"' + $(possibleFilters[i]).val() + '"' + "]"; //Format the filter values
-        }
-    }
+    var species_include = $("#dropdownAnimal").val();
+    var species_exclude = $("#dropdownNoAnimal").val();
+    var habitat_id = $("#dropdownHabitat").val();
+    var site_id = $("#dropdownSite").val();
+
+    /* get the fields from the DOM elements and convert to number */
+    filters.species_include = species_include == null ? undefined : species_include.map(Number);
+    filters.species_exclude = species_exclude == null ? undefined : species_exclude.map(Number);
+    filters.habitat_id = habitat_id == null ? undefined : habitat_id.map(Number);
+    filters.site_id = site_id == null ? undefined : site_id.map(Number);
+
 
     //Since dates
     var sinceValues = ["1970", "1", "1", "00", "00", "00"]; //Where the selected datetime values are held. The values already there allow it so not all datetime divisions (day, minutes etc) have to be chosen
@@ -73,6 +73,7 @@ $("#applyFilterButton").click(function () {
     var untilValues = ["2100", "1", "1", "00", "00", "00"];
     var untilDatetime = "";
 
+    var i;
     for (i = 0; i < sinces.length; i++) {
         if ($(sinces[i]).val() != "") {
             sinceValues[i] = $(sinces[i]).val(); //Store the selected datetime values
@@ -80,7 +81,7 @@ $("#applyFilterButton").click(function () {
     }
     if (equalArray(sinceValues, sinceDefaults) == false) //If the default values and selected values of datetime are different (i.e. a datetime has been chosen)
     {
-        sinceDatetime = '"' + "taken_start" + '"' + ":" + '"' + sinceValues[0] + "-" + sinceValues[1] + "-" + sinceValues[2] + " " + sinceValues[3] + ":" + sinceValues[4] + ":" + sinceValues[5] + '"'; //Format date time
+        filters.taken_start = sinceValues[0] + "-" + sinceValues[1] + "-" + sinceValues[2] + " " + sinceValues[3] + ":" + sinceValues[4] + ":" + sinceValues[5]; //Format date time;
     }
 
     //Until dates
@@ -90,53 +91,38 @@ $("#applyFilterButton").click(function () {
         }
     }
     if (equalArray(untilDefaults, untilValues) == false) {
-        untilDatetime = '"' + "taken_end" + '"' + ":" + '"' + untilValues[0] + "-" + untilValues[1] + "-" + untilValues[2] + " " + untilValues[3] + ":" + untilValues[4] + ":" + untilValues[5] + '"';
+        filters.taken_end  =  untilValues[0] + "-" + untilValues[1] + "-" + untilValues[2] + " "+
+            untilValues[3] + ":" + untilValues[4] + ":" + untilValues[5];
+
     }
 
     //Deal with dates. Since seems to work if only both start and end date provided, must make sure if only on give, other is also given
     if (sinceDatetime != "") //If a since date given
     {
-        if (chosenFilters != "") {
-            chosenFilters += ",";
-        }
-        chosenFilters += sinceDatetime; //Add the formatted date to the json string
-        if (untilDatetime == "") //If no until date given
+        if (filters.taken_end === undefined) //If no until date given
         {
-            chosenFilters += ', "taken_end":"2017-1-1 00:00:00"'; //Add a default futer end date
-        }
-    }
-    if (untilDatetime != "") //If an until date given
-    {
-        if (chosenFilters != "") {
-            chosenFilters += ",";
-        }
-        if (sinceDatetime == "") //If no since date given
-        {
-            chosenFilters += '"taken_start":"1970-1-1 00:00:00",'; //Add a default since past date
-        }
-        chosenFilters += untilDatetime; //Add formatted date to json string
-    }
-
-    if (chosenFilters != "") //If some filters chosen
-    {
-
-        $.ajax({
-            url:     "../backend/src/api/internal/filter.php",
-            type:    "POST",
-            data:    {"params": JSON.stringify(JSON.parse('{' + chosenFilters + '}'))}, //JSON.stringify({"species_include":$("#dropdownAnimal").val(), "habitat_id":$("#dropdownHabitat").val(), "site_id":$("#dropdownSite").val()})
-            success: function (json) {
-                displayTable(json, function (message) {
-                    console.log(message);
-                });
-            },
-            error:   function () {
-                alert("It does not work...");
+            filters.taken_end = "2017-1-1 00:00:00"; //Add a default futer end date
+            if (filters.taken_start == "") //If no since date given
+            {
+                filters.taken_start = "1970-1-1 00:00:00"; //Add a default since past date
             }
-        });
+        }
     }
-    else {
-        $("#results").html("No filter selected");
-    }
+
+
+    $.ajax({
+        url:     "../backend/src/api/internal/filter.php",
+        type:    "POST",
+        data:    {"params": JSON.stringify(filters)}, //JSON.stringify({"species_include":$("#dropdownAnimal").val(), "habitat_id":$("#dropdownHabitat").val(), "site_id":$("#dropdownSite").val()})
+        success: function (json) {
+            displayTable(json, function (message) {
+                console.log(message);
+            });
+        },
+        error:   function () {
+            alert("It does not work...");
+        }
+    });
 });
 //Clear buttons - clears and selected filter options
 $("#clearSince").click(function () {
@@ -190,7 +176,6 @@ $(document).ready(function () {
     for (var j = 0; j < filterOptions.length; j++) {
         fromAPI(filterOptions, j);
     }
-
 
 
 });
