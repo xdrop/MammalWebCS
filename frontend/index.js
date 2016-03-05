@@ -1,4 +1,6 @@
 function displayTable(json, callback) {
+    /* clear table first */
+    $("#resultsTable").html('');
     for (var i = 0; i < json.length; i++) {
         var obj = json[i];
         var data = "";
