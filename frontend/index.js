@@ -97,15 +97,18 @@ $("#applyFilterButton").click(function () {
     }
 
     //Deal with dates. Since seems to work if only both start and end date provided, must make sure if only on give, other is also given
-    if (sinceDatetime != "") //If a since date given
+    if (filters.taken_start !== undefined) //If a since date given
     {
         if (filters.taken_end === undefined) //If no until date given
         {
             filters.taken_end = "2017-1-1 00:00:00"; //Add a default futer end date
-            if (filters.taken_start == "") //If no since date given
-            {
-                filters.taken_start = "1970-1-1 00:00:00"; //Add a default since past date
-            }
+        }
+    }
+    if (filters.taken_start === undefined) //If no since date given
+    {
+        if (filters.taken_end !== undefined) //If no until date given
+        {
+            filters.taken_start = "1970-1-1 00:00:00"; //Add a default since past date
         }
     }
 
