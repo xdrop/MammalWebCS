@@ -30,10 +30,6 @@ var sinces = ["#sinceYear", "#sinceMonth", "#sinceDay", "#sinceHour", "#sinceMin
 var untils = ["#untilYear", "#untilMonth", "#untilDay", "#untilHour", "#untilMinute", "#untilSecond"]; //IDs of datetime forms
 
 
-var possibleFilters = ["#dropdownAnimal", "#dropdownNoAnimal", "#dropdownHabitat", "#dropdownSite"];
-
-var filterNames = ["species_include", "species_exclude", "habitat_id", "site_id"];
-
 var sinceDefaults = ["1970", "1", "1", "00", "00", "00"]; //What is used if no date/time filled in
 
 var untilDefaults = ["2100", "1", "1", "00", "00", "00"]; //Defaults
@@ -69,9 +65,7 @@ $("#applyFilterButton").click(function () {
 
     //Since dates
     var sinceValues = ["1970", "1", "1", "00", "00", "00"]; //Where the selected datetime values are held. The values already there allow it so not all datetime divisions (day, minutes etc) have to be chosen
-    var sinceDatetime = ""; //Where the datetime string is held
     var untilValues = ["2100", "1", "1", "00", "00", "00"];
-    var untilDatetime = "";
 
     var i;
     for (i = 0; i < sinces.length; i++) {
