@@ -1,11 +1,41 @@
-var possibleFilters = ["#dropdownAnimal", "#dropdownNoAnimal", "#dropdownHabitat", "#dropdownSite"];
-var filterNames = ["species_include", "species_exclude", "habitat_id", "site_id"];
+function displayTable(json, callback) {
+    for (var i = 0; i < json.length; i++) {
+        var obj = json[i];
+        var data = "";
+        //Add Preview (empty atm)
+        data += "<tr><td></td>";
+        //Add species
+        data += "<td>" + obj.species_name + "</td>";
+        //Add flagged
+        data += "<td>" + "False" + "</td>";
+        //Add time classified
+        data += "<td>" + "Time classified" + "</td>";
+        //Add time uploaded
+        data += "<td>" + "Time uploaded" + "</td>";
+        //Add person ID
+        data += "<td>" + obj.person_id + "</td>";
+        //Add site ID
+        data += "<td>" + obj.site_name + "</td>";
+        //Add contains human
+        data += "<td>" + "Human" + "</td>";
+        //Habit ID
+        data += "<td>" + obj.habitat_id + "</td>";
+        $(data + "</tr>").appendTo("#resultsTable");
+    }
+    callback("hello");
+}
 
 //Time since variables
 var sinces = ["#sinceYear", "#sinceMonth", "#sinceDay", "#sinceHour", "#sinceMinute", "#sinceSecond"]; //The ids of the time forms
+var untils = ["#untilYear", "#untilMonth", "#untilDay", "#untilHour", "#untilMinute", "#untilSecond"]; //IDs of datetime forms
+
+
+var possibleFilters = ["#dropdownAnimal", "#dropdownNoAnimal", "#dropdownHabitat", "#dropdownSite"];
+
+var filterNames = ["species_include", "species_exclude", "habitat_id", "site_id"];
+
 var sinceDefaults = ["1970", "1", "1", "00", "00", "00"]; //What is used if no date/time filled in
 
-var untils = ["#untilYear", "#untilMonth", "#untilDay", "#untilHour", "#untilMinute", "#untilSecond"]; //IDs of datetime forms
 var untilDefaults = ["2100", "1", "1", "00", "00", "00"]; //Defaults
 
 function equalArray(arr1, arr2) //Checks if two arrays are equal
@@ -25,6 +55,7 @@ function equalArray(arr1, arr2) //Checks if two arrays are equal
 $("#applyFilterButton").click(function () {
     //Animal include/exclude, site, habitat
     var chosenFilters = ""; //String that stores the selected fillters. Stored as json without the surrounding {}
+
     var i;
     for (i = 0; i < possibleFilters.length; i++) {
         if ($(possibleFilters[i]).val() != null) //If a filter has some values chosen
@@ -88,21 +119,15 @@ $("#applyFilterButton").click(function () {
 
     if (chosenFilters != "") //If some filters chosen
     {
+
         $.ajax({
             url:     "../backend/src/api/internal/filter.php",
             type:    "POST",
             data:    {"params": JSON.stringify(JSON.parse('{' + chosenFilters + '}'))}, //JSON.stringify({"species_include":$("#dropdownAnimal").val(), "habitat_id":$("#dropdownHabitat").val(), "site_id":$("#dropdownSite").val()})
-            success: function (response) {
-                var results = "<b>" + response.length + " results</b><br/><br/>";
-                var parsed = JSON.parse(JSON.stringify(response));
-                for (var i = 0; i < parsed.length; i++) {
-                    results += "<b>Image " + (i + 1) + "</b><br/>";
-                    for (var j in parsed[i]) {
-                        results += j.toString() + ": " + parsed[i][j] + "<br/>"; //Write the results
-                    }
-                    results += "<br/>";
-                }
-                $("#results").html(results); //Takes a string and converts to html and placed in #esults
+            success: function (json) {
+                displayTable(json, function (message) {
+                    console.log(message);
+                });
             },
             error:   function () {
                 alert("It does not work...");
@@ -113,7 +138,6 @@ $("#applyFilterButton").click(function () {
         $("#results").html("No filter selected");
     }
 });
-
 //Clear buttons - clears and selected filter options
 $("#clearSince").click(function () {
     for (var i = 0; i < sinces.length; i++) {
@@ -134,38 +158,12 @@ $("#clearDropdownNoAnimal").click(function () {
 $("#clearDropdownSite").click(function () {
     $("#dropdownSite").dropdown('clear');
 });
+
+
 $("#clearDropdownHabitat").click(function () {
     $("#dropdownHabitat").dropdown('clear');
 });
-
-
 $(document).ready(function () {
-    function displayTable(json, callback) {
-        for (var i = 0; i < json.length; i++) {
-            var obj = json[i];
-            var data = "";
-            //Add Preview (empty atm)
-            data += "<tr><td></td>";
-            //Add species
-            data += "<td>" + obj.species_name + "</td>";
-            //Add flagged
-            data += "<td>" + "False" + "</td>";
-            //Add time classified
-            data += "<td>" + "Time classified" + "</td>";
-            //Add time uploaded
-            data += "<td>" + "Time uploaded" + "</td>";
-            //Add person ID
-            data += "<td>" + obj.person_id + "</td>";
-            //Add site ID
-            data += "<td>" + obj.site_name + "</td>";
-            //Add contains human
-            data += "<td>" + "Human" + "</td>";
-            //Habit ID
-            data += "<td>" + obj.habitat_id + "</td>";
-            $(data + "</tr>").appendTo("#resultsTable");
-        }
-        callback("hello");
-    }
 
     $('.ui.dropdown')
         .dropdown()
@@ -193,9 +191,6 @@ $(document).ready(function () {
         fromAPI(filterOptions, j);
     }
 
-    $.getJSON("res/filter_example.json", function (json) {
-        displayTable(json, function (message) {
-            console.log(message);
-        });
-    });
+
+
 });
