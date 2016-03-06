@@ -10,13 +10,13 @@ if (isset($_GET['item'])) {
     try {
         if ($apiParam === 'species') {
             $query = new SpeciesNameQuery();
-            echo $query->fetchJSON();
+            echo $query->fetch()->asJSON();
         } else if ($apiParam === 'habitats') {
             $query = new HabitatNameQuery();
-            echo $query->fetchJSON();
+            echo $query->fetch()->asJSON();
         } else if ($apiParam === 'sites') {
             $query = new SiteNameQuery();
-            echo $query->fetchJSON();
+            echo $query->fetch()->asJSON();
         } else {
             error("Invalid action");
         }
