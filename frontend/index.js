@@ -5,32 +5,30 @@ function displayTable(json) {
         var obj = json[i];
         var data;
         if (obj.flagged == 0) {
-            data = "<tr>"
+            data = "<tr class='center aligned'>"
         } else {
-            data = "<tr class='error'>"
+            data = "<tr class='center aligned error'>"
         }
-        //Add species
-        data += "<td>" + obj.species_name + "</td>";
         //Add flagged
         if (obj.flagged == 0) {
             data += "<td></td>";
         } else {
-            data += "<td class='centered'><i class='attention icon'></i></td>";
+            data += "<td class='centered'><i class='flag icon'></i></td>";
         }
+        //Add species
+        data += "<td>" + obj.species_name + "</td>";
         //Add time classified
         data += "<td>" + obj.time_classified + "</td>";
-        //Add time uploaded
-        data += "<td>" + obj.taken + "</td>";
         //Add person ID
         data += "<td>" + obj.person_id + "</td>";
         //Add site IDs
         data += "<td>" + obj.site_name + "</td>";
         //Add contains human
-        if (obj.contains_human == 0) {
-            data += "<td class='centered'><i class='remove icon'></i></td>";
-        } else {
-            data += "<td class='centered'><i class='checkmark icon'></i></td>";
-        }
+        // if (obj.contains_human == 0) {
+        //     data += "<td class='centered'><i class='remove icon'></i></td>";
+        // } else {
+        //     data += "<td class='centered'><i class='checkmark icon'></i></td>";
+        // }
         //Habit ID
         data += "<td>" + obj.habitat_id + "</td>";
         $(data + "</tr>").appendTo("#resultsTable");
