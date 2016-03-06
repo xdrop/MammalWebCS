@@ -41,17 +41,20 @@ class FileStorage
         return $path;
     }
 
-    public static function downloadFile($filename,$dir){
-        $path = self::getPath($filename,$dir);
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="output.csv"');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($path));
-        readfile($path);
-        exit;
+    public static function downloadFile($filename,$dir)
+    {
+        $path = self::getPath($filename, $dir);
+        if (file_exists($path) && is_file($path)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="output.csv"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($path));
+            readfile($path);
+            exit;
+        }
     }
 
 }

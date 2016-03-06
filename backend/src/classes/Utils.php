@@ -63,6 +63,11 @@ class Utils
         return true;
     }
 
+    public static function sanitizeFilename($filename){
+        $clean = basename(realpath($filename));
+        return $clean;
+    }
+
     public static function generateRandomString($length = 10) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);

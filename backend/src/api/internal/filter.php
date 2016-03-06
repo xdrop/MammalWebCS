@@ -20,7 +20,7 @@ if (isset($_POST['params'])) {
 
 } else if (isset($_GET['csv'])){
     $csvPath = SettingsStorage::settings()["csv_file_locations"];
-    $filename = $_GET['csv'];
+    $filename = Utils::sanitizeFilename($_GET['csv']);
     FileStorage::downloadFile($filename, $csvPath);
 }
 else {
