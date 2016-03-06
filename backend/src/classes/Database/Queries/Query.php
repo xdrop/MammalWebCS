@@ -101,7 +101,8 @@ abstract class Query
         $this->fetchQuery($this->params);
 
         if (!is_null($this->internalFetchQuery)) {
-            return $this->reformat($this->internalFetchQuery->fetchAll());
+            $reformatted = $this->reformat($this->internalFetchQuery->fetchAll());
+            return !$reformatted ? "none" : $reformatted;
         } else{
             return null;
         }

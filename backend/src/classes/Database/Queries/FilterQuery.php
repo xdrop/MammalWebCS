@@ -52,7 +52,9 @@ class FilterQuery extends Query
             ->leftJoin('options ON options.option_id = classified.species')
             ->select('options.option_name AS species_name')
             ->leftJoin('evenness ON evenness.photo_id = classified.photo_id')
-            ->select(['evenness.evenness_species','evenness.evenness_count']);
+            ->select(['evenness.evenness_species','evenness.evenness_count'])
+            ->leftJoin('options AS options2 ON options2.option_id = site.habitat_id')
+            ->select('options2.option_name AS habitat_name');
 
         if($hasNumberOfClassificationsFrom && $hasNumberOfClassificationsTo){
             $classificationsFrom = $params["no_of_classifications_from"];
@@ -75,8 +77,7 @@ class FilterQuery extends Query
         }
 
         if ($hasSpeciesToInclude) {
-            $unknowns = Utils::generateUnknowns($speciesToInclude);
-            $query->where("species IN ($unknowns)", ['expand' => $speciesToInclude]);
+            $query->where("species", $speciesToInclude);
         }
 
         if ($hasSpeciesToExclude) {
@@ -85,8 +86,7 @@ class FilterQuery extends Query
         }
 
         if($hasUsersToInclude){
-            $unknowns = Utils::generateUnknowns($usersToInclude);
-            $query->where("photo.person_id IN ($unknowns)", ['expand' => $usersToInclude]);
+            $query->where("photo.person_id", $usersToInclude);
         }
 
         if($hasUsersToExclude){
@@ -145,13 +145,15 @@ class FilterQuery extends Query
 
     protected function reformat($results)
     {
-        foreach($results as &$element){
+        if($results){
+            foreach($results as &$element){
 
-            $person_id = $element["person_id"];
-            $site_id = $element["site_id"];
-            $filename = $element["filename"];
-            $element['url'] = ImageURL::getURL($person_id,$site_id,$filename);
-            unset($element['filename']);
+                $person_id = $element["person_id"];
+                $site_id = $element["site_id"];
+                $filename = $element["filename"];
+                $element['url'] = ImageURL::getURL($person_id,$site_id,$filename);
+                unset($element['filename']);
+            }
         }
 
         return $results;
