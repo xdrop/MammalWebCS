@@ -4,10 +4,27 @@
 abstract class Query
 {
     protected $db;
+
+    /**
+     * @var SelectQuery the fetch query
+     */
     protected $internalFetchQuery;
+
+    /**
+     * @var InsertQuery|InsertQuery[] the insert query
+     */
     protected $internalStoreQueries;
+
+    /**
+     * @var UpdateQuery|UpdateQuery[] the update query
+     */
     protected $internalUpdateQueries;
+
+    /**
+     * @var DeleteQuery|DeleteQuery[] the delete query
+     */
     protected $internalDeleteQueries;
+
     protected $params;
 
     public function __construct()
@@ -94,43 +111,21 @@ abstract class Query
 
 
     /**
-     * @return mixed|null Fetches the results of the query
+     * @return QueryResults|string|null Fetches the results of the query
      */
     public function fetch()
     {
         $this->fetchQuery($this->params);
 
         if (!is_null($this->internalFetchQuery)) {
-            $reformatted = $this->reformat($this->internalFetchQuery->fetchAll());
-            return !$reformatted ? "none" : $reformatted;
+            $result = $this->reformat($this->internalFetchQuery->fetchAll());
+            return !$result ? "none" : new QueryResults($result);
         } else{
             return null;
         }
     }
 
-    /**
-     * @return string Fetches the results of the query in JSON format
-     */
-    public function fetchJSON(){
-        return json_encode($this->fetch());
-    }
 
-    /**
-     * @return string Fetches the results of the query in CSV format
-     */
-    public function fetchCSV(){
-        $result = $this->fetch();
-        $outputBuffer = fopen("php://output", 'w');
-
-        if(is_array($result)){
-            foreach($result as $row){
-                fputcsv($outputBuffer,$row);
-            }
-            fclose($outputBuffer);
-        }
-
-        return $outputBuffer;
-    }
 
     public function store()
     {
@@ -142,7 +137,7 @@ abstract class Query
                     $query->execute();
                 }
             } else {
-                $queries . execute();
+                $queries->execute();
             }
 
         }
@@ -158,7 +153,7 @@ abstract class Query
                     $query->execute();
                 }
             } else {
-                $queries . execute();
+                $queries->execute();
             }
 
         }
@@ -174,7 +169,7 @@ abstract class Query
                     $query->execute();
                 }
             } else {
-                $queries . execute();
+                $queries->execute();
             }
 
         }

@@ -20,6 +20,10 @@ class Environment
         return $settings['database'];
     }
 
+    public static function getRootDir(){
+        return dirname(__DIR__);
+    }
+
 
 
 

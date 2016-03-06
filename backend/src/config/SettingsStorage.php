@@ -2,11 +2,11 @@
 
 class SettingsStorage
 {
-    const filename = 'scientist_settings.json';
+    const filename = 'settings.json';
 
 
     /**
-     * Returns the settings stored at the scientist_settings.json file
+     * Returns the settings stored at the settings.json file
      *
      * @return array
      */
