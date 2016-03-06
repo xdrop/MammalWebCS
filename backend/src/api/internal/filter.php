@@ -13,13 +13,15 @@ if (isset($_POST['params'])) {
         }
         $listNamesQuery = new FilterQuery();
         $queryResults = $listNamesQuery->with($params)->fetch();
-        echo ["csv" => createCSVFile($queryResults->asCSV()),"results" => $queryResults->asArray()];
+        echo json_encode(["csv" => createCSVFile($queryResults),"results" => $queryResults->asArray()]);
     } catch (PDOException $e) {
         error("Failure in database connection.");
     }
 
 } else if (isset($_GET['csv'])){
-
+    $csvPath = SettingsStorage::settings()["csv_file_locations"];
+    $filename = $_GET['csv'];
+    FileStorage::downloadFile($filename, $csvPath);
 }
 else {
     error("No params provided");
@@ -30,22 +32,14 @@ function error($status)
     echo json_encode(["error" => $status]);
 }
 
-function createCSVFile($csvStream){
+/***
+ * @param $results QueryResults
+ * @return string
+ */
+function createCSVFile($results){
     $csvPath = SettingsStorage::settings()["csv_file_locations"];
     $rand = Utils::generateRandomString(10) . '.csv';
-    FileStorage::storeFile($rand,$csvPath,$csvStream);
+    $results->asCSV(FileStorage::getPath($rand,$csvPath));
     return $rand;
 }
 
-function outputCSV($fileStream)
-{
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=output.csv');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($fileStream));
-    readfile($fileStream);
-    exit;
-}

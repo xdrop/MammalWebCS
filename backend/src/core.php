@@ -3,6 +3,7 @@
 require_once('libs/FluentPDO/FluentPDO.php');
 require_once('classes/Utils.php');
 require_once('classes/ImageURL.php');
+require_once('classes/FileStorage.php');
 require_once('classes/Swanson/Classification.php');
 require_once('classes/Swanson/MammalClassifier.php');
 require_once('classes/Database/DatabaseConnector.php');

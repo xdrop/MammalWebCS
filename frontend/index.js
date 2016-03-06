@@ -114,9 +114,13 @@ $("#applyFilterButton").click(function () {
         type:    "POST",
         data:    {"params": JSON.stringify(filters)}, //JSON.stringify({"species_include":$("#dropdownAnimal").val(), "habitat_id":$("#dropdownHabitat").val(), "site_id":$("#dropdownSite").val()})
         success: function (json) {
-            displayTable(json, function (message) {
+            displayTable(json.results, function (message) {
                 console.log(message);
             });
+
+            var csv_filename = json.csv;
+            // TODO: add a link to "filter.php?csv=" + csv_filename which will download the csv output
+            console.log(csv_filename + "  ");
         },
         error:   function () {
             alert("It does not work...");
