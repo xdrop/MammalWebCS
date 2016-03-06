@@ -110,6 +110,10 @@ Get filtered results
 }
 ```
 
+Download CSV file
+`GET ./internal/filter.php?csv=BY3Jj2nsQi.csv'
+
+Should download the file
 
 Getting the settings:
 
