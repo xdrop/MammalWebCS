@@ -5,16 +5,17 @@ function displayTable(json) {
         var obj = json[i];
         var data;
         if (obj.flagged == 0) {
-
+            data = "<tr>"
+        } else {
+            data = "<tr class='error'>"
         }
-        var data = "<tr>";
         //Add species
         data += "<td>" + obj.species_name + "</td>";
         //Add flagged
         if (obj.flagged == 0) {
-            data += "<td>" + "No" + "</td>";
+            data += "<td></td>";
         } else {
-            data += "<td>" + "Yes" + "</td>";
+            data += "<td class='centered'><i class='attention icon'></i></td>";
         }
         //Add time classified
         data += "<td>" + obj.time_classified + "</td>";
@@ -22,13 +23,13 @@ function displayTable(json) {
         data += "<td>" + obj.taken + "</td>";
         //Add person ID
         data += "<td>" + obj.person_id + "</td>";
-        //Add site ID
+        //Add site IDs
         data += "<td>" + obj.site_name + "</td>";
         //Add contains human
         if (obj.contains_human == 0) {
-            data += "<td>" + "No" + "</td>";
+            data += "<td class='centered'><i class='remove icon'></i></td>";
         } else {
-            data += "<td>" + "Yes" + "</td>";
+            data += "<td class='centered'><i class='checkmark icon'></i></td>";
         }
         //Habit ID
         data += "<td>" + obj.habitat_id + "</td>";
@@ -115,7 +116,7 @@ function testTable() {
 
     "photo_id": "129",
     "species": "87",
-    "flagged": "0",
+    "flagged": "1",
     "time_classified": "2016-02-17 18:45:33",
     "taken": "2015-04-15 14:22:59",
     "person_id": "182",
