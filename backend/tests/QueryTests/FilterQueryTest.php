@@ -12,7 +12,7 @@ class FilterQueryTest extends \PHPUnit_Framework_TestCase
     function testHasURL(){
         $t = new FilterQuery();
 
-        $result = $t->with([])->fetch();
+        $result = $t->with([])->fetch()->asArray();
 
         $this->assertArrayHasKey("url",$result[0]);
     }
@@ -21,7 +21,7 @@ class FilterQueryTest extends \PHPUnit_Framework_TestCase
     {
         $t = new FilterQuery();
 
-        $result = $t->with([])->fetch();
+        $result = $t->with([])->fetch()->asArray();
 
         $url = $result[0]['url'];
 
@@ -33,7 +33,7 @@ class FilterQueryTest extends \PHPUnit_Framework_TestCase
     {
         $t = new FilterQuery();
 
-        $result = $t->with(["species_include" => [22, 23]])->fetch();
+        $result = $t->with(["species_include" => [22, 23]])->fetch()->asArray();
 
         foreach ($result as $entry) {
             $this->assertTrue($entry['species'] == 22 || $entry['species'] == 23);
@@ -45,7 +45,7 @@ class FilterQueryTest extends \PHPUnit_Framework_TestCase
     {
         $t = new FilterQuery();
 
-        $result = $t->with(["species_exclude" => [22, 23]])->fetch();
+        $result = $t->with(["species_exclude" => [22, 23]])->fetch()->asArray();
 
         foreach ($result as $entry) {
             $this->assertTrue($entry['species'] != 22 || $entry['species'] != 23);
