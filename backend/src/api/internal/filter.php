@@ -19,7 +19,7 @@ if (isset($_POST['params'])) {
             return;
         }
         $listNamesQuery = new FilterQuery();
-        $queryResults = $listNamesQuery->with($params)->limit(5)->page(2)->fetch();
+        $queryResults = $listNamesQuery->with($params)->fetch();
         echo json_encode(["csv" => createCSVFile($queryResults),"results" => $queryResults->asArray()]);
     } catch (PDOException $e) {
         error("Failure in database connection.");

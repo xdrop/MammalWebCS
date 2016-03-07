@@ -115,7 +115,23 @@ To use your query either in another class or to test all you need to do is creat
 ```php
 $myQuery = new MyNewQuery();
 
-$results = $myQuery->with(['id' => 2] /* Some parameters to the query */)->fetch();
+$results = $myQuery->with(['id' => 2] /* Some parameters to the query */)->fetch()->asArray();
 ```
 
-You can also export results in CSV using `fetchCSV()` or in JSON using `fetchJSON()`.
+You can also export results in CSV using `->asCSV()` or in JSON using `->asJSON()`.
+
+
+
+
+Pageable Query
+--------------
+
+By extending `PageableQuery` instead of `Query` you can also access the methods `limit()` and `page()` which specify the current page and the number of results per page.
+
+You can also pass these in the `with()` argument like so 
+
+```php
+$results = $myQuery->with(['id' => 2, 'page' => 1, 'limit' => 10])->fetch()->asArray();
+```
+
+Just don't combine both!

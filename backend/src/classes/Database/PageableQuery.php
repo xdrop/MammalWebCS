@@ -1,6 +1,9 @@
 <?php
 
-
+/**
+ * A type of query that can be accessed via pages
+ * Class PageableQuery
+ */
 abstract class PageableQuery extends Query
 {
     /**
@@ -32,18 +35,20 @@ abstract class PageableQuery extends Query
         $this->fetchQuery($this->params);
 
         if (!is_null($this->internalFetchQuery)) {
-            /* get the limit of results */
-            $limit = $this->params["limit"];
-            /* get the page */
-            $page = $this->params["page"];
+            if(isset($this->params["limit"]) &&
+                isset($this->params["page"])){
+                /* get the limit of results */
+                $limit = $this->params["limit"];
+                /* get the page */
+                $page = $this->params["page"];
 
-            /* if they are valid */
-            if($limit > 0 && $page > 0){
-                /* limit the actual query */
-                $this->internalFetchQuery->limit($limit)->offset($limit * ($page - 1));
+                /* if they are valid */
+                if($limit > 0 && $page > 0){
+                    /* limit the actual query */
+                    $this->internalFetchQuery->limit($limit)->offset($limit * ($page - 1));
+                }
             }
-            $result = $this->reformat($this->internalFetchQuery->fetchAll());
-            return !$result ? "none" : new QueryResults($result);
+            return parent::runFetch();
         } else{
             return null;
         }
