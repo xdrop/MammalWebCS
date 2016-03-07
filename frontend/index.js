@@ -3,13 +3,16 @@ function displayTable(json) {
     $("#resultsTable").html('');
     for (var i = 0; i < json.length; i++) {
         var obj = json[i];
-        alert(obj.url)
-        var data= "<td><a href=" + obj.url + "</td>";
+        a = document.createElement('a');
+        a.href =  obj.url; // Insted of calling setAttribute
+        a.target = "_blank";
+        a.innerHTML = "View" // <a>INNER_TEXT</a>
         if (obj.flagged == 0) {
-            data += "<tr class='center aligned'>"
+            data = "<tr class='center aligned'>"
         } else {
-            data += "<tr class='center aligned error'>"
+            data = "<tr class='center aligned error'>"
         }
+        data += "<td>" + a.outerHTML + "</td>";
         //Add flagged
         if (obj.flagged == 0) {
             data += "<td></td>";
@@ -178,7 +181,13 @@ $(document).ready(function () {
         fromAPI(filterOptions, j);
     }
 
-    $('.ui.dropdown')
-        .dropdown()
-    ;
+    // $('.species')
+    //   .dropdown({
+    //     action: 'hide',
+    //     onChange: function(value, text) {
+    //         alert(value);
+    //     }
+    //   })
+    // ;
+    $('.dropdown').dropdown();
 });
