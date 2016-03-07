@@ -1,7 +1,7 @@
 <?php
 
 
-class FilterQuery extends Query
+class FilterQuery extends PageableQuery
 {
 
     const CLASSIFICATION_RESULTS_TABLE_NAME = 'classified';
