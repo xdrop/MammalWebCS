@@ -35,121 +35,6 @@ function displayTable(json) {
     }
 }
 
-//Function for BEN as I cant access database
-function testTable() {
-    var json = [
-{
-
-    "photo_id": "123",
-    "species": "87",
-    "flagged": "0",
-    "time_classified": "2016-02-17 18:45:27",
-    "taken": "2015-04-15 14:19:26",
-    "person_id": "182",
-    "site_id": "2",
-    "contains_human": "1",
-    "habitat_id": "104",
-    "site_name": "SBBS Little High Wood",
-    "species_name": "Human <span class='fa fa-male'/>",
-    "evenness_species": "0",
-    "evenness_count": "0",
-    "url": "http://www.mammalweb.org/biodivimages/person_182/site_2/52964ab57e40e7b371aa301ee37bc5fc.jpg"
-
-},
-{
-
-    "photo_id": "124",
-    "species": "86",
-    "flagged": "0",
-    "time_classified": "2016-02-17 18:45:33",
-    "taken": "2015-04-15 14:19:27",
-    "person_id": "182",
-    "site_id": "2",
-    "contains_human": "0",
-    "habitat_id": "104",
-    "site_name": "SBBS Little High Wood",
-    "species_name": "Nothing <span class='fa fa-ban'/>",
-    "evenness_species": "0",
-    "evenness_count": "0",
-    "url": "http://www.mammalweb.org/biodivimages/person_182/site_2/0073904af3b7307759194dbd92cd9130.jpg"
-
-},
-{
-
-    "photo_id": "126",
-    "species": "86",
-    "flagged": "0",
-    "time_classified": "2016-02-17 18:45:33",
-    "taken": "2015-04-15 14:19:28",
-    "person_id": "182",
-    "site_id": "2",
-    "contains_human": "0",
-    "habitat_id": "104",
-    "site_name": "SBBS Little High Wood",
-    "species_name": "Nothing <span class='fa fa-ban'/>",
-    "evenness_species": "0",
-    "evenness_count": "0",
-    "url": "http://www.mammalweb.org/biodivimages/person_182/site_2/72b771d8dd8b6acb2fb47bfcf13f383e.jpg"
-
-},
-{
-
-    "photo_id": "127",
-    "species": "87",
-    "flagged": "1",
-    "time_classified": "2016-02-17 20:04:06",
-    "taken": "2015-04-15 14:22:57",
-    "person_id": "182",
-    "site_id": "2",
-    "contains_human": "1",
-    "habitat_id": "104",
-    "site_name": "SBBS Little High Wood",
-    "species_name": "Human <span class='fa fa-male'/>",
-    "evenness_species": "0",
-    "evenness_count": "0",
-    "url": "http://www.mammalweb.org/biodivimages/person_182/site_2/c94fa30a015bed16c17a218e8d934bcd.jpg"
-
-},
-{
-
-    "photo_id": "129",
-    "species": "87",
-    "flagged": "1",
-    "time_classified": "2016-02-17 18:45:33",
-    "taken": "2015-04-15 14:22:59",
-    "person_id": "182",
-    "site_id": "2",
-    "contains_human": "1",
-    "habitat_id": "104",
-    "site_name": "SBBS Little High Wood",
-    "species_name": "Human <span class='fa fa-male'/>",
-    "evenness_species": "0",
-    "evenness_count": "0",
-    "url": "http://www.mammalweb.org/biodivimages/person_182/site_2/458607bd27e4d7ba3d20025077eb517b.jpg"
-
-},
-{
-
-    "photo_id": "134",
-    "species": "87",
-    "flagged": "0",
-    "time_classified": "2016-02-17 18:45:33",
-    "taken": "2015-04-15 14:23:05",
-    "person_id": "182",
-    "site_id": "2",
-    "contains_human": "1",
-    "habitat_id": "104",
-    "site_name": "SBBS Little High Wood",
-    "species_name": "Human <span class='fa fa-male'/>",
-    "evenness_species": "0",
-    "evenness_count": "0",
-    "url": "http://www.mammalweb.org/biodivimages/person_182/site_2/7d39735ea6fefbe03f9902a7632d78e9.jpg"
-
-}
-];
-displayTable(json);
-}
-
 //Time since variables
 var sinces = ["#sinceYear", "#sinceMonth", "#sinceDay", "#sinceHour", "#sinceMinute", "#sinceSecond"]; //The ids of the time forms
 var untils = ["#untilYear", "#untilMonth", "#untilDay", "#untilHour", "#untilMinute", "#untilSecond"]; //IDs of datetime forms
@@ -275,13 +160,11 @@ $("#clearDropdownHabitat").click(function () {
 });
 $(document).ready(function () {
 
-    $('.ui.dropdown')
-        .dropdown()
-    ;
+
     $('.ui.accordion')
         .accordion()
     ;
-    testTable();
+
     var filterOptions = ["species", "species", "habitats", "sites"]; //The possible filters
     var dropdownOptions = ["dropdownAnimal", "dropdownNoAnimal", "dropdownHabitat", "dropdownSite"]; //The ids of the possible filters
     function fromAPI(name, num) {
@@ -302,5 +185,18 @@ $(document).ready(function () {
         fromAPI(filterOptions, j);
     }
 
-
+    $('.ui.dropdown')
+        .dropdown()
+    ;
+        var test = $('#dropdownAnimal')
+      .dropdown('get value')
+    ;
+    alert(test);
+    $('#dropdownAnimal')
+      .dropdown('set value', 2);
+    ;
+    test = $('#dropdownAnimal')
+      .dropdown('get value')
+    ;
+    alert(test);
 });

@@ -125,7 +125,18 @@
 	<br/>
 	<button id="applyFilterButton" class = "ui primary labelled icon button">
 	<i class="filter icon"></i>Apply filter</button>
-	<table class="ui compact sortable very basic selectable celled table">
+
+	<div id="test_area"></div>
+
+	<!--Results of filter-->
+	<br/>
+	<div class="ui accordion" id="animalAccordion">
+	  <div class="active title">
+		<i class="dropdown icon"></i>
+		Toggle filter results
+	  </div>
+	  <div class="content">
+			<table class="ui compact sortable very basic selectable celled table">
 		<thead>
 			<tr>
 			<th class="collapsed center aligned"></th>
@@ -140,18 +151,6 @@
 
 		</tbody>
 	</table>
-
-	<div id="test_area"></div>
-
-	<!--Results of filter-->
-	<br/>
-	<div class="ui accordion" id="animalAccordion">
-	  <div class="active title">
-		<i class="dropdown icon"></i>
-		Toggle filter results
-	  </div>
-	  <div class="active content">
-		<p id="results">No results yet</p>
 	  </div>
 	</div>
 </div>
