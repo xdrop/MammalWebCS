@@ -131,7 +131,11 @@ Get filtered results
     "taken_start": "2014-04-19 14:55:22",
     "taken_end": "2015-04-19 14:55:22",
     "__comment_ignore": "the dates strictly have to be YYYY-MM-DD HH:MM:SS",
-    "contains_human": false
+    "contains_human": false,
+    "limit" : 10,
+    "__comment_ignore": "the limit defines results per page",
+    "page" : 1,
+    "__comment_ignore": "the page of the results (each page has as many results as limit)"
 }
 ```
 
