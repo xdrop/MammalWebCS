@@ -4,6 +4,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+<style type="text/css">
+	.container{
+		padding-top: 25px;
+	}
+</style>
 <title>MammalWeb</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
@@ -17,7 +22,28 @@
 <a class="ui item" href="scientists.html">Scientists</a>
 </div>
 
-<div class = "ui container segment">
+<div class = "ui container">
+ <div class="ui large header">Filter Classifications</div>
+	<div class="ui fluid multiple search selection dropdown">
+  <input name="country" type="hidden">
+  <div class="default text">Filter Items</div>
+  <div class="menu">
+</div>
+ </div>
+ <div class="ui bottom attached basic buttons">
+  <div class="ui search dropdown basic button">
+  <span class="text">Species</span>
+  <div class="menu">
+    <div class="item">Arabic</div>
+    <div class="item">Chinese</div>
+    <div class="item">Danish</div>
+  </div>
+</div>
+  <button class="ui button">Habitat</button>
+  <button class="ui button">Site</button>
+  <button class="ui button">Date From</button>
+  <button class="ui button">Date To</button>
+  </div>
 	<!-- Filter for animal species-->
 	<h2>Included Animal Species</h2>
 	<div class="ui form">
@@ -128,15 +154,7 @@
 
 	<div id="test_area"></div>
 
-	<!--Results of filter-->
-	<br/>
-	<div class="ui accordion" id="animalAccordion">
-	  <div class="active title">
-		<i class="dropdown icon"></i>
-		Toggle filter results
-	  </div>
-	  <div class="content">
-			<table class="ui compact sortable very basic selectable celled table">
+				<table class="ui compact sortable very basic selectable celled table">
 		<thead>
 			<tr>
 			<th></th>
@@ -151,6 +169,15 @@
 
 		</tbody>
 	</table>
+	<!--Results of filter-->
+	<br/>
+	<div class="ui accordion" id="animalAccordion">
+	  <div class="active title">
+		<i class="dropdown icon"></i>
+		Toggle filter results
+	  </div>
+	  <div class="content">
+
 	  </div>
 	</div>
 </div>

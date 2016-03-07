@@ -3,6 +3,7 @@ function displayTable(json) {
     $("#resultsTable").html('');
     for (var i = 0; i < json.length; i++) {
         var obj = json[i];
+        alert(obj.url)
         var data= "<td><a href=" + obj.url + "</td>";
         if (obj.flagged == 0) {
             data += "<tr class='center aligned'>"
