@@ -118,8 +118,7 @@ abstract class Query
         $this->fetchQuery($this->params);
 
         if (!is_null($this->internalFetchQuery)) {
-            $result = $this->reformat($this->internalFetchQuery->fetchAll());
-            return !$result ? "none" : new QueryResults($result);
+            return $this->runFetch();
         } else{
             return null;
         }
@@ -173,6 +172,16 @@ abstract class Query
             }
 
         }
+    }
+
+    /**
+     * Runs the query
+     * @return QueryResults|string
+     */
+    protected function runFetch()
+    {
+        $result = $this->reformat($this->internalFetchQuery->fetchAll());
+        return !$result ? "none" : new QueryResults($result);
     }
 
 }
