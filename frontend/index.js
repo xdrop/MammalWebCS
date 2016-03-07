@@ -204,4 +204,19 @@ $(document).ready(function () {
                 }
             }
         });
+    $("#speciesDrop").dropdown({
+    action: 'hide',
+    onChange: function(value, text) {
+      var text = '<a style="display: inline-block ! important;" data-value="10" class="ui label transition visible">Badger<i class="delete icon"></i></a>'
+      $("#masterDrop").prepend(text);
+    },
+    fields: { name: "name", value: "id"},
+    apiSettings: {
+        url: '../backend/src/api/internal/list.php?item=species',
+        onResponse: function(response){
+            return {success: true, results: response};
+        }
+    }
+  })
+;
 });
