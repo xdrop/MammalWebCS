@@ -5,9 +5,9 @@ function displayTable(json) {
         var obj = json[i];
         var data;
         if (obj.flagged == 0) {
-            data = "<tr class='center aligned'>"
+            data = "<tr class='center aligned clickable row' data-href=" + obj.url +" >"
         } else {
-            data = "<tr class='center aligned error'>"
+            data = "<tr class='center aligned error clickable row' data-href=" + obj.url +">"
         }
         //Add flagged
         if (obj.flagged == 0) {
@@ -169,6 +169,7 @@ $(document).ready(function () {
     var dropdownOptions = ["dropdownAnimal", "dropdownNoAnimal", "dropdownHabitat", "dropdownSite"]; //The ids of the possible filters
     function fromAPI(name, num) {
         $.get("../backend/src/api/internal/list.php?item=" + name[num], function (recvdata) {
+            alert("hello");
             var options = "";
             var done = [];
             for (var i in recvdata) {
