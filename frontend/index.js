@@ -188,15 +188,4 @@ $(document).ready(function () {
     $('.ui.dropdown')
         .dropdown()
     ;
-        var test = $('#dropdownAnimal')
-      .dropdown('get value')
-    ;
-    alert(test);
-    $('#dropdownAnimal')
-      .dropdown('set value', 2);
-    ;
-    test = $('#dropdownAnimal')
-      .dropdown('get value')
-    ;
-    alert(test);
 });
