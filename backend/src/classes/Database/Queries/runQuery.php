@@ -11,7 +11,7 @@ require('../../../core.php');
 
 $newQueryTest = new FilterQuery();
 
-$results = $newQueryTest->with([])->fetch();
+$results = $newQueryTest->with([])->page(1)->limit(5)->fetch();
 
 //$newNameQuery = new HabitatNameQuery();
 

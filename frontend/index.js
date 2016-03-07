@@ -161,26 +161,52 @@ $(document).ready(function () {
         .accordion()
     ;
 
-    var filterOptions = ["species", "species", "habitats", "sites"]; //The possible filters
-    var dropdownOptions = ["dropdownAnimal", "dropdownNoAnimal", "dropdownHabitat", "dropdownSite"]; //The ids of the possible filters
-    function fromAPI(name, num) {
-        $.get("../backend/src/api/internal/list.php?item=" + name[num], function (recvdata) {
-            var options = "";
-            var done = [];
-            for (var i in recvdata) {
-                if ($.inArray(recvdata[i], done) == -1) {
-                    options += "<option value=" + i + ">" + recvdata[i] + "</option>"; //Make each option in html format
-                    done.push(recvdata[i]);
+    $('#dropdownAnimal')
+        .dropdown({
+            fields: { name: "name", value: "id"},
+            apiSettings: {
+                url: '../backend/src/api/internal/list.php?item=species',
+                onResponse: function(response){
+                    return {success: true, results: response};
                 }
             }
-            $("#" + dropdownOptions[num]).html(options); //Put the options in the dropdown as html
         });
-    }
 
-    for (var j = 0; j < filterOptions.length; j++) {
-        fromAPI(filterOptions, j);
-    }
+    $('#dropdownNoAnimal')
+        .dropdown({
+            fields: { name: "name", value: "id"},
+            apiSettings: {
+                url: '../backend/src/api/internal/list.php?item=species',
+                onResponse: function(response){
+                    return {success: true, results: response};
+                }
+            }
+        });
 
+    $('#dropdownHabitat')
+        .dropdown({
+            fields: { name: "name", value: "id"},
+            apiSettings: {
+                url: '../backend/src/api/internal/list.php?item=habitats',
+                onResponse: function(response){
+                    return {success: true, results: response};
+                }
+            }
+        });
+
+    $('#dropdownSite')
+        .dropdown({
+            fields: { name: "name", value: "id"},
+            apiSettings: {
+                url: '../backend/src/api/internal/list.php?item=sites',
+                onResponse: function(response){
+                    return {success: true, results: response};
+                }
+            }
+        });
+
+
+<<<<<<< HEAD
     // $('.species')
     //   .dropdown({
     //     action: 'hide',
@@ -190,4 +216,6 @@ $(document).ready(function () {
     //   })
     // ;
     $('.dropdown').dropdown();
+=======
+>>>>>>> bf688e120134d32c079dc1bb03f7f7e1d92368b1
 });

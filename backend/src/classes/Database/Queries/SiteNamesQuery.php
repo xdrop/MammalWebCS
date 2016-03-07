@@ -46,12 +46,17 @@ class SiteNameQuery extends Query
         if (!is_null($results)) {
             $map = [];
             foreach ($results as $entry) {
-                $map[$entry[self::SITE_ID]] = $entry[self::SITE_NAME];
+                $newEntry = [];
+                $newEntry["id"] = $entry[self::SITE_ID];
+                $newEntry["name"] = $entry[self::SITE_NAME];
+                $map[] = $newEntry;
             }
             return $map;
 
         } else {
             return [];
         }
+
+
     }
 }
