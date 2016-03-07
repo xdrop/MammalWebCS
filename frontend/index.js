@@ -160,6 +160,7 @@ $("#clearDropdownHabitat").click(function () {
 });
 $(document).ready(function () {
     $(".clickable-row").click(function() {
+        alert("hello");
             window.document.location = $(this).data("href");
         });
 
