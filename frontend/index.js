@@ -3,11 +3,11 @@ function displayTable(json) {
     $("#resultsTable").html('');
     for (var i = 0; i < json.length; i++) {
         var obj = json[i];
-        var data;
+        var data= "<td><a href=" + obj.url + "</td>";
         if (obj.flagged == 0) {
-            data = "<tr class='center aligned clickable-row' data-href=" + obj.url +" >"
+            data += "<tr class='center aligned'>"
         } else {
-            data = "<tr class='center aligned error clickable-row' data-href=" + obj.url +">"
+            data += "<tr class='center aligned error'>"
         }
         //Add flagged
         if (obj.flagged == 0) {
@@ -23,14 +23,7 @@ function displayTable(json) {
         data += "<td>" + obj.person_id + "</td>";
         //Add site IDs
         data += "<td>" + obj.site_name + "</td>";
-        //Add contains human
-        // if (obj.contains_human == 0) {
-        //     data += "<td class='centered'><i class='remove icon'></i></td>";
-        // } else {
-        //     data += "<td class='centered'><i class='checkmark icon'></i></td>";
-        // }
-        //Habit ID
-        data += "<td>" + obj.habitat_id + "</td>";
+
         $(data + "</tr>").appendTo("#resultsTable");
     }
 }
@@ -159,10 +152,6 @@ $("#clearDropdownHabitat").click(function () {
     $("#dropdownHabitat").dropdown('clear');
 });
 $(document).ready(function () {
-    $(".clickable-row").click(function() {
-        alert("hello");
-            window.document.location = $(this).data("href");
-        });
 
     $('.ui.accordion')
         .accordion()
