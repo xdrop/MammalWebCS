@@ -35,15 +35,16 @@ abstract class PageableQuery extends Query
         $this->fetchQuery($this->params);
 
         if (!is_null($this->internalFetchQuery)) {
-            if(isset($this->params["limit"]) &&
-                isset($this->params["page"])){
+            if(isset($this->params["limit"])){
                 /* get the limit of results */
                 $limit = $this->params["limit"];
-                /* get the page */
-                $page = $this->params["page"];
-
                 /* if they are valid */
-                if($limit > 0 && $page > 0){
+                if($limit > 0){
+                    if(!isset($this->params["page"]) || !($this->params["page"] > 0)){
+                        $page = 1;
+                    } else{
+                        $page = $this->params["page"];
+                    }
                     /* limit the actual query */
                     $this->internalFetchQuery->limit($limit)->offset($limit * ($page - 1));
                 }
