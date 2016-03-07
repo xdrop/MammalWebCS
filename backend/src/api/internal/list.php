@@ -22,6 +22,13 @@ if (isset($_GET['item'])) {
         } else if ($apiParam === 'sites') {
             $query = new SiteNameQuery();
             echo $query->fetch()->asJSON();
+        } else if ($apiParam === "all"){
+            $species = new SpeciesNameQuery();
+            $habitats = new HabitatNameQuery();
+            $sites = new SiteNameQuery();
+            echo json_encode(["species" => $species->fetch()->asArray(),
+                "habitats" => $habitats->fetch()->asArray(),
+                "sites" => $sites->fetch()->asArray()]);
         } else {
             error("Invalid action");
         }

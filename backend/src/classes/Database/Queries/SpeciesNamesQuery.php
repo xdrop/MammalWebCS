@@ -47,7 +47,10 @@ class SpeciesNameQuery extends Query
         if (!is_null($results)) {
             $map = [];
             foreach ($results as $entry) {
-                $map[$entry[self::OPTION_ID]] = $entry[self::OPTION_NAME];
+                $newEntry = [];
+                $newEntry["id"] = $entry[self::OPTION_ID];
+                $newEntry["name"] = $entry[self::OPTION_NAME];
+                $map[] = $newEntry;
             }
             return $map;
 

@@ -47,12 +47,16 @@ class HabitatNameQuery extends Query
         if (!is_null($results)) {
             $map = [];
             foreach ($results as $entry) {
-                $map[$entry[self::HABITAT_ID]] = $entry[self::HABITAT_NAME];
+                $newEntry = [];
+                $newEntry["id"] = $entry[self::HABITAT_ID];
+                $newEntry["name"] = $entry[self::HABITAT_NAME];
+                $map[] = $newEntry;
             }
             return $map;
 
         } else {
             return [];
         }
+
     }
 }
