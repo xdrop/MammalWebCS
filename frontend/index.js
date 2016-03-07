@@ -169,7 +169,6 @@ $(document).ready(function () {
     var dropdownOptions = ["dropdownAnimal", "dropdownNoAnimal", "dropdownHabitat", "dropdownSite"]; //The ids of the possible filters
     function fromAPI(name, num) {
         $.get("../backend/src/api/internal/list.php?item=" + name[num], function (recvdata) {
-            alert("hello");
             var options = "";
             var done = [];
             for (var i in recvdata) {
