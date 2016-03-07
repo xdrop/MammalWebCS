@@ -204,18 +204,4 @@ $(document).ready(function () {
                 }
             }
         });
-
-
-<<<<<<< HEAD
-    // $('.species')
-    //   .dropdown({
-    //     action: 'hide',
-    //     onChange: function(value, text) {
-    //         alert(value);
-    //     }
-    //   })
-    // ;
-    $('.dropdown').dropdown();
-=======
->>>>>>> bf688e120134d32c079dc1bb03f7f7e1d92368b1
 });
