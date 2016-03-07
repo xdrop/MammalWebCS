@@ -5,9 +5,9 @@ function displayTable(json) {
         var obj = json[i];
         var data;
         if (obj.flagged == 0) {
-            data = "<tr class='center aligned clickable row' data-href=" + obj.url +" >"
+            data = "<tr class='center aligned clickable-row' data-href=" + obj.url +" >"
         } else {
-            data = "<tr class='center aligned error clickable row' data-href=" + obj.url +">"
+            data = "<tr class='center aligned error clickable-row' data-href=" + obj.url +">"
         }
         //Add flagged
         if (obj.flagged == 0) {
@@ -159,7 +159,9 @@ $("#clearDropdownHabitat").click(function () {
     $("#dropdownHabitat").dropdown('clear');
 });
 $(document).ready(function () {
-
+    $(".clickable-row").click(function() {
+            window.document.location = $(this).data("href");
+        });
 
     $('.ui.accordion')
         .accordion()
