@@ -156,7 +156,14 @@ $("#clearDropdownHabitat").click(function () {
     $("#dropdownHabitat").dropdown('clear');
 });
 $(document).ready(function () {
-    $('input[name="daterange"]').daterangepicker();
+    $('#datebtn').daterangepicker({
+        timePicker: true,
+        timePickerSeconds: true,
+        timePickerIncrement: 1,
+        locale: {
+            format: 'MM/DD/YYYY h:mm:ss  A'
+        }
+    });
 
     $('.ui.accordion')
         .accordion()
