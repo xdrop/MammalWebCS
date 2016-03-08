@@ -156,6 +156,7 @@ $("#clearDropdownHabitat").click(function () {
     $("#dropdownHabitat").dropdown('clear');
 });
 $(document).ready(function () {
+    $('input[name="daterange"]').daterangepicker();
 
     $('.ui.accordion')
         .accordion()
