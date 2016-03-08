@@ -218,7 +218,7 @@ $(document).ready(function () {
     var $habitatDrop = $("#habitatDrop");
 
 
-    $masterDrop.dropdown({action: function() { return; } });
+    $masterDrop.dropdown({action: function() {}  });
 
     $speciesDrop.dropdown({
         action: function(text, value) {

@@ -4524,7 +4524,7 @@ $.fn.dropdown = function(parameters) {
             ? callback
             : function(){}
           ;
-          if( module.can.show() && !module.is.active() ) {
+          if( module.can.show() && !module.is.active() && !module.is.noDrop() ) {
             module.debug('Showing dropdown');
             if(module.is.multiple() && !module.has.search() && module.is.allFiltered()) {
               return true;
@@ -6900,6 +6900,9 @@ $.fn.dropdown = function(parameters) {
           },
           hidden: function($subMenu) {
             return !module.is.visible($subMenu);
+          },
+          noDrop: function() {
+            return $module.hasClass("nodrop");
           },
           initialLoad: function() {
             return initialLoad;
