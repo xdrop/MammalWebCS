@@ -242,7 +242,7 @@ $(document).ready(function () {
             $masterDrop.dropdown("add label", "habitat-" + value,
                 "Habitat: " + text.substr(0,text.indexOf(' ')),"blue");
             $masterDrop.dropdown("set selected", value);
-            $speciesDrop.dropdown("action hide");
+            $habitatDrop.dropdown("action hide");
         },
         fields:      {name: "name", value: "id"},
         apiSettings: {
