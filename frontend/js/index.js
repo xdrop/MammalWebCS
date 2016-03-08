@@ -4,7 +4,7 @@ function displayTable(json) {
     for (var i = 0; i < json.length; i++) {
         var obj = json[i];
         a = document.createElement('a');
-        a.href =  obj.url; // Insted of calling setAttribute
+        a.href = obj.url; // Insted of calling setAttribute
         a.target = "_blank";
         a.innerHTML = "View" // <a>INNER_TEXT</a>
         if (obj.flagged == 0) {
@@ -92,7 +92,7 @@ $("#applyFilterButton").click(function () {
         }
     }
     if (equalArray(untilDefaults, untilValues) == false) {
-        filters.taken_end  =  untilValues[0] + "-" + untilValues[1] + "-" + untilValues[2] + " "+
+        filters.taken_end = untilValues[0] + "-" + untilValues[1] + "-" + untilValues[2] + " " +
             untilValues[3] + ":" + untilValues[4] + ":" + untilValues[5];
 
     }
@@ -163,10 +163,10 @@ $(document).ready(function () {
 
     $('#dropdownAnimal')
         .dropdown({
-            fields: { name: "name", value: "id"},
+            fields:      {name: "name", value: "id"},
             apiSettings: {
-                url: '../backend/src/api/internal/list.php?item=species',
-                onResponse: function(response){
+                url:        '../backend/src/api/internal/list.php?item=species',
+                onResponse: function (response) {
                     return {success: true, results: response};
                 }
             }
@@ -174,10 +174,10 @@ $(document).ready(function () {
 
     $('#dropdownNoAnimal')
         .dropdown({
-            fields: { name: "name", value: "id"},
+            fields:      {name: "name", value: "id"},
             apiSettings: {
-                url: '../backend/src/api/internal/list.php?item=species',
-                onResponse: function(response){
+                url:        '../backend/src/api/internal/list.php?item=species',
+                onResponse: function (response) {
                     return {success: true, results: response};
                 }
             }
@@ -185,10 +185,10 @@ $(document).ready(function () {
 
     $('#dropdownHabitat')
         .dropdown({
-            fields: { name: "name", value: "id"},
+            fields:      {name: "name", value: "id"},
             apiSettings: {
-                url: '../backend/src/api/internal/list.php?item=habitats',
-                onResponse: function(response){
+                url:        '../backend/src/api/internal/list.php?item=habitats',
+                onResponse: function (response) {
                     return {success: true, results: response};
                 }
             }
@@ -196,27 +196,52 @@ $(document).ready(function () {
 
     $('#dropdownSite')
         .dropdown({
-            fields: { name: "name", value: "id"},
+            fields:      {name: "name", value: "id"},
             apiSettings: {
-                url: '../backend/src/api/internal/list.php?item=sites',
-                onResponse: function(response){
+                url:        '../backend/src/api/internal/list.php?item=sites',
+                onResponse: function (response) {
                     return {success: true, results: response};
                 }
             }
         });
-    $("#speciesDrop").dropdown({
-    action: 'hide',
-    onChange: function(value, text) {
-      var text = '<a style="display: inline-block ! important;" data-value="10" class="ui label transition visible">Badger<i class="delete icon"></i></a>'
-      $("#masterDrop").prepend(text);
-    },
-    fields: { name: "name", value: "id"},
-    apiSettings: {
-        url: '../backend/src/api/internal/list.php?item=species',
-        onResponse: function(response){
-            return {success: true, results: response};
+
+    var $masterDrop = $("#masterDrop");
+    var $speciesDrop = $("#speciesDrop");
+    var $habitatDrop = $("#habitatDrop");
+
+
+    $masterDrop.dropdown({action: function() { return; } });
+
+    $speciesDrop.dropdown({
+        action: function(text, value) {
+            $masterDrop.dropdown("add value", "animal-" +value, "Include: " + text);
+            $masterDrop.dropdown("add label", "animal-" + value, "Include: " + text,"green");
+            $masterDrop.dropdown("set selected", value);
+            $speciesDrop.dropdown("action hide");
+        },
+        fields:      {name: "name", value: "id"},
+        apiSettings: {
+            url:        '../backend/src/api/internal/list.php?item=species',
+            onResponse: function (response) {
+                return {success: true, results: response};
+            }
         }
-    }
-  })
-;
+    });
+
+    $habitatDrop.dropdown({
+        action: function(text, value) {
+            $masterDrop.dropdown("add value", "habitat-" +value, "Habitat: " + text);
+            $masterDrop.dropdown("add label", "habitat-" + value,
+                "Habitat: " + text.substr(0,text.indexOf(' ')),"blue");
+            $masterDrop.dropdown("set selected", value);
+            $speciesDrop.dropdown("action hide");
+        },
+        fields:      {name: "name", value: "id"},
+        apiSettings: {
+            url:        '../backend/src/api/internal/list.php?item=habitats',
+            onResponse: function (response) {
+                return {success: true, results: response};
+            }
+        }
+    });
 });
