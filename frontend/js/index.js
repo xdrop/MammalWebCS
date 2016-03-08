@@ -252,4 +252,21 @@ $(document).ready(function () {
             }
         }
     });
+
+    $siteDrop.dropdown({
+        action: function(text, value) {
+            $masterDrop.dropdown("add value", "site-" +value, "Site: " + text);
+            $masterDrop.dropdown("add label", "site-" + value,
+                "Site: " + text, "yellow");
+            $masterDrop.dropdown("set selected", value);
+            $habitatDrop.dropdown("action hide");
+        },
+        fields:      {name: "name", value: "id"},
+        apiSettings: {
+            url:        '../backend/src/api/internal/list.php?item=sites',
+            onResponse: function (response) {
+                return {success: true, results: response};
+            }
+        }
+    });
 });
