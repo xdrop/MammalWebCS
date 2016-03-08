@@ -35,84 +35,8 @@ function displayTable(json) {
     }
 }
 
-// //Time since variables
-// var sinces = ["#sinceYear", "#sinceMonth", "#sinceDay", "#sinceHour", "#sinceMinute", "#sinceSecond"]; //The ids of the time forms
-// var untils = ["#untilYear", "#untilMonth", "#untilDay", "#untilHour", "#untilMinute", "#untilSecond"]; //IDs of datetime forms
-
-
-// var sinceDefaults = ["1970", "1", "1", "00", "00", "00"]; //What is used if no date/time filled in
-
-// var untilDefaults = ["2100", "1", "1", "00", "00", "00"]; //Defaults
-
-// function equalArray(arr1, arr2) //Checks if two arrays are equal
-// {
-//     var result = true;
-//     if (arr1.length != arr2.length) {
-//         result = false;
-//     }
-//     for (var i = 0; i < arr1.length; i++) {
-//         if (arr1[i] != arr2[i]) {
-//             result = false;
-//         }
-//     }
-//     return result;
-// }
-
 $("#applyFilterButton").click(function () {
-    // var species_include = $("#dropdownAnimal").val();
-    // var species_exclude = $("#dropdownNoAnimal").val();
-    // var habitat_id = $("#dropdownHabitat").val();
-    // var site_id = $("#dropdownSite").val();
 
-    // /* get the fields from the DOM elements and convert to number */
-    // filters.species_include = species_include == null ? undefined : species_include.map(Number);
-    // filters.species_exclude = species_exclude == null ? undefined : species_exclude.map(Number);
-    // filters.habitat_id = habitat_id == null ? undefined : habitat_id.map(Number);
-    // filters.site_id = site_id == null ? undefined : site_id.map(Number);
-
-
-    // //Since dates
-    // var sinceValues = ["1970", "1", "1", "00", "00", "00"]; //Where the selected datetime values are held. The values already there allow it so not all datetime divisions (day, minutes etc) have to be chosen
-    // var untilValues = ["2100", "1", "1", "00", "00", "00"];
-
-    // var i;
-    // for (i = 0; i < sinces.length; i++) {
-    //     if ($(sinces[i]).val() != "") {
-    //         sinceValues[i] = $(sinces[i]).val(); //Store the selected datetime values
-    //     }
-    // }
-    // if (equalArray(sinceValues, sinceDefaults) == false) //If the default values and selected values of datetime are different (i.e. a datetime has been chosen)
-    // {
-    //     filters.taken_start = sinceValues[0] + "-" + sinceValues[1] + "-" + sinceValues[2] + " " + sinceValues[3] + ":" + sinceValues[4] + ":" + sinceValues[5]; //Format date time;
-    // }
-
-    // //Until dates
-    // for (i = 0; i < untils.length; i++) {
-    //     if ($(untils[i]).val() != "") {
-    //         untilValues[i] = $(untils[i]).val();
-    //     }
-    // }
-    // if (equalArray(untilDefaults, untilValues) == false) {
-    //     filters.taken_end = untilValues[0] + "-" + untilValues[1] + "-" + untilValues[2] + " " +
-    //         untilValues[3] + ":" + untilValues[4] + ":" + untilValues[5];
-
-    // }
-
-    // //Deal with dates. Since seems to work if only both start and end date provided, must make sure if only on give, other is also given
-    // if (filters.taken_start !== undefined) //If a since date given
-    // {
-    //     if (filters.taken_end === undefined) //If no until date given
-    //     {
-    //         filters.taken_end = "2017-1-1 00:00:00"; //Add a default futer end date
-    //     }
-    // }
-    // if (filters.taken_start === undefined) //If no since date given
-    // {
-    //     if (filters.taken_end !== undefined) //If no until date given
-    //     {
-    //         filters.taken_start = "1970-1-1 00:00:00"; //Add a default since past date
-    //     }
-    // }
     filters.species_include = species_include;
     alert(JSON.stringify(filters));
     $.ajax({
@@ -148,6 +72,7 @@ $(document).ready(function () {
 
 
     $masterDrop.dropdown({action: function() {}  });
+    $masterDrop.dropdown("clear values");
 
     $speciesDrop.dropdown({
         action: function(text, value) {
