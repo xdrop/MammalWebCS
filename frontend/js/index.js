@@ -130,31 +130,6 @@ $("#applyFilterButton").click(function () {
         }
     });
 });
-//Clear buttons - clears and selected filter options
-$("#clearSince").click(function () {
-    for (var i = 0; i < sinces.length; i++) {
-        document.getElementById(sinces[i].substr(1)).value = "";
-    }
-});
-$("#clearUntil").click(function () {
-    for (var i = 0; i < untils.length; i++) {
-        document.getElementById(untils[i].substr(1)).value = "";
-    }
-});
-$("#clearDropdownAnimal").click(function () {
-    $("#dropdownAnimal").dropdown('clear');
-});
-$("#clearDropdownNoAnimal").click(function () {
-    $("#dropdownNoAnimal").dropdown('clear');
-});
-$("#clearDropdownSite").click(function () {
-    $("#dropdownSite").dropdown('clear');
-});
-
-
-$("#clearDropdownHabitat").click(function () {
-    $("#dropdownHabitat").dropdown('clear');
-});
 $(document).ready(function () {
     $('#datebtn').daterangepicker({
         timePicker: true,
@@ -165,57 +140,10 @@ $(document).ready(function () {
         }
     });
 
-    $('.ui.accordion')
-        .accordion()
-    ;
-
-    $('#dropdownAnimal')
-        .dropdown({
-            fields:      {name: "name", value: "id"},
-            apiSettings: {
-                url:        '../backend/src/api/internal/list.php?item=species',
-                onResponse: function (response) {
-                    return {success: true, results: response};
-                }
-            }
-        });
-
-    $('#dropdownNoAnimal')
-        .dropdown({
-            fields:      {name: "name", value: "id"},
-            apiSettings: {
-                url:        '../backend/src/api/internal/list.php?item=species',
-                onResponse: function (response) {
-                    return {success: true, results: response};
-                }
-            }
-        });
-
-    $('#dropdownHabitat')
-        .dropdown({
-            fields:      {name: "name", value: "id"},
-            apiSettings: {
-                url:        '../backend/src/api/internal/list.php?item=habitats',
-                onResponse: function (response) {
-                    return {success: true, results: response};
-                }
-            }
-        });
-
-    $('#dropdownSite')
-        .dropdown({
-            fields:      {name: "name", value: "id"},
-            apiSettings: {
-                url:        '../backend/src/api/internal/list.php?item=sites',
-                onResponse: function (response) {
-                    return {success: true, results: response};
-                }
-            }
-        });
-
     var $masterDrop = $("#masterDrop");
     var $speciesDrop = $("#speciesDrop");
     var $habitatDrop = $("#habitatDrop");
+    var $siteDrop = $("#siteDrop");
 
 
     $masterDrop.dropdown({action: function() {}  });
