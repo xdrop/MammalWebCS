@@ -10,6 +10,23 @@ function getSettings(_callback) {
     });
 }
 
+function setSettings(json) {
+    json2 = {};
+    json2.action = "store";
+    json2.settings = json;
+    $.ajax({
+        url:     "../backend/src/api/internal/settings.php",
+        type:    "POST",
+        data:     json2,
+        success: function () {
+            alert("success");
+        },
+        error:   function () {
+            alert("fail");
+        }
+    });
+}
+
 function updateFields(json) {
     $("input[name='consecutive'").val(json.consecutive_expected);
     $("input[name='consensus'").val(json.votes_before_consensus);
@@ -17,6 +34,22 @@ function updateFields(json) {
     $("input[name='evenness_species'").val(json.evenness_threshold_species);
     $("input[name='evenness_count'").val(json.evenness_threshold_count);
 }
+
+function getFields(_callback) {
+    json = {};
+    json.consecutive_expected = $("input[name='consecutive'").val();
+    json.votes_before_consensus = $("input[name='consensus'").val();
+    json.unreasonable_number_of_species_in_image = $("input[name='unreasonable'").val();
+    json.evenness_threshold_species = $("input[name='evenness_species'").val();
+    json.evenness_threshold_count = $("input[name='evenness_count'").val();
+    _callback(json);
+}
+
+$("#reclassify").click(function() {
+    getFields(function(json) {
+        setSettings(json);
+    });
+});
 
 $(document).ready(function () {
     getSettings(function(json) {
