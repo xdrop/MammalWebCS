@@ -1,14 +1,20 @@
-$(document).ready(function () {
-    alert("hello");
+function getSettings(_callback) {
     $.ajax({
         url:     "../backend/src/api/internal/settings.php?action=get",
         type:    "GET",
         success: function (json) {
-            $("#test").text(JSON.stringify(json));
-            alert("yay");
+            _callback(json);
         },
         error:   function () {
-            alert("It does not work...");
         }
+    });
+}
+
+function updateFields(json) {
+    $("input[name='consecutive'").val(json.consecutive.expected);
+}
+$(document).ready(function () {
+    getSettings(function(json) {
+        updateFields(json);
     });
 });
