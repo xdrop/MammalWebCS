@@ -22,7 +22,29 @@
     <a class="ui item" href="scientists.html">Scientists</a>
 </div>
 <div class="ui container">
-    <div id="test"></div>
+    <form class="ui form">
+      <div class="field">
+        <label>Consecutive Classifications</label>
+        <input type="number" name="consecutive" value="" placeholder="">
+      </div>
+      <div class="field">
+        <label>Votes Before Consensus</label>
+        <input type="number" name="consensus" value="" placeholder="">
+      </div>
+      <div class="field">
+        <label>Unreasonable Number of Species in Image</label>
+        <input type="number" name="unreasonable" value="" placeholder="" min="0">
+      </div>
+      <div class="field">
+        <label>Evenness Threshold for Species</label>
+        <input type="number" name="evenness_species" value="" placeholder="" min="0" max="1" step="0.01">
+      </div>
+      <div class="field">
+        <label>Evenness Threshold for Animal Count</label>
+        <input type="number" name="evenness_count" value="" placeholder="" min="0" max="1" step="0.01">
+      </div>
+      <button class="ui button" type="submit">Reclassify</button>
+    </form>
 </div>
 <script src="js/classify.js" type="text/javascript">
 </script>
