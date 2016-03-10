@@ -1,3 +1,4 @@
+// Gets the current settings
 function getSettings(_callback) {
     $.ajax({
         url:     "../backend/src/api/internal/settings.php?action=get",
@@ -10,23 +11,22 @@ function getSettings(_callback) {
     });
 }
 
-function setSettings(json) {
-    json2 = {};
-    json2.action = "store";
-    json2.settings = json;
+// Sets the settings to the user specified
+function setSettings(json_settings) {
+    json = {};
+    json.action = "store";
+    json.settings = json_settings;
     $.ajax({
         url:     "../backend/src/api/internal/settings.php",
         type:    "POST",
-        data:     json2,
-        success: function () {
-            alert("success");
-        },
+        data:     json,
         error:   function () {
-            alert("fail");
+            alert("Failed to set settings");
         }
     });
 }
 
+// Update HTML form
 function updateFields(json) {
     $("input[name='consecutive'").val(json.consecutive_expected);
     $("input[name='consensus'").val(json.votes_before_consensus);
@@ -35,6 +35,7 @@ function updateFields(json) {
     $("input[name='evenness_count'").val(json.evenness_threshold_count);
 }
 
+// Get new settings from HTML form
 function getFields(_callback) {
     json = {};
     json.consecutive_expected = $("input[name='consecutive'").val();
@@ -45,12 +46,16 @@ function getFields(_callback) {
     _callback(json);
 }
 
+// To reclassify data:
+// Get -> Set new settings
+// Rerun classify with new settings
 $("#reclassify").click(function() {
     getFields(function(json) {
         setSettings(json);
     });
 });
 
+// Get the current settings and populate the HTML form
 $(document).ready(function () {
     getSettings(function(json) {
         updateFields(json);
