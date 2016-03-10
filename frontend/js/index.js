@@ -1,5 +1,6 @@
 var filters = {};
 var species_include = [];
+var habitats = [];
 
 function displayTable(json) {
     /* clear table first */
@@ -36,8 +37,8 @@ function displayTable(json) {
 }
 
 $("#applyFilterButton").click(function () {
-
     filters.species_include = species_include;
+	filters.habitat_id = habitats
     alert(JSON.stringify(filters));
     $.ajax({
         url:     "../backend/src/api/internal/filter.php",
@@ -74,15 +75,35 @@ $(document).ready(function () {
     $masterDrop.dropdown({action: function() {}  });
     $masterDrop.dropdown("clear values");
 
+	$masterDrop.dropdown({onChange: function(value,text){ //Whenever there is a change in the main dropdown 
+			value = String(value);
+			species_include, habitats = [];
+			var values = value.split(',');
+			for(var i = 0 ; i < values.length ; i++)
+			{
+				var val = values[i].split('-');
+				var filterCategory = val[0];
+				var filterValue = val[1];
+				
+				if(filterCategory == "animal")
+				{
+					species_include.push(parseInt(filterValue));
+				}
+				else if(filterCategory == "habitat")
+				{
+					habitats.push(parseInt(filterValue));
+				}
+			}
+		}
+	});
+	
+	
     $speciesDrop.dropdown({
         action: function(text, value) {
             $masterDrop.dropdown("add value", "animal-" +value, "Include: " + text);
             $masterDrop.dropdown("add label", "animal-" + value, "Include: " + text,"green");
             $masterDrop.dropdown("set selected", value);
             $speciesDrop.dropdown("action hide");
-            if ($.inArray(parseInt(value), species_include) == -1) {
-                species_include.push(parseInt(value));
-            }
         },
         fields:      {name: "name", value: "id"},
         apiSettings: {
