@@ -11,8 +11,10 @@ function getSettings(_callback) {
 }
 
 function updateFields(json) {
+
     $("input[name='consecutive'").val(json.consecutive_expected);
 }
+
 $(document).ready(function () {
     getSettings(function(json) {
         updateFields(json);
