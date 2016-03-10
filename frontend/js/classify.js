@@ -11,4 +11,4 @@ $(document).ready(function () {
             alert("It does not work...");
         }
     });
-};
+});
