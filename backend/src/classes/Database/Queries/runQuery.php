@@ -13,6 +13,10 @@ $newQueryTest = new FilterQuery();
 
 $results = $newQueryTest->with(["no_of_species"=> 2])->page(1)->limit(5)->fetch();
 
+
+$speciesCountsQuery = new SpeciesCountsQuery();
+$res = $speciesCountsQuery->fetch();
+
 //$newNameQuery = new HabitatNameQuery();
 
 //$results = $newNameQuery->fetch();
@@ -20,3 +24,4 @@ $results = $newQueryTest->with(["no_of_species"=> 2])->page(1)->limit(5)->fetch(
 //currently just print for test purposes
 //print_r($results);
 echo $results->asJSON();
+echo $res->asJSON();
