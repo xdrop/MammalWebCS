@@ -13,6 +13,8 @@ class SpeciesCountsQuery extends Query
     {
         $query = $this->db->from("classified")
             ->select(["species","COUNT(species) as count"])
+            ->leftJoin("options on options.option_id = classified.species")
+            ->select("options.option_name AS name")
             ->groupBy("species");
 
         $this->addFetchQuery($query);
