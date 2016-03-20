@@ -19,4 +19,4 @@ $results = $newQueryTest->with([])->page(1)->limit(5)->fetch();
 //$results = $newQueryTest->with([""])->fetchCSV();
 //currently just print for test purposes
 //print_r($results);
-echo json_encode(array("filterResults" => $results));
+echo $results->asJSON();

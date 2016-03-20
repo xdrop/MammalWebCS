@@ -127,6 +127,7 @@ Get filtered results
     "no_of_classifications_to":10,
     "habitat_id": 104,
     "flagged": false,
+    "photo_id": 1039,
     "site_id": 2,
     "taken_start": "2014-04-19 14:55:22",
     "taken_end": "2015-04-19 14:55:22",

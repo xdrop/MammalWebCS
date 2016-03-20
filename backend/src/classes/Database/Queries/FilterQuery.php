@@ -32,6 +32,8 @@ class FilterQuery extends PageableQuery
 
         $hasHabitatType = Utils::keysExist("habitat_id",$params);
 
+        $hasPhotoId = Utils::keysExist("photo_id",$params);
+
         $hasNumberOfClassificationsFrom = Utils::keysExist("no_of_classifications_from",$params);
 
         $hasNumberOfClassificationsTo = Utils::keysExist("no_of_classifications_to",$params);
@@ -56,6 +58,8 @@ class FilterQuery extends PageableQuery
             ->leftJoin('options AS options2 ON options2.option_id = site.habitat_id')
             ->select('options2.option_name AS habitat_name');
 
+
+
         if($hasNumberOfClassificationsFrom && $hasNumberOfClassificationsTo){
             $classificationsFrom = $params["no_of_classifications_from"];
             $classificationsTo = $params["no_of_classifications_to"];
@@ -69,6 +73,11 @@ class FilterQuery extends PageableQuery
                 ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
                 ->groupBy('photo_id')
                 ->having("COUNT(DISTINCT animal.person_id) = ?",$numberOfClassifications);
+        }
+
+        if($hasPhotoId){
+            $photoId = $params["photo_id"];
+            $query->where('photo_id',$photoId);
         }
 
         if($hasHabitatType){
