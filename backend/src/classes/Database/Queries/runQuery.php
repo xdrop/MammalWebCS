@@ -11,7 +11,7 @@ require('../../../core.php');
 
 $newQueryTest = new FilterQuery();
 
-$results = $newQueryTest->with([])->page(1)->limit(5)->fetch();
+$results = $newQueryTest->with(["no_of_species"=> 2])->page(1)->limit(5)->fetch();
 
 //$newNameQuery = new HabitatNameQuery();
 

@@ -208,7 +208,9 @@ abstract class CommonQuery extends BaseQuery {
 			return $statement;
 		}
 
-		preg_match_all('~\\b([a-z_][a-z0-9_.:]*[.:])[a-z_]*~i', $statement, $matches);
+
+		preg_match_all('~^(?:[\(\s]*)([a-z_][a-z0-9_.:]*[.:])[a-z_]*$~i', $statement, $matches);
+		//preg_match_all('~\\b([a-z_][a-z0-9_.:]*[.:])[a-z_]*~i', $statement, $matches);
 		foreach ($matches[1] as $join) {
 			if (!in_array(substr($join, 0, -1), $this->joins)) {
 				$this->addJoinStatements('LEFT JOIN', $join);

@@ -30,6 +30,8 @@ class FilterQuery extends PageableQuery
 
         $hasNumberOfClassifications = Utils::keysExist("no_of_classifications", $params);
 
+        $hasNumberOfSpecies = Utils::keysExist("no_of_species",$params);
+
         $hasHabitatType = Utils::keysExist("habitat_id",$params);
 
         $hasPhotoId = Utils::keysExist("photo_id",$params);
@@ -39,7 +41,7 @@ class FilterQuery extends PageableQuery
         $hasNumberOfClassificationsTo = Utils::keysExist("no_of_classifications_to",$params);
 
 
-
+$this->db->debug = true;
         // SELECT * FROM classified
         // WHERE species IN (?,?,?,...) AND NOT IN (?,?,...)
 
@@ -73,6 +75,13 @@ class FilterQuery extends PageableQuery
                 ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
                 ->groupBy('photo_id')
                 ->having("COUNT(DISTINCT animal.person_id) = ?",$numberOfClassifications);
+        }
+
+
+        if($hasNumberOfSpecies){
+            $numberOfSpecies = $params["no_of_species"];
+            $query->select("(SELECT COUNT(photo_id) FROM classified ct WHERE ct.photo_id = classified.photo_id GROUP BY ct.photo_id) as counted");
+            $query->having("counted = ?",$numberOfSpecies);
         }
 
         if($hasPhotoId){
