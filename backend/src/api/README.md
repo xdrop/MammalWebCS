@@ -116,10 +116,26 @@ Species Counts
 
 ```JSON
 [
-{"species":"20","count":"15"},
-{"species":"22","count":"281"},
-{"species":"86","count":"234"},
-{"species":"87","count":"7"}
+   {
+      "species":"20",
+      "count":"15",
+      "name":"Rabbit"
+   },
+   {
+      "species":"22",
+      "count":"281",
+      "name":"Roe Deer"
+   },
+   {
+      "species":"86",
+      "count":"234",
+      "name":"Nothing <span class='fa fa-ban'/>"
+   },
+   {
+      "species":"87",
+      "count":"7",
+      "name":"Human <span class='fa fa-male'/>"
+   }
 ]
 ```
 
