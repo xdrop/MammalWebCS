@@ -5,7 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
 	<script src="js/semantic.js"></script>
 	<script type="text/javascript" src="lib/moment.min.js"></script>
-	<script type="text/javascript" src="lib/daterangepicker.min.js"></script>
+	<link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="lib/daterangepicker.min.css" />
 	<style type="text/css">
 		.container{
@@ -21,36 +21,55 @@
 <body>
 <div class="ui top attached menu">
 	<div class="ui header item">MammalWeb</div>
-	<a class="ui item" href="index.html">Users</a>
-	<a class="ui item" href="scientists.html">Scientists</a>
+	<a class="ui item" href="classify.html">Classify</a>
 </div>
 
 <div class = "ui container">
 	<div class="ui large header">Filter Classifications</div>
-	<div id="masterDrop" class="ui fluid multiple selection dropdown nodrop">
-		<input name="country" type="hidden">
+	<div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
+		
+		<input name="country" type="hidden"></input>
+		
 		<div class="default text">Filter Items</div>
+		<i class="delete icon" id="clearMaster" style="cursor:pointer line-height:100%"></i>
 		<div class="menu">
+		
 		</div>
 	</div>
-	<div style="margin-top: 10px" class="ui bottom attached basic buttons">
-		<div id="speciesDrop" class="ui search dropdown species basic button">
-			<span class="text">Species</span>
+	<div style="margin-top: 10px" class="six ui bottom attached basic buttons">
+		<div id="speciesIncludeDrop" style="text-align: center" class="ui fluid search species basic button dropdown right> <!--species basic button right"-->
+			<span class="text">Species Include</span>
 			<div class="menu">
 			</div>
+			<i class="dropdown icon"></i>
 		</div>
-		<div id="habitatDrop" class="ui search dropdown species basic button">
+		<div id="speciesExcludeDrop" style="text-align: center" class="ui dropdown search species basic button">
+			<span class="text">Species Exclude</span>
+			<div class="menu">
+			</div>
+			<i class="dropdown icon"></i>
+		</div>
+		<div id="habitatDrop" style="text-align: center" class="ui dropdown species search basic button">
 			<span class="text">Habitat</span>
 			<div class="menu">
 			</div>
+			<i class="dropdown icon"></i>
 		</div>
-		<div id="siteDrop" class="ui search dropdown species basic button">
+		<div id="siteDrop" style="text-align: center" class="ui dropdown species search basic button">
 			<span class="text">Site</span>
 			<div class="menu">
 			</div>
+			<i class="dropdown icon"></i>
 		</div>
-		<button id="datebtn" class="ui button">Date From</button>
-		<button class="ui button">Date To</button>
+		<form id="dateform" style="text-align: center" class="ui form">
+			<div class="field">
+				<input id="dateFormInput" type="text" name="dateFrom" placeholder="Date" maxlength="4">
+			</div>
+		</form>
+		<button class="ui button">
+			Date To
+			<i class="dropdown icon"></i>
+		</button>
 	</div>
 
 	<button id="applyFilterButton" class = "ui bottom attached fluid primary labelled icon button">
@@ -68,13 +87,12 @@
 		</tr>
 		</thead>
 		<tbody id="resultsTable">
-
 		</tbody>
 	</table>
 	<!--Results of filter-->
 	<br/>
 </div>
-
+<script src="lib/lightbox/js/lightbox.js"></script>
 <script src="js/index.js" type="text/javascript">
 </script>
 </body>
