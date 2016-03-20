@@ -110,7 +110,18 @@ Get a list of species and ids
 }
 ```
 
+Species Counts
 
+`GET ./internal/list.php?item=counts`
+
+```JSON
+[
+{"species":"20","count":"15"},
+{"species":"22","count":"281"},
+{"species":"86","count":"234"},
+{"species":"87","count":"7"}
+]
+```
 
 Get filtered results
 
