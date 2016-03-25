@@ -145,22 +145,6 @@ $this->db->debug = true;
 
     }
 
-
-    protected function storeQuery(&$params)
-    {
-
-    }
-
-    protected function updateQuery(&$params)
-    {
-
-    }
-
-    protected function deleteQuery(&$params)
-    {
-
-    }
-
     protected function reformat($results)
     {
         if($results){

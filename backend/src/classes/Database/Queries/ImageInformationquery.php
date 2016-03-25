@@ -21,13 +21,6 @@ class ImageInformationQuery extends Query{
 
     }
 
-
-    protected function storeQuery(&$params){}
-
-    protected function updateQuery(&$params){}
-
-    protected function deleteQuery(&$params){}
-
     protected function reformat($results)
     {
         if(!is_null($results) && count($results) > 0){

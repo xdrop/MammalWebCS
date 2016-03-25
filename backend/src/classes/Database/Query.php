@@ -56,21 +56,21 @@ abstract class Query
      * @param array $params The parameters of the query
      * @return mixed
      */
-    protected abstract function storeQuery(&$params);
+    protected function storeQuery(&$params) {}
 
     /**
      * Creates the SQL queries to update the data required and stores it in the appropriate internal query
      * @param array $params The parameters of the query
      * @return mixed
      */
-    protected abstract function updateQuery(&$params);
+    protected function updateQuery(&$params) {}
 
     /**
      * Creates the SQL queries to delete the data required and stores it in the appropriate internal query
      * @param array $params The parameters of the query
      * @return mixed
      */
-    protected abstract function deleteQuery(&$params);
+    protected function deleteQuery(&$params) {}
 
     /**
      * Formats the results of this query into a format required by the class using it's results

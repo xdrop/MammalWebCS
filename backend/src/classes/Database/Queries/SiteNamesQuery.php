@@ -26,20 +26,6 @@ class SiteNameQuery extends Query
 
     }
 
-    protected function storeQuery(&$params)
-    {
-        // TODO: Implement storeQuery() method
-    }
-
-    protected function updateQuery(&$params)
-    {
-        // TODO: Implement updateQuery() method.
-    }
-
-    protected function deleteQuery(&$params)
-    {
-        // TODO: Implement deleteQuery() method.
-    }
 
     protected function reformat($results)
     {

@@ -70,7 +70,7 @@ class ClassificationQuery extends Query
                     'id' => null,
                     'photo_id' => $params['imageId'],
                     'species' => '0',
-                    'numberOf' => '0',
+                    'count' => '0',
                     'flagged' => true
                 ];
             }
@@ -80,6 +80,7 @@ class ClassificationQuery extends Query
                 'evenness_species' => $params['result']['evenness_species'],
                 'evenness_count' => $params['result']['evenness_count']
             ];
+
 
             /* Query
                 INSERT INTO classified (id, photo_id, species, count, flagged)
@@ -101,7 +102,61 @@ class ClassificationQuery extends Query
 
     protected function updateQuery(&$params)
     {
-        // TODO: Implement updateQuery() method.
+        if (!Utils::keysExist(['imageId', 'result'], $params)) {
+            throw new BadMethodCallException("You need to provide a value to imageId and the" .
+                " query result before using this method.");
+        }
+
+        $result = $params['result'];
+
+        $values = [];
+
+        if ($result != MammalClassifier::NOT_ENOUGH_TO_CLASSIFY) {
+            if ($result['classification'] != MammalClassifier::FLAGGED_FOR_SCIENTIST) {
+                foreach ($result['classification'] as $species => $numberOf) {
+                    $values[] = [
+                        'id' => null,
+                        'photo_id' => $params['imageId'],
+                        'species' => $species,
+                        'count' => $numberOf,
+                        'flagged' => false
+                    ];
+                }
+            } else {
+                $values = [
+                    'id' => null,
+                    'photo_id' => $params['imageId'],
+                    'species' => '0',
+                    'count' => '0',
+                    'flagged' => true
+                ];
+            }
+            $evenness = [
+                'id' => null,
+                'photo_id' => $params['imageId'],
+                'evenness_species' => $params['result']['evenness_species'],
+                'evenness_count' => $params['result']['evenness_count']
+            ];
+
+            /* firstly delete any previous classifications for image */
+
+
+
+
+            /* Query
+                INSERT INTO classified (id, photo_id, species, count, flagged)
+                VALUES (NULL, 221, 22, '1', 0)
+            */
+
+            $this->addStoreQuery($this->db->insertInto(self::CLASSIFIED_TABLE_NAME)->values($values));
+
+            /* Query
+                INSERT INTO evenness (id, photo_id, evenness_species, evenness_count)
+                VALUES (...)
+             */
+
+            $this->addStoreQuery($this->db->insertInto(self::EVENNESS_TABLE_NAME)->values($evenness));
+        }
     }
 
     protected function deleteQuery(&$params)
