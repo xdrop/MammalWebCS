@@ -4,7 +4,7 @@
 class AlgorithmController
 {
 
-    /***
+    /**
      * Runs the algorithm on the first $n images
      * @param boolean [$store] Store the results
      * @param bool [$log] Output log
@@ -50,13 +50,20 @@ class AlgorithmController
             return "No classifications.";
         }
     }
-
+    
+    
+    /**
+     * Clears previously stored results
+     */
     public function clearResults()
     {
         $query = new ClassificationQuery();
         $query->with(["all" => true])->delete();
     }
 
+    /**
+     * Returns the maximum image id (id of the last image)
+     */
     protected function getMaxImageId()
     {
         return DatabaseConnector::getPurePDO()->query("SELECT MAX(photo_id) FROM animal")
