@@ -16,10 +16,9 @@ $classifier = new MammalClassifier();
     Order is (most of the time) important!
 */
 
-DatabaseConnector::getDatabase()->debug = true;
+$controller = new AlgorithmController();
 
-$query = new ClassificationQuery();
-$query->with(["all" => true])->delete();
+$controller->runAlgorithm();
 
 
 $id = 311;

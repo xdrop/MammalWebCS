@@ -87,7 +87,10 @@ class MammalClassifier
         $query = $this->db->with(['imageId' => $imageId])->fetch();
         if($query !== "none"){
             $this->dataset = $query->asArray();
-        };
+        } else{
+            throw new RuntimeException("Invalid image id supplied to on().");
+        }
+        
         $this->result = null;
         return $this;
     }
@@ -200,7 +203,11 @@ class MammalClassifier
 
     public function getResult()
     {
-        return $this->result;
+        if($this->result){
+            return $this->result;
+        } else{
+            return "No classifications.";
+        }
     }
 
     /**
@@ -396,6 +403,9 @@ class MammalClassifier
     public function classify()
     {
         $dataset = &$this->dataset;
+        if($dataset === null){
+            return $this;
+        }
         $this->filterUnreasonableVotes();
         $numberOfVotes = count($dataset);
         if ($numberOfVotes >= 5) {
