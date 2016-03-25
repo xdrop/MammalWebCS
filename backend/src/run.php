@@ -16,10 +16,16 @@ $classifier = new MammalClassifier();
     Order is (most of the time) important!
 */
 
-$id = 0;
+DatabaseConnector::getDatabase()->debug = true;
 
-while($id < 3000){
-    $res = $classifier->on($id)->classify()->getResult();
+$query = new ClassificationQuery();
+$query->with(["all" => true])->delete();
+
+
+$id = 311;
+
+while($id <= 311){
+    $res = $classifier->on($id)->classify()->store()->getResult();
     $id++;
     print("id: ". $id . " =>");
     print_r($res);

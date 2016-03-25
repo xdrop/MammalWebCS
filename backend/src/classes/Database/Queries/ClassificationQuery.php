@@ -97,8 +97,16 @@ class ClassificationQuery extends Query
             $this->addStoreQuery($this->db->insertInto(self::EVENNESS_TABLE_NAME)->values($evenness));
         }
 
-
     }
+
+    protected function deleteQuery(&$params)
+    {
+        if($params["all"]){
+            echo "Run";
+            $this->db->getPdo()->prepare("TRUNCATE classified")->execute();
+        };
+    }
+
 
     protected function updateQuery(&$params)
     {
@@ -107,62 +115,14 @@ class ClassificationQuery extends Query
                 " query result before using this method.");
         }
 
-        $result = $params['result'];
 
-        $values = [];
+        /* firstly delete any previous classifications for image */
+        $this->db->deleteFrom("classified")
+            ->where("photo_id",$params["imageId"])->execute();
 
-        if ($result != MammalClassifier::NOT_ENOUGH_TO_CLASSIFY) {
-            if ($result['classification'] != MammalClassifier::FLAGGED_FOR_SCIENTIST) {
-                foreach ($result['classification'] as $species => $numberOf) {
-                    $values[] = [
-                        'id' => null,
-                        'photo_id' => $params['imageId'],
-                        'species' => $species,
-                        'count' => $numberOf,
-                        'flagged' => false
-                    ];
-                }
-            } else {
-                $values = [
-                    'id' => null,
-                    'photo_id' => $params['imageId'],
-                    'species' => '0',
-                    'count' => '0',
-                    'flagged' => true
-                ];
-            }
-            $evenness = [
-                'id' => null,
-                'photo_id' => $params['imageId'],
-                'evenness_species' => $params['result']['evenness_species'],
-                'evenness_count' => $params['result']['evenness_count']
-            ];
-
-            /* firstly delete any previous classifications for image */
-
-
-
-
-            /* Query
-                INSERT INTO classified (id, photo_id, species, count, flagged)
-                VALUES (NULL, 221, 22, '1', 0)
-            */
-
-            $this->addStoreQuery($this->db->insertInto(self::CLASSIFIED_TABLE_NAME)->values($values));
-
-            /* Query
-                INSERT INTO evenness (id, photo_id, evenness_species, evenness_count)
-                VALUES (...)
-             */
-
-            $this->addStoreQuery($this->db->insertInto(self::EVENNESS_TABLE_NAME)->values($evenness));
-        }
+        $this->store();
     }
 
-    protected function deleteQuery(&$params)
-    {
-        // TODO: Implement deleteQuery() method.
-    }
 
     /**
      * Formats the results of this query into a format required by the class using it's results
