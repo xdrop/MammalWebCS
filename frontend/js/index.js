@@ -36,6 +36,8 @@ function displayTable(json) {
 			data += "<td>" + obj.species_name + "</td>";
 			//Add time classified
 			data += "<td>" + obj.time_classified + "</td>";
+			//Add time taken
+			data += "<td>" + obj.taken + "</td>";
 			//Add person ID
 			data += "<td>" + obj.person_id + "</td>";
 			//Add site IDs
