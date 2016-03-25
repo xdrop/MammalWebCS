@@ -8,13 +8,14 @@ header('Access-Control-Allow-Methods: GET, POST');
 
 header("Access-Control-Allow-Headers: X-Requested-With");
 
+header('Content-Type: application/json');
+
 
 if (isset($_GET["action"])) {
     $action = $_GET["action"];
     $controller = new AlgorithmController();
 
     if ($action === "query") {
-        header('Content-Type: application/json');
         if (isset($_GET["image_id"])) {
             $imageId = $_GET["image_id"];
             if (isset($_GET["store"]) && $_GET["store"] === true) {
@@ -26,13 +27,12 @@ if (isset($_GET["action"])) {
             error("No image id specified.");
         }
     } else if ($action === "empty") {
-        header('Content-Type: application/json');
         $controller->clearResults();
         return json_encode(["success" => true]);
     } else if ($action === "run") {
+        header_remove("Content-Type");
         $controller->runAlgorithm();
     } else {
-        header('Content-Type: application/json');
         error("Invalid action");
     }
 
