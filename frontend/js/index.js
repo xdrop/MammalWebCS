@@ -216,7 +216,7 @@ function lastPage()
 		}
 		else //filterResults is a multiple of resPerPage. Need this stop a blank last page.
 		{
-			resStart = filterResults.length - (filterResults.length/resPerPage - 1);
+			resStart = filterResults.length - resPerPage;
 		}
 		displayTable(filterResults);
 	}
