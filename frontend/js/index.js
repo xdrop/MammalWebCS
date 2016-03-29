@@ -227,7 +227,7 @@ function updatePageNum()
 {
 	if(filterResults.length != 0)
 	{
-		$("#pageNum").html("Showing page " + ((resStart/resPerPage)+1) + " of " + Math.floor((filterResults.length/resPerPage)+1));
+		$("#pageNum").html("Showing page " + ((resStart/resPerPage)+1) + " of " + Math.ceil((filterResults.length/resPerPage)));
 	}
 	else
 	{
