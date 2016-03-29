@@ -1,7 +1,5 @@
 /* TO DO:
 	- Make filter buttons either not searchable (preferred), or make search work 
-	- Make the clear cross on the main dropdown better (more vertically central)
-	- Perhaps change the data that is displayed in the table 
 */
 
 
@@ -216,9 +214,9 @@ function lastPage()
 			console.log(resStart, resPerPage, resStart/resPerPage);
 			document.getElementById("pagesDropdown").options[resStart/resPerPage].setAttribute("selected", true);
 		}
-		else
+		else //filterResults is a multiple of resPerPage. Need this stop a blank last page.
 		{
-			resStart = 0;
+			resStart = filterResults.length/resPerPage - 1;
 		}
 		displayTable(filterResults);
 	}
@@ -240,8 +238,17 @@ function updatePageNum()
 //POPULATE THE PAGE CHANGE DROPDOWN WITH THE POSSIBLE PAGE NUMBERS
 function populatePagesDropdown(currentValue)
 {
+	var extra;
+	if(filterResults.length % resPerPage == 0)
+	{
+		extra = 1; //Otherwise 2 would make a blank last page
+	}
+	else
+	{
+		extra = 2;
+	}
 	$("#pagesDropdown").empty(); //Clear current options so don't keep adding them 
-	for(var i = 1 ; i < Math.floor((filterResults.length/resPerPage)+2) ; i++)
+	for(var i = 1 ; i < Math.floor((filterResults.length/resPerPage) + extra) ; i++)
 	{
 		var currentOption =  document.getElementById("pagesDropdown"); //The current page the table is on 
 		currentOption.add(new Option(i)); //Add a new option 
