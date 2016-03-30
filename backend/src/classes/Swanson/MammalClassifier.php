@@ -13,6 +13,9 @@ class MammalClassifier
 
     private $db;
 
+    /***
+     * @var Classification[]
+     */
     private $dataset;
 
     private $votesPerSpecies;
@@ -22,7 +25,6 @@ class MammalClassifier
     // 86 is the species used in the database for nothing here
 
     const NOTHING_HERE_IDENTIFIER = "86";
-    // TODO: eventually switch these to numbers to store in a field in database
 
     const NOT_ENOUGH_TO_CLASSIFY = "not enough for classification";
 
@@ -82,7 +84,13 @@ class MammalClassifier
     public function on($imageId)
     {
         $this->imageId = $imageId;
-        $this->dataset = $this->db->with(['imageId' => $imageId])->fetch();
+        $query = $this->db->with(['imageId' => $imageId])->fetch();
+        if($query !== "none"){
+            $this->dataset = $query->asArray();
+        } else{
+            throw new RuntimeException("Invalid image id supplied to on().");
+        }
+        
         $this->result = null;
         return $this;
     }
@@ -125,6 +133,7 @@ class MammalClassifier
         /* Remember the last classification
          * seen starting with null */
 
+        /** @var Classification $current */
         foreach ($classifications as $current) {
 
             $currentClassificationKey = $current->hashed();
@@ -171,6 +180,7 @@ class MammalClassifier
     {
         $lastVote = null;
 
+        /** @var Classification $vote */
         foreach ($dataset as $vote) {
             if ($consecutiveLim > 0) {
                 if (substr($vote->hashed(),0,strlen($type . '=')) === ($type . '=')) {
@@ -193,13 +203,19 @@ class MammalClassifier
 
     public function getResult()
     {
-        return $this->result;
+        if($this->result){
+            return $this->result;
+        } else{
+            return "No classifications.";
+        }
     }
 
     /**
      * Stores the result of the algorithm in the database
+     * @param bool [$new] Add a new record instead of updating
+     * @return $this
      */
-    public function store()
+    public function store($new = false)
     {
         if ($this->result === null) {
             throw new RuntimeException('You need to call classify before storing the results!');
@@ -207,7 +223,11 @@ class MammalClassifier
         if ($this->db === null){
             throw new RuntimeException('You cannot store without an active database connection');
         }
-        $this->db->with(['imageId' => $this->imageId, 'result' => $this->result])->store();
+        if($new){
+            $this->db->with(['imageId' => $this->imageId, 'result' => $this->result])->store();
+        } else{
+            $this->db->with(['imageId' => $this->imageId, 'result' => $this->result])->update();
+        }
         return $this;
     }
 
@@ -383,6 +403,9 @@ class MammalClassifier
     public function classify()
     {
         $dataset = &$this->dataset;
+        if($dataset === null){
+            return $this;
+        }
         $this->filterUnreasonableVotes();
         $numberOfVotes = count($dataset);
         if ($numberOfVotes >= 5) {

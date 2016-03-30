@@ -16,10 +16,15 @@ $classifier = new MammalClassifier();
     Order is (most of the time) important!
 */
 
-$id = 0;
+$controller = new AlgorithmController();
 
-while($id < 3000){
-    $res = $classifier->on($id)->classify()->getResult();
+$controller->runAlgorithm();
+
+
+$id = 311;
+
+while($id <= 311){
+    $res = $classifier->on($id)->classify()->store()->getResult();
     $id++;
     print("id: ". $id . " =>");
     print_r($res);
