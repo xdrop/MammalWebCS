@@ -13,6 +13,7 @@ class SpeciesNameQuery extends Query
 
     protected function fetchQuery(&$params)
     {
+        $onlyNonEmpty = Utils::getValue($params["nonempty"],false);
 
         /* Query
             SELECT (options_name,options_id) FROM options
@@ -21,6 +22,12 @@ class SpeciesNameQuery extends Query
         $query = $this->db->from(self::OPTIONS_TABLE_NAME)
             ->select([self::OPTION_NAME, self::OPTION_ID])
             ->where('struc', ['mammal', 'bird', 'noanimal']);
+
+        if($onlyNonEmpty){
+            $query->select("(SELECT COUNT(*) from classified
+            WHERE classified.species = options.option_id) AS counted")
+                ->having("counted > 0");
+        }
 
         /* Add the query */
         $this->addFetchQuery($query);

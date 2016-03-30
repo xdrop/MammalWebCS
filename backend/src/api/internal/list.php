@@ -15,13 +15,13 @@ if (isset($_GET['item'])) {
     try {
         if ($apiParam === 'species') {
             $query = new SpeciesNameQuery();
-            echo $query->fetch()->asJSON();
+            echo $query->with(["nonempty"=> true])->fetch()->asJSON();
         } else if ($apiParam === 'habitats') {
             $query = new HabitatNameQuery();
-            echo $query->fetch()->asJSON();
+            echo $query->with(["nonempty"=> true])->fetch()->asJSON();
         } else if ($apiParam === 'sites') {
             $query = new SiteNameQuery();
-            echo $query->fetch()->asJSON();
+            echo $query->with(["nonempty"=> true])->fetch()->asJSON();
         } else if ($apiParam === "all"){
             $species = new SpeciesNameQuery();
             $habitats = new HabitatNameQuery();

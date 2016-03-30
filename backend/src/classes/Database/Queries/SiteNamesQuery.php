@@ -14,12 +14,22 @@ class SiteNameQuery extends Query
     protected function fetchQuery(&$params)
     {
 
+        $onlyNonEmpty = Utils::getValue($params["nonempty"],false);
+
         /* Query
             SELECT (site_name, site_id) FROM site
          */
 
         $query = $this->db->from(self::SITE_TABLE_NAME)
             ->select([self::SITE_NAME, self::SITE_ID]);
+
+
+        if($onlyNonEmpty){
+            $query->select("(SELECT COUNT(*) from classified
+            LEFT JOIN photo ON photo.photo_id = classified.photo_id
+            WHERE photo.site_id = site.site_id) AS counted")
+                ->having("counted > 0");
+        }
 
         /* Add the query */
         $this->addFetchQuery($query);
