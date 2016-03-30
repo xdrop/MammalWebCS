@@ -41,7 +41,6 @@ class FilterQuery extends PageableQuery
         $hasNumberOfClassificationsTo = Utils::keysExist("no_of_classifications_to",$params);
 
 
-$this->db->debug = true;
         // SELECT * FROM classified
         // WHERE species IN (?,?,?,...) AND NOT IN (?,?,...)
 
