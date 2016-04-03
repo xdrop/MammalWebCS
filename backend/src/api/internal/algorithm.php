@@ -35,9 +35,6 @@ if (isset($_GET["action"])) {
     }
 
 } else if (isset($_POST["action"])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
     $action = $_POST["action"];
     if ($action === "run") {
         $st = new JobStatusQuery();
