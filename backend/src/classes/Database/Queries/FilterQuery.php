@@ -4,7 +4,10 @@
 class FilterQuery extends PageableQuery
 {
 
-    const CLASSIFICATION_RESULTS_TABLE_NAME = 'classified';
+    const CLASSIFIED_TABLE_NAME = 'classified';
+    const CLASSIFIED_SCIENTIST_TABLE_NAME = 'classified_scientist';
+    const EVENNESS_TABLE_NAME = 'evenness';
+    const EVENNESS_SCIENTIST_TABLE_NAME = 'evenness_scientist';
 
     protected function fetchQuery(&$params)
     {
@@ -40,22 +43,31 @@ class FilterQuery extends PageableQuery
 
         $hasNumberOfClassificationsTo = Utils::keysExist("no_of_classifications_to",$params);
 
+        /* depending on whether we are filtering temporary scientist results
+           or results in the public table we switch the table name accordingly */
+        $classifiedTableName
+            = Utils::getValue($params["scientist_dataset"],false) ? self::CLASSIFIED_SCIENTIST_TABLE_NAME
+            : self::CLASSIFIED_TABLE_NAME;
+        $evennessTableName
+            = Utils::getValue($params["scientist_dataset"],false) ? self::EVENNESS_SCIENTIST_TABLE_NAME
+            : self::EVENNESS_TABLE_NAME;
+
 
         // SELECT * FROM classified
         // WHERE species IN (?,?,?,...) AND NOT IN (?,?,...)
 
-        $query = $this->db->from('classified')
-            ->select(['classified.photo_id', 'classified.species', 'classified.flagged',
-                'classified.timestamp AS time_classified'])
-            ->leftJoin('photo ON photo.photo_id = classified.photo_id')
+        $query = $this->db->from("$classifiedTableName AS classified_tbl")
+            ->select(['classified_tbl.photo_id', 'classified_tbl.species', 'classified_tbl.flagged',
+                'classified_tbl.timestamp AS time_classified'])
+            ->leftJoin('photo ON photo.photo_id = classified_tbl.photo_id')
             ->select(['photo.taken', 'photo.person_id', 'photo.site_id',
                 'photo.filename', 'photo.contains_human'])
             ->leftJoin('site ON site.site_id = photo.site_id')
             ->select(['site.habitat_id','site.site_name'])
-            ->leftJoin('options ON options.option_id = classified.species')
+            ->leftJoin('options ON options.option_id = classified_tbl.species')
             ->select('options.option_name AS species_name')
-            ->leftJoin('evenness ON evenness.photo_id = classified.photo_id')
-            ->select(['evenness.evenness_species','evenness.evenness_count'])
+            ->leftJoin("$evennessTableName AS evenness_tbl ON evenness_tbl.photo_id = classified_tbl.photo_id")
+            ->select(['evenness_tbl.evenness_species','evenness_tbl.evenness_count'])
             ->leftJoin('options AS options2 ON options2.option_id = site.habitat_id')
             ->select('options2.option_name AS habitat_name');
 
@@ -64,13 +76,13 @@ class FilterQuery extends PageableQuery
         if($hasNumberOfClassificationsFrom && $hasNumberOfClassificationsTo){
             $classificationsFrom = $params["no_of_classifications_from"];
             $classificationsTo = $params["no_of_classifications_to"];
-            $query->leftJoin('animal ON animal.photo_id = classified.photo_id')
+            $query->leftJoin('animal ON animal.photo_id = classified_tbl.photo_id')
                 ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
                 ->groupBy('photo_id')
                 ->having("COUNT(DISTINCT animal.person_id) BETWEEN ? AND ?",$classificationsFrom, $classificationsTo);
         } else if($hasNumberOfClassifications){
             $numberOfClassifications = $params["no_of_classifications"];
-            $query->leftJoin('animal ON animal.photo_id = classified.photo_id')
+            $query->leftJoin('animal ON animal.photo_id = classified_tbl.photo_id')
                 ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
                 ->groupBy('photo_id')
                 ->having("COUNT(DISTINCT animal.person_id) = ?",$numberOfClassifications);
@@ -79,7 +91,7 @@ class FilterQuery extends PageableQuery
 
         if($hasNumberOfSpecies){
             $numberOfSpecies = $params["no_of_species"];
-            $query->select("(SELECT COUNT(photo_id) FROM classified ct WHERE ct.photo_id = classified.photo_id GROUP BY ct.photo_id) as counted");
+            $query->select("(SELECT COUNT(photo_id) FROM classified_tbl ct WHERE ct.photo_id = classified_tbl.photo_id GROUP BY ct.photo_id) as counted");
             $query->having("counted = ?",$numberOfSpecies);
         }
 
@@ -119,7 +131,7 @@ class FilterQuery extends PageableQuery
 
         if ($hasFlagged) {
             $flagged = $params['flagged'];
-            $query->where("classified.flagged", $flagged);
+            $query->where("classified_tbl.flagged", $flagged);
         }
 
         if ($hasSiteId) {

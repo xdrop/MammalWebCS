@@ -5,41 +5,43 @@ class AlgorithmController
 {
 
     /**
-     * Runs the algorithm on the first $n images
-     * @param boolean [$store] Store the results
-     * @param bool [$log] Output log
-     * @param $n integer Algorithm is run for all ids <= $n
+     * Run the algorithm as a background job
+     * @param $statusQuery JobStatusQuery
+     * @param array $settings The settings to run the algorithm with
+     * @param bool $scientistDataset Whether to store in the scientist dataset table
+     * @param int $from Id of image to run the algorithm from
+     * @param int $to Id of the image to run the algorithm to
      */
-    public function runAlgorithm($store = true, $log = false, $n = -1)
+    public function runAlgorithmJob($statusQuery, $settings, $scientistDataset = false, $from = 1, $to = -1)
     {
-        @ini_set('max_execution_time', 300);
-        print("<pre>");
-        $id = 1;
-        if ($n < 0) {
-            $n = $this->getMaxImageId();
+        $classifier = new MammalClassifier($settings,$scientistDataset);
+        $id = $from;
+        if ($to < 0) {
+            $to = $this->getMaxImageId();
         }
-        while ($id <= $n) {
-            if ($id % 1000 == 0 || $log) {
-                print("=> Running on image id " . $id . ":\n");
-                print($this->runOnImage($id, $store));
-                print("\n");
-                ob_flush();
-            } else {
-                $this->runOnImage($id, $store);
+        $statusQuery->with(["started" => true, "total" => $to])->update();
+        while ($id <= $to) {
+            if ($id % 500 == 0) {
+                $statusQuery->with(["started" => true, "progress" => $id])->update();
             }
+            $this->runOnImage($id, true, $classifier);
             $id++;
         }
-        print("</pre>");
+        $statusQuery->with(["started" => false, "progress" => $to])->update();
     }
-
+    
     /**
      * @param $imageId integer Run the algorithm on a single image
      * @param boolean $store Store the result
+     * @param MammalClassifier|null $classifier An instance of MammalClassifier
+     * @param bool $scientistDataset Whether to store in the scientist dataset table
      * @return array|string The result
      */
-    public function runOnImage($imageId, $store)
+    public function runOnImage($imageId, $store, $classifier, $scientistDataset = false)
     {
-        $classifier = new MammalClassifier();
+        if(!$classifier){
+            $classifier = new MammalClassifier(null, $scientistDataset);
+        }
         try {
             if ($store) {
                 return $classifier->on($imageId)->classify()->store()->getResult();
@@ -50,21 +52,24 @@ class AlgorithmController
             return "No classifications.";
         }
     }
-    
-    
+
+
     /**
      * Clears previously stored results
+     * @param bool $scientistDataset
      */
-    public function clearResults()
+    public function clearResults($scientistDataset = false)
     {
         $query = new ClassificationQuery();
-        $query->with(["all" => true])->delete();
+        $query->with(["all" => true,
+            "scientist_dataset" => $scientistDataset])
+            ->delete();
     }
 
     /**
      * Returns the maximum image id (id of the last image)
      */
-    protected function getMaxImageId()
+    public function getMaxImageId()
     {
         return DatabaseConnector::getPurePDO()->query("SELECT MAX(photo_id) FROM animal")
             ->fetch()[0];

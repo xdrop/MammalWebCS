@@ -5,7 +5,9 @@ class ClassificationQuery extends Query
 {
     const CLASSIFICATION_TABLE_NAME = 'animal';
     const CLASSIFIED_TABLE_NAME = 'classified';
+    const CLASSIFIED_SCIENTIST_TABLE_NAME = 'classified_scientist';
     const EVENNESS_TABLE_NAME = 'evenness';
+    const EVENNESS_SCIENTIST_TABLE_NAME = 'evenness_scientist';
 
     const IMAGE_ID_FIELD_NAME = 'photo_id';
     const USER_ID_FIELD_NAME = 'person_id';
@@ -81,20 +83,28 @@ class ClassificationQuery extends Query
                 'evenness_count' => $params['result']['evenness_count']
             ];
 
+            /* depending on whether we are storing/updating temporary scientist results
+               or results in the public table we switch the table name accordingly */
+            $classifiedTableName
+                = Utils::getValue($params["scientist_dataset"],false) ? self::CLASSIFIED_SCIENTIST_TABLE_NAME
+                                                              : self::CLASSIFIED_TABLE_NAME;
+            $evennessTableName
+                = Utils::getValue($params["scientist_dataset"],false) ? self::EVENNESS_SCIENTIST_TABLE_NAME
+                                                              : self::EVENNESS_TABLE_NAME;
 
             /* Query
                 INSERT INTO classified (id, photo_id, species, count, flagged)
                 VALUES (NULL, 221, 22, '1', 0)
             */
 
-            $this->addStoreQuery($this->db->insertInto(self::CLASSIFIED_TABLE_NAME)->values($values));
+            $this->addStoreQuery($this->db->insertInto($classifiedTableName)->values($values));
 
             /* Query
                 INSERT INTO evenness (id, photo_id, evenness_species, evenness_count)
                 VALUES (...)
              */
 
-            $this->addStoreQuery($this->db->insertInto(self::EVENNESS_TABLE_NAME)->values($evenness));
+            $this->addStoreQuery($this->db->insertInto($evennessTableName)->values($evenness));
         }
 
     }
@@ -102,8 +112,10 @@ class ClassificationQuery extends Query
     protected function deleteQuery(&$params)
     {
         if($params["all"]){
-            echo "Run";
-            $this->db->getPdo()->prepare("TRUNCATE classified")->execute();
+            if($params["scientist_dataset"]){
+                $this->db->getPdo()->prepare("TRUNCATE " . self::CLASSIFIED_SCIENTIST_TABLE_NAME)->execute();
+            }
+            $this->db->getPdo()->prepare("TRUNCATE " . self::CLASSIFIED_TABLE_NAME)->execute();
         };
     }
 
@@ -115,9 +127,20 @@ class ClassificationQuery extends Query
                 " query result before using this method.");
         }
 
+        /* depending on whether we are storing/updating temporary scientist results
+           or results in the public table we switch the table name accordingly
+         */
+        $classifiedTableName
+            = Utils::getValue($params["scientist_dataset"],false) ? self::CLASSIFIED_SCIENTIST_TABLE_NAME
+            : self::CLASSIFIED_TABLE_NAME;
+        $evennessTableName
+            = Utils::getValue($params["scientist_dataset"],false) ? self::EVENNESS_SCIENTIST_TABLE_NAME
+            : self::EVENNESS_TABLE_NAME;
 
         /* firstly delete any previous classifications for image */
-        $this->db->deleteFrom("classified")
+        $this->db->deleteFrom($classifiedTableName)
+            ->where("photo_id",$params["imageId"])->execute();
+        $this->db->deleteFrom($evennessTableName)
             ->where("photo_id",$params["imageId"])->execute();
 
         $this->store();

@@ -13,12 +13,17 @@ class MammalClassifier
 
     private $db;
 
-    /***
+    /**
      * @var Classification[]
      */
     private $dataset;
 
     private $votesPerSpecies;
+
+    /**
+     * @var bool Whether to store in scientist dataset results or public
+     */
+    private $scientistDataset;
 
     /* Unused for now */
 
@@ -30,35 +35,38 @@ class MammalClassifier
 
     const FLAGGED_FOR_SCIENTIST = "High disagreement flag for scientist";
 
-    private $CONSECUTIVE_EXPECTED = 8;
-
-    private $VOTES_BEFORE_CONSENSUS = 15;
-    private $UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE = 10;
-
-    private $EVENNESS_THRESHOLD_SPECIES = 0.69;
-    private $EVENNESS_THRESHOLD_COUNT = 0.7;
 
     /**
      * MammalClassifier constructor.
+     * @param null $settings A settings object to run the algorithm
+     * @param bool $scientistDataset Switches between running on live data, or scientist data
      */
-    public function __construct()
+    public function __construct($settings = null, $scientistDataset = false)
     {
         $this->result = null;
         $this->imageId = null;
-        try{
+        try {
             $this->db = new ClassificationQuery();
-        } catch(PDOException $exception){
+        } catch (PDOException $exception) {
             trigger_error("Failure to create a database connection." .
                 " Possibly database settings provided are wrong", E_USER_WARNING);
         }
 
-        $settings = SettingsStorage::settings();
-
-        $this->CONSECUTIVE_EXPECTED = $settings['consecutive_expected'];
-        $this->VOTES_BEFORE_CONSENSUS = $settings['votes_before_consensus'];
-        $this->UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE = $settings['unreasonable_number_of_species_in_image'];
-        $this->EVENNESS_THRESHOLD_COUNT = $settings['evenness_threshold_count'];
-        $this->EVENNESS_THRESHOLD_SPECIES = $settings['evenness_threshold_species'];
+        if (!$settings) {
+            $settings = SettingsStorage::settings();
+        }
+        $this->scientistDataset = $scientistDataset;
+        
+        $this->CONSECUTIVE_EXPECTED =
+            Utils::getValue($settings['consecutive_expected'], 8);
+        $this->VOTES_BEFORE_CONSENSUS =
+            Utils::getValue($settings['votes_before_consensus'], 15);
+        $this->UNREASONABLE_NUMBER_OF_SPECIES_IN_IMAGE =
+            Utils::getValue($settings['unreasonable_number_of_species_in_image'], 5);
+        $this->EVENNESS_THRESHOLD_COUNT =
+            Utils::getValue($settings['evenness_threshold_count'], 0.69);
+        $this->EVENNESS_THRESHOLD_SPECIES =
+            Utils::getValue($settings['evenness_threshold_species'], 0.7);
 
     }
 
@@ -85,12 +93,12 @@ class MammalClassifier
     {
         $this->imageId = $imageId;
         $query = $this->db->with(['imageId' => $imageId])->fetch();
-        if($query !== "none"){
+        if ($query !== "none") {
             $this->dataset = $query->asArray();
-        } else{
+        } else {
             throw new RuntimeException("Invalid image id supplied to on().");
         }
-        
+
         $this->result = null;
         return $this;
     }
@@ -183,7 +191,7 @@ class MammalClassifier
         /** @var Classification $vote */
         foreach ($dataset as $vote) {
             if ($consecutiveLim > 0) {
-                if (substr($vote->hashed(),0,strlen($type . '=')) === ($type . '=')) {
+                if (substr($vote->hashed(), 0, strlen($type . '=')) === ($type . '=')) {
                     if ($lastVote == null || $vote->hashed() == $lastVote) {
                         $lastVote = $vote->hashed();
                         $consecutiveLim--;
@@ -203,9 +211,9 @@ class MammalClassifier
 
     public function getResult()
     {
-        if($this->result){
+        if ($this->result) {
             return $this->result;
-        } else{
+        } else {
             return "No classifications.";
         }
     }
@@ -220,13 +228,16 @@ class MammalClassifier
         if ($this->result === null) {
             throw new RuntimeException('You need to call classify before storing the results!');
         }
-        if ($this->db === null){
+        if ($this->db === null) {
             throw new RuntimeException('You cannot store without an active database connection');
         }
-        if($new){
-            $this->db->with(['imageId' => $this->imageId, 'result' => $this->result])->store();
-        } else{
-            $this->db->with(['imageId' => $this->imageId, 'result' => $this->result])->update();
+        if ($new) {
+            $this->db->with(
+                ['imageId' => $this->imageId,
+                    'result' => $this->result, 'scientist_dataset' => $this->scientistDataset])->store();
+        } else {
+            $this->db->with(['imageId' => $this->imageId,
+                'result' => $this->result, 'scientist_dataset' => $this->scientistDataset])->update();
         }
         return $this;
     }
@@ -403,7 +414,7 @@ class MammalClassifier
     public function classify()
     {
         $dataset = &$this->dataset;
-        if($dataset === null){
+        if ($dataset === null) {
             return $this;
         }
         $this->filterUnreasonableVotes();
