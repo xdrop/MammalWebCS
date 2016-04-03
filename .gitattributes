@@ -1,0 +1,5 @@
+frontend/lib/* linguist-vendored
+frontend/slideshow/* linguist-vendored
+frontend/graphs/* linguist-vendored
+backend/src/libs/* linguist-vendored
+backend/examples/* linguist-vendored
