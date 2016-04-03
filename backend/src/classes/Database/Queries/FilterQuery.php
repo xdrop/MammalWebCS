@@ -78,13 +78,13 @@ class FilterQuery extends PageableQuery
             $classificationsTo = $params["no_of_classifications_to"];
             $query->leftJoin('animal ON animal.photo_id = classified_tbl.photo_id')
                 ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
-                ->groupBy('photo_id')
+                ->groupBy('classified_tbl.photo_id')
                 ->having("COUNT(DISTINCT animal.person_id) BETWEEN ? AND ?",$classificationsFrom, $classificationsTo);
         } else if($hasNumberOfClassifications){
             $numberOfClassifications = $params["no_of_classifications"];
             $query->leftJoin('animal ON animal.photo_id = classified_tbl.photo_id')
                 ->select('COUNT(DISTINCT animal.person_id) AS no_of_classifications')
-                ->groupBy('photo_id')
+                ->groupBy('classified_tbl.photo_id')
                 ->having("COUNT(DISTINCT animal.person_id) = ?",$numberOfClassifications);
         }
 
@@ -97,7 +97,7 @@ class FilterQuery extends PageableQuery
 
         if($hasPhotoId){
             $photoId = $params["photo_id"];
-            $query->where('photo_id',$photoId);
+            $query->where('classified_tbl.photo_id',$photoId);
         }
 
         if($hasHabitatType){
@@ -106,12 +106,12 @@ class FilterQuery extends PageableQuery
         }
 
         if ($hasSpeciesToInclude) {
-            $query->where("species", $speciesToInclude);
+            $query->where("classified_tbl.species", $speciesToInclude);
         }
 
         if ($hasSpeciesToExclude) {
             $unknowns = Utils::generateUnknowns($speciesToExclude);
-            $query->where("species NOT IN ($unknowns)", ["expand" => $speciesToExclude]);
+            $query->where("classified_tbl.species NOT IN ($unknowns)", ["expand" => $speciesToExclude]);
         }
 
         if($hasUsersToInclude){
@@ -143,7 +143,7 @@ class FilterQuery extends PageableQuery
             $humans = $params['contains_human'];
             $query->where("photo.contains_human", $humans);
         }
-
+        
 
         /* expand is a special keyword which says take the arguments from the list and bind them to unbound variables
            eg. Query is WHERE NOT IN (?,?)
