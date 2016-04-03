@@ -51,6 +51,9 @@ abstract class CommonQuery extends BaseQuery {
 			if (is_null($parameters)) {
 				return $this->addStatement('WHERE', "$condition is NULL");
 			} elseif (is_array($args[1])) {
+				if(count($args[1]) < 1){
+					return $this;
+				}
 				$in = $this->quote($args[1]);
 				return $this->addStatement('WHERE', "$condition IN $in");
 			}

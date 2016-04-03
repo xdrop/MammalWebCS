@@ -67,6 +67,8 @@ class MammalClassifier
             Utils::getValue($settings['evenness_threshold_count'], 0.69);
         $this->EVENNESS_THRESHOLD_SPECIES =
             Utils::getValue($settings['evenness_threshold_species'], 0.7);
+        $this->NUMBER_OF_NOTHING_HERE_BEFORE_CLASSIFY = 
+            Utils::getValue($settings["number_of_nothing_here_before_classify"],5);
 
     }
 
@@ -419,11 +421,12 @@ class MammalClassifier
         }
         $this->filterUnreasonableVotes();
         $numberOfVotes = count($dataset);
-        if ($numberOfVotes >= 5) {
+        if ($numberOfVotes >= $this->NUMBER_OF_NOTHING_HERE_BEFORE_CLASSIFY) {
 
-            /* If first five consecutive were nothing here */
+            /* If first X consecutive were nothing here */
 
-            if ($this->checkConsecutive($dataset, 5, self::NOTHING_HERE_IDENTIFIER)) {
+            if ($this->checkConsecutive($dataset, $this->NUMBER_OF_NOTHING_HERE_BEFORE_CLASSIFY, self::NOTHING_HERE_IDENTIFIER)) {
+                /* classify as nothing here */
                 $this->result = [
                     'classification' => [self::NOTHING_HERE_IDENTIFIER => 0],
                     'evenness_species' => 0,
