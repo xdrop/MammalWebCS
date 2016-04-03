@@ -27,6 +27,8 @@ abstract class Query
 
     protected $params;
 
+    private $lastInsertedId;
+
     public function __construct()
     {
         $this->db = DatabaseConnector::getDatabase();
@@ -133,13 +135,14 @@ abstract class Query
         if (!is_null($queries)) {
             if (is_array($queries)) {
                 foreach ($this->internalStoreQueries as $query) {
-                    $query->execute();
+                    $this->lastInsertedId = $query->execute();
                 }
             } else {
-                $queries->execute();
+                $this->lastInsertedId = $queries->execute();
             }
 
         }
+        return $this->lastInsertedId;
     }
 
     public function update()
@@ -172,6 +175,7 @@ abstract class Query
             }
 
         }
+
     }
 
     /**
@@ -182,6 +186,10 @@ abstract class Query
     {
         $result = $this->reformat($this->internalFetchQuery->fetchAll());
         return !$result ? "none" : new QueryResults($result);
+    }
+
+    protected function getLastID(){
+        return $this->lastInsertedId;
     }
 
 }

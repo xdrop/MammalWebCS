@@ -14,6 +14,7 @@ require_once('classes/Database/QueryResults.php');
 require_once('classes/Database/Queries/JobStatusQuery.php');
 require_once('classes/Database/Queries/ClassificationQuery.php');
 require_once('classes/Database/Queries/SpeciesNamesQuery.php');
+require_once('classes/Database/Queries/RecentQueries.php');
 require_once('classes/Database/Queries/FilterQuery.php');
 require_once('classes/Database/Queries/HabitatNamesQuery.php');
 require_once('classes/Database/Queries/SiteNamesQuery.php');

@@ -18,9 +18,16 @@ if (isset($_POST['params'])) {
             error("Invalid JSON input");
             return;
         }
-        $listNamesQuery = new FilterQuery();
-        $queryResults = $listNamesQuery->with($params)->fetch();
-        echo json_encode(["csv" => createCSVFile($queryResults),"results" => $queryResults->asArray()],JSON_PRETTY_PRINT);
+        $lastId = null;
+        /* store as recent query */
+        if(Utils::getValue($params["query"],false) === true){
+            $recentQueries = new RecentQueries();
+            $lastId = $recentQueries->with(["json" => $_POST['params']])->store();
+        }
+        
+        $filterQuery = new FilterQuery();
+        $queryResults = $filterQuery->with($params)->fetch();
+        echo json_encode(["id" => $lastId,"results" => $queryResults->asArray()],JSON_PRETTY_PRINT);
     } catch (PDOException $e) {
         error("Failure in database connection.");
     }

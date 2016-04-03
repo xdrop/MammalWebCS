@@ -30,12 +30,11 @@ class QueryResults
     }
 
     /**
-     * @param $filepath
      * @return string Returns the results of the query in CSV format
      */
-    public function asCSV($filepath){
+    public function asCSV(){
         $result = $this->results;
-        $outputBuffer = fopen($filepath, 'w');
+        $outputBuffer = fopen("php://output", 'w');
 
         if(is_array($result)){
             foreach($result as $row){

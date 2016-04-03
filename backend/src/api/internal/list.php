@@ -32,7 +32,11 @@ if (isset($_GET['item'])) {
         } else if($apiParam === "counts"){
             $counts = new SpeciesCountsQuery();
             echo $counts->fetch()->asJSON();
-        } else {
+        } else if($apiParam === "queries") {
+            $recentQueries = new RecentQueries();
+            echo $recentQueries->fetch()->asJSON();
+        } else
+        {
             error("Invalid action");
         }
     } catch (PDOException $e) {
