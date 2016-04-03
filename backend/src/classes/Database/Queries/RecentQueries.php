@@ -14,9 +14,9 @@ class RecentQueries extends Query
         $value = Utils::getValue($params["id"], false);
 
         if($value){
-            $this->addFetchQuery($this->db->from('recent_queries')->select('*')->orderBy("id DESC")->limit(10));
-        } else{
             $this->addFetchQuery($this->db->from('recent_queries')->select('*')->where('id',$value));
+        } else{
+            $this->addFetchQuery($this->db->from('recent_queries')->select('*')->orderBy("id DESC")->limit(10));
         }
     }
 
