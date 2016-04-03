@@ -35,6 +35,9 @@ if (isset($_GET["action"])) {
     }
 
 } else if (isset($_POST["action"])) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
     $action = $_POST["action"];
     if ($action === "run") {
         $st = new JobStatusQuery();
@@ -87,6 +90,8 @@ if (isset($_GET["action"])) {
 
         //close connection
         curl_close($ch);
+
+        echo json_encode(["success" => true, "log" => "Algorithm started."]);
 
     } else if ($action === "empty") {
         $scientistDataset = Utils::getValue($_POST["scientist_dataset"],false);
