@@ -79,6 +79,7 @@ function displayTable(json) {
     if (json == "NO RESULT") //No photos for the given criteria
     {
         $("#resultsTable").html("<tr class='center aligned'><td colspan='7' class='align right'><b>No results</b></td></tr>");
+        $("#tableFooter").addClass('hidden');
     }
     else {
         $("#resultsTable").html(''); //Clear the table first
