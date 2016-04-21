@@ -45,6 +45,8 @@ function updateResPerPage(value) {
             resPerPage = parseInt(value);
         }
         resStart = 0; //Go back to first reault
+        currentPage = 1;
+        updatePaginationMenu($paginationMenu);
         displayTable(sortJson(filterResults, isAscending, currentSort));
     }
 }
@@ -191,10 +193,6 @@ function updatePageNum() {
 }
 
 function numberOfPages(){
-    // var extra = 1;
-    // if (filterResults.length % resPerPage != 0) {
-    //     extra = 2; //Otherwise 2 would make a blank last page
-    // }
     return Math.ceil((filterResults.length / resPerPage));
 }
 
