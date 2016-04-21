@@ -1,174 +1,163 @@
 <html>
 <head>
-    <title>MammalWeb</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
-    <title>
-        MammalWeb
-    </title>
+	<title>MammalWeb</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+		MammalWeb
+	</title>
 </head>
 <body>
 
 <div class="ui top attached menu">
-    <div class="ui header item">MammalWeb</div>
-    <a class="ui item" href="classify.html">Classify</a>
+	<div class="ui header item">MammalWeb</div>
+	<a class="ui item" href="index.html">User Filter</a>
+	<a class="ui item" href="indexScientist.html">Scientist Filter</a>
+	<a class="ui item" href="classify.html">Classify</a>
 </div>
 
-<div class="ui container">
-    <div class="ui large header">Filter Classifications</div>
-
-    <!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
-    <div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
-        <input name="country" type="hidden"></input>
-        <div class="default text">Filter Items</div>
-        <i class="delete icon" id="clearMaster" style="cursor:pointer; line-height:100%; margin-top: -4px"></i>
-        <div class="menu"></div>
-    </div>
-
-    <!-- FILTER CATEGORY BUTTONS -->
-    <div style="margin-top: 10px" class="six ui bottom attached basic buttons">
-        <div id="speciesIncludeDrop" style="text-align: center"
-             class="ui dropdown search species fluid basic button button-bold">
-            <span class="text">Species Include</span>
-            <div class="menu">
-            </div>
-            <i class="dropdown icon"></i>
-        </div>
-        <div id="speciesExcludeDrop" style="text-align: center"
-             class="ui dropdown search species basic button button-bold">
-            <span class="text">Species Exclude</span>
-            <div class="menu">
-            </div>
-            <i class="dropdown icon"></i>
-        </div>
-        <div id="habitatDrop" style="text-align: center" class="ui dropdown species search basic button button-bold">
-            <span class="text">Habitat</span>
-            <div class="menu">
-            </div>
-            <i class="dropdown icon"></i>
-        </div>
-        <div id="siteDrop" style="text-align: center;" class="ui dropdown species search basic button button-bold">
-            <span class="text">Site</span>
-            <div class="menu">
-            </div>
-            <i class="dropdown icon"></i>
-        </div>
-        <button class="ui species basic button button-bold" style="text-align: center" id="dateFrom">
-            Date Taken From
-            <i class="dropdown icon"></i>
-        </button>
-        <button class="ui species basic button button-bold" style="text-align: center" id="dateTo">
-            Date Taken To
-            <i class="dropdown icon"></i>
-        </button>
-    </div>
-
-    <br/>
-
-    <!-- APPLY FILTER BUTTON -->
-    <div style="text-align:center">
-        <button id="applyFilterButton" style="margin:auto" class="ui large primary labelled button">Apply filter
-        </button>
-    </div>
-
-    <br/>
-
-    <!-- TABLE OF RESULTS -->
-    <table class="ui basic selectable sortable celled table" id="tableHeadings">
-        <thead>
-        <tr>
-            <th></th>
-            <th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>
-            <th class="center aligned tableHead" value="species_name" id="tableSpecies">Species</th>
-            <th class="center aligned tableHead" value="time_classified" id="tableTime">Time Classified</th>
-            <th class="center aligned tableHead" value="taken" id="tableTaken">Time Taken</th>
-            <th class="center aligned tableHead" value="person_id" id="tablePerson">Person ID</th>
-            <th class="center aligned tableHead" value="site_name" id="tableSite">Site ID</th>
-        </tr>
-        </thead>
-        <tbody id="resultsTable">
-        </tbody>
-    </table>
-
-    <br/>
-
-    <!-- TABLE PAGE INFORMATION -->
-    <div class="ui grid" style="text-align:center">
-        <div class="six wide column"></div>
-        <div class="four wide column middle" id="pageNum">Showing page 0 of 0</div>
-        <div class="two wide column"></div>
-        <div class="three wide column middle"> Go to page:
-            <select id="pagesDropdown" onchange="goToPage(this.value)"></select>
-        </div>
-    </div>
-    <br/>
-    <div style="text-align:center" class="ui grid">
-        <div class="four wide column middle"></div>
-        <div class="two wide column middle aligned content"><a class="pageChange" onclick="firstPage()"> <u><< First
-            page</u> </a></div>
-        <div class="two wide column middle aligned content"><a class="pageChange" onclick="prevPage()"> <u>< Prev
-            page</u> </a></div>
-        <div class="two wide column middle aligned content"><a class="pageChange" onclick="nextPage()"> <u>Next page
-            ></u> </a></div>
-        <div class="two wide column middle aligned content"><a class="pageChange" onclick="lastPage()"> <u>Last page
-            >></u> </a></div>
-        <div class="three wide column middle aligned content">
-            Results per page:
-            <select id="resPerPage" onchange="updateResPerPage(this.value)">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="500">500</option>
-                <option value="All">All</option>
-            </select>
-        </div>
-        <div class="one wide column middle aligned content"></div>
-    </div>
-
-    <br/><br/>
-</div>
-
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="js/semantic.js"></script>
-
-<!--Moment (used for date range picker)-->
-<script type="text/javascript" src="lib/moment.min.js"></script>
-
-<!--Lightbox (used for viewing images)-->
-<link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
-<script src="lib/lightbox/js/lightbox.js"></script>
-
-<!--Date range picker-->
-<link rel="stylesheet" type="text/css" href="lib/daterangepicker.min.css"/>
-<script type="text/javascript" src="lib/daterangepicker.min.js"></script>
-
-<style type="text/css">
-    .container {
-        padding-top: 25px;
-    }
-
-    .ui.button-bold {
-        font-weight: 700 !important;
-    }
-
-    .daterangepicker{
-        padding-right: 35px;
-    }
-
-    #resPerPage {
-        width: 33%;
-    }
-
-    .pageChange {
-        cursor: hand;
-    }
-</style>
-
-<!-- Index.js -->
-<script src="js/index.js" type="text/javascript"></script>
+<div class = "ui container">
+	<div class="ui large header">Filter Classifications</div>
+	
+	<!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
+	<div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default"> 
+		<input name="country" type="hidden"></input>
+		<div class="default text">Filter Items</div>
+		<i class="delete icon" id="clearMaster" style="cursor:pointer; line-height:100%; margin-top: -4px"></i>
+		<div class="menu"></div>
+	</div>
+	
+	<!-- FILTER CATEGORY BUTTONS -->
+	<div style="margin-top: 10px" class="six ui bottom attached basic buttons">
+		<div id="speciesIncludeDrop" style="text-align: center" class="ui dropdown search species fluid basic button button-bold"> 
+			<span class="text">Species Include</span>
+			<div class="menu">
+			</div>
+			<i class="dropdown icon"></i>
+		</div>
+		<div id="speciesExcludeDrop" style="text-align: center" class="ui dropdown search species basic button button-bold">
+			<span class="text">Species Exclude</span>
+			<div class="menu">
+			</div>
+			<i class="dropdown icon"></i>
+		</div>
+		<div id="habitatDrop" style="text-align: center" class="ui dropdown species search basic button button-bold">
+			<span class="text">Habitat</span>
+			<div class="menu">
+			</div>
+			<i class="dropdown icon"></i>
+		</div>
+		<div id="siteDrop" style="text-align: center;" class="ui dropdown species search basic button button-bold">
+			<span class="text">Site</span>
+			<div class="menu">
+			</div>
+			<i class="dropdown icon"></i>
+		</div>
+		<button class="ui species basic button button-bold" style="text-align: center" id="dateFrom">
+			Date Taken From
+			<i class="dropdown icon"></i>
+		</button>
+		<button class="ui species basic button button-bold" style="text-align: center" id="dateTo">
+			Date Taken To
+			<i class="dropdown icon"></i>
+		</button>
+	</div>
+	
+	<br/>
+	
+	<!-- APPLY FILTER BUTTON -->
+	<div style="text-align:center"><button id="applyFilterButton" style="margin:auto" class = "ui large primary labelled button">Apply filter</button></div>
+	
+	<br/>
+	
+	<!-- TABLE OF RESULTS -->
+	<table class="ui basic selectable sortable celled table" id="tableHeadings">
+		<thead>
+			<tr>
+				<th></th>
+				<th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>
+				<th class="center aligned tableHead" value="species_name" id="tableSpecies">Species</th>
+				<th class="center aligned tableHead" value="time_classified" id="tableTime">Time Classified</th>
+				<th class="center aligned tableHead" value="taken" id="tableTaken">Time Taken</th>
+				<th class="center aligned tableHead" value="habitat_name" id="tableHabitat">Habitat</th>
+				<th class="center aligned tableHead" value="site_name" id="tableSite">Site</th>
+			</tr>
+		</thead>
+		 <tbody id="resultsTable">
+		</tbody>
+	</table>
+	
+	<br/>
+	
+	<!-- TABLE PAGE INFORMATION -->
+	<div class="ui grid" style="text-align:center">
+		<div class="six wide column"></div>
+		<div class="four wide column middle" id="pageNum">Showing page 0 of 0</div>
+		<div class="two wide column"></div>
+		<div class="three wide column middle"> Go to page: 
+			<select id="pagesDropdown" onchange="goToPage(this.value)"></select>
+		</div>
+	</div>
+	<br/>
+	<div style="text-align:center" class="ui grid">
+		<div class="four wide column middle"></div>
+		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="firstPage()"> <u><< First page</u> </a> </div>
+		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="prevPage()"> <u>< Prev page</u> </a> </div>
+		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="nextPage()"> <u>Next page ></u> </a> </div>
+		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="lastPage()"> <u>Last page >></u> </a> </div>
+		<div class="three wide column middle aligned content"> 
+			Results per page:
+			<select id="resPerPage" onchange="updateResPerPage(this.value)">
+				<option value="10">10</option>
+				<option value="25">25</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="500">500</option>
+				<option value="All">All</option>
+			</select>
+		</div>
+		<div class="one wide column middle aligned content"></div>
+	</div>
+	
+	<br/><br/>
+	</div>
+	
+	
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
+	<script src="js/semantic.js"></script>
+	
+	<!--Moment (used for date range picker)-->
+	<script type="text/javascript" src="lib/moment.min.js"></script>
+	
+	<!--Lightbox (used for viewing images)-->
+	<link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
+	<script src="lib/lightbox/js/lightbox.js"></script>
+	
+	<!--Date range picker-->
+	<link rel="stylesheet" type="text/css" href="lib/daterangepicker.min.css" />
+	<script type="text/javascript" src="lib/daterangepicker.min.js"></script>
+	
+	<style type="text/css">
+		.container{
+			padding-top: 25px;
+		}
+ 
+	       .ui.button-bold {
+	             font-weight: 700 !important;
+	        }
+	 
+		#resPerPage {
+			width: 33%;
+		}
+		
+		.pageChange{
+			cursor: hand;
+		}
+	</style>
+	
+	<!-- Index.js -->
+	<script src="js/index.js" type="text/javascript"></script>
 </body>
 </html>
 
