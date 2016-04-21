@@ -196,16 +196,12 @@ function numberOfPages(){
     return Math.ceil((filterResults.length / resPerPage));
 }
 
-
-
 function truncate(string, len){
     if (string.length > len)
         return string.substring(0,len)+'...';
     else
         return string;
 }
-
-
 
 /**
  *
@@ -294,6 +290,7 @@ $("#applyFilterButton").click(function () //If the filter button is pressed
                 tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0];
             }
             updatePaginationMenu($paginationMenu);
+            window.scrollTo(0, 0);
         },
         error: function () {
             //alert("It does not work...");
