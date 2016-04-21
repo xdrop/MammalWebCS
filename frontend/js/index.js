@@ -312,6 +312,7 @@ $(document).ready(function () {
     var $dateFrom = $("#dateFrom");
     var $dateTo = $("#dateTo");
     $paginationMenu = $("#paginationMenu");
+    $masterDrop.dropdown('clear');
 
     $("#resultsTable").html("<tr class='center aligned'><td colspan='7' class='align right'>Results go here...</td></tr>"); //Show were results will go
 
