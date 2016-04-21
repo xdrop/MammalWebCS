@@ -10,6 +10,10 @@
     <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
     <style type="text/css">
+        body {
+            padding-bottom: 50px;
+        }
+
         .container {
             padding-top: 25px;
         }
@@ -119,7 +123,7 @@
             <th colspan="7">
               <div class="ui three column grid" style="text-align:center; visibilty:visible" id="pageInfo">
                 <div class="column middle aligned content">
-                    <label for="resPerPage">Results per page:</label><select class="ui compact dropdown" id="resPerPage" onchange="updateResPerPage(this.value)">
+                    <label style="margin-right: 5px" for="resPerPage">Results per page:</label><select class="ui compact dropdown" id="resPerPage" onchange="updateResPerPage(this.value)">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
