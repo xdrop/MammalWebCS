@@ -268,34 +268,15 @@ $(document).ready(function () {
     var $speciesExcludeDrop = $("#speciesExcludeDrop");
     var $habitatDrop = $("#habitatDrop");
     var $siteDrop = $("#siteDrop");
+    var $dateFrom = $("#dateFrom");
+    var $dateTo = $("#dateTo");
 
     $("#resultsTable").html("<tr class='center aligned'><td colspan='7' class='align right'>Results go here...</td></tr>"); //Show were results will go
 
     populatePagesDropdown(0); //Make the dropdown have only the value of 0 in. Looks better than a dropdown with nothing
 
     //SORT A COLUMN OF THE TABLE
-    $(".tableHead").click(function () { //If a column heading clicked
-        var tableHeads = $(".tableHead"); //All the column headings
-        for (var i = 0; i < tableHeads.length; i++) //Remove dropdown arrows from other headings
-        {
-            tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0]; //Get the column heading name - ignore the rest of the html (the icon)
-        }
-        var newSort = $(this).attr("value"); //The column being sorted. Stored so can check if same as column already being sorted. 'this' is used because coud be any of the column headings - 'this' is the one that was clicked
-        if (currentSort == newSort) //Change ordering
-        {
-            isAscending = !isAscending; //Make next click change direction
-            iconIndex = (iconIndex + 1) % 2; //Make next click change arrow direction
-        }
-        else //If sort a different column, make it so ascending by default
-        {
-            isAscending = true;
-            iconIndex = 0;
-        }
-        currentSort = newSort;
-        filterResults = sortJson(filterResults, isAscending, $(this).attr("value")); //Update filterResults with the new, sorted results
-        displayTable(filterResults); //Display results
-        this.innerHTML = this.innerHTML.split("<")[0] + icons[iconIndex];
-    });
+    $(".tableHead").click(sortColumn);
 
     //Clear the master dropdown of all labels
     $("#clearMaster").click(function () {
@@ -320,23 +301,25 @@ $(document).ready(function () {
                 var filterCategory = val[0]; //The name of the filter category
                 var filterValue = val[1]; //The value of that specific filter
                 //Add the desired filters to their arrays
-                if (filterCategory == "animal") {
-                    species_include.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "no_animal") {
-                    species_exclude.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "habitat") {
-                    habitats.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "site") {
-                    sites.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "datetimeFrom") {
-                    taken_start = filterValue;
-                }
-                else if (filterCategory == "datetimeTo") {
-                    taken_end = filterValue;
+                switch (filterCategory){
+                    case "animal":
+                        species_include.push(parseInt(filterValue));
+                        break;
+                    case "no_animal":
+                        species_exclude.push(parseInt(filterValue));
+                        break;
+                    case "habitat":
+                        habitats.push(parseInt(filterValue));
+                        break;
+                    case "site":
+                        sites.push(parseInt(filterValue));
+                        break;
+                    case "datetimeFrom":
+                        taken_start = filterValue;
+                        break;
+                    case "datetimeTo":
+                        taken_end = filterValue;
+                        break;
                 }
             }
         }
@@ -414,7 +397,7 @@ $(document).ready(function () {
     var prevDateTimeTo = "";
 
     //DATE FROM
-    $('#dateFrom').daterangepicker(
+    $dateFrom.daterangepicker(
         {
             singleDatePicker: true,
             showDropdowns: true,
@@ -425,7 +408,7 @@ $(document).ready(function () {
         }
     );
 
-    $('#dateFrom').on('apply.daterangepicker', function (ev, picker) { //Executed when the apply button is clicked
+    $dateFrom.on('apply.daterangepicker', function (ev, picker) { //Executed when the apply button is clicked
         var datetime = picker.startDate.format('YYYY-MM-DD HH:mm:ss');
         //Remove previous datetime since only allowed one
         $masterDrop.dropdown("remove label", "datetimeFrom=" + prevDateTimeFrom);
@@ -437,7 +420,7 @@ $(document).ready(function () {
     });
 
     //DATE TO
-    $('#dateTo').daterangepicker(
+    $dateTo.daterangepicker(
         {
             singleDatePicker: true,
             showDropdowns: true,
@@ -449,7 +432,7 @@ $(document).ready(function () {
     );
 
     //Executed when the apply button is clicked
-    $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
+    $dateTo.on('apply.daterangepicker', function (ev, picker) {
         var datetime = picker.startDate.format('YYYY-MM-DD HH:mm:ss');
         $masterDrop.dropdown("remove label", "datetimeTo=" + prevDateTimeTo);
         $masterDrop.dropdown("remove value", "datetimeTo=" + prevDateTimeTo);
@@ -459,3 +442,28 @@ $(document).ready(function () {
     });
 
 });
+
+
+function sortColumn() {
+    var tableHeads = $(".tableHead"); //All the column headings
+    for (var i = 0; i < tableHeads.length; i++) //Remove dropdown arrows from other headings
+    {
+        tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0]; //Get the column heading name - ignore the rest of the html (the icon)
+    }
+    var newSort = $(this).attr("value"); //The column being sorted. Stored so can check if same as column already being sorted. 'this' is used because coud be any of the column headings - 'this' is the one that was clicked
+    if (currentSort == newSort) //Change ordering
+    {
+        isAscending = !isAscending; //Make next click change direction
+        iconIndex = (iconIndex + 1) % 2; //Make next click change arrow direction
+    }
+    else //If sort a different column, make it so ascending by default
+    {
+        isAscending = true;
+        iconIndex = 0;
+    }
+    currentSort = newSort;
+    filterResults = sortJson(filterResults, isAscending, $(this).attr("value")); //Update filterResults with the new, sorted results
+    displayTable(filterResults); //Display results
+    this.innerHTML = this.innerHTML.split("<")[0] + icons[iconIndex];
+}
+
