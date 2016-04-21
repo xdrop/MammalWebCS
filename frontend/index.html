@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="lib/daterangepicker.min.css"/>
     <link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
-    href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
     <style type="text/css">
         body {
             padding-bottom: 50px;
@@ -37,75 +37,75 @@
 </head>
 <body>
 
-    <div class="ui top attached menu">
-        <div class="ui header item">MammalWeb</div>
-        <a class="ui item" href="index.html">User Filter</a>
-        <a class="ui item" href="indexScientist.html">Scientist Filter</a>
-        <a class="ui item" href="classify.html">Classify</a>
+<div class="ui top attached menu">
+    <div class="ui header item">MammalWeb</div>
+    <a class="ui item" href="index.html">User Filter</a>
+    <a class="ui item" href="indexScientist.html">Scientist Filter</a>
+    <a class="ui item" href="classify.html">Classify</a>
+</div>
+
+<div class="ui container">
+    <div class="ui large header">Filter Classifications</div>
+
+    <!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
+    <div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
+        <input name="country" type="hidden"></input>
+        <div class="default text">Filter Items</div>
+        <i class="delete icon" id="clearMaster" style="cursor:pointer; line-height:100%; margin-top: -4px"></i>
+        <div class="menu"></div>
     </div>
 
-    <div class="ui container">
-        <div class="ui large header">Filter Classifications</div>
-
-        <!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
-        <div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
-            <input name="country" type="hidden"></input>
-            <div class="default text">Filter Items</div>
-            <i class="delete icon" id="clearMaster" style="cursor:pointer; line-height:100%; margin-top: -4px"></i>
-            <div class="menu"></div>
-        </div>
-
-        <!-- FILTER CATEGORY BUTTONS -->
-        <div style="margin-top: 10px" class="six ui bottom attached basic buttons">
-            <div id="speciesIncludeDrop" style="text-align: center"
-            class="ui dropdown search species fluid basic button button-bold">
+    <!-- FILTER CATEGORY BUTTONS -->
+    <div style="margin-top: 10px" class="six ui bottom attached basic buttons">
+        <div id="speciesIncludeDrop" style="text-align: center"
+             class="ui dropdown search species fluid basic button button-bold">
             <span class="text">Species Include</span>
             <div class="menu">
             </div>
             <i class="dropdown icon"></i>
         </div>
         <div id="speciesExcludeDrop" style="text-align: center"
-        class="ui dropdown search species basic button button-bold">
-        <span class="text">Species Exclude</span>
-        <div class="menu">
+             class="ui dropdown search species basic button button-bold">
+            <span class="text">Species Exclude</span>
+            <div class="menu">
+            </div>
+            <i class="dropdown icon"></i>
         </div>
-        <i class="dropdown icon"></i>
-    </div>
-    <div id="habitatDrop" style="text-align: center" class="ui dropdown species search basic button button-bold">
-        <span class="text">Habitat</span>
-        <div class="menu">
+        <div id="habitatDrop" style="text-align: center" class="ui dropdown species search basic button button-bold">
+            <span class="text">Habitat</span>
+            <div class="menu">
+            </div>
+            <i class="dropdown icon"></i>
         </div>
-        <i class="dropdown icon"></i>
-    </div>
-    <div id="siteDrop" style="text-align: center;" class="ui dropdown species search basic button button-bold">
-        <span class="text">Site</span>
-        <div class="menu">
+        <div id="siteDrop" style="text-align: center;" class="ui dropdown species search basic button button-bold">
+            <span class="text">Site</span>
+            <div class="menu">
+            </div>
+            <i class="dropdown icon"></i>
         </div>
-        <i class="dropdown icon"></i>
+        <button class="ui species basic button button-bold" style="text-align: center" id="dateFrom">
+            Date Taken From
+            <i class="dropdown icon"></i>
+        </button>
+        <button class="ui species basic button button-bold" style="text-align: center" id="dateTo">
+            Date Taken To
+            <i class="dropdown icon"></i>
+        </button>
     </div>
-    <button class="ui species basic button button-bold" style="text-align: center" id="dateFrom">
-        Date Taken From
-        <i class="dropdown icon"></i>
-    </button>
-    <button class="ui species basic button button-bold" style="text-align: center" id="dateTo">
-        Date Taken To
-        <i class="dropdown icon"></i>
-    </button>
-</div>
 
-<br/>
+    <br/>
 
-<!-- APPLY FILTER BUTTON -->
-<div style="text-align:center">
-    <button id="applyFilterButton" style="margin:auto" class="ui large primary labelled button">Apply filter
-    </button>
-</div>
+    <!-- APPLY FILTER BUTTON -->
+    <div style="text-align:center">
+        <button id="applyFilterButton" style="margin:auto" class="ui large primary labelled button">Apply filter
+        </button>
+    </div>
 
-<br/>
+    <br/>
 
-<!-- TABLE OF RESULTS -->
-<table class="ui basic selectable sortable celled table" style="visibility:hidden;" id="tableHeadings">
-    <thead>
+    <!-- TABLE OF RESULTS -->
+    <table class="ui basic selectable sortable celled table" style="visibility:hidden;" id="tableHeadings">
+        <thead>
         <tr>
             <th></th>
             <th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>
@@ -115,15 +115,16 @@
             <th class="center aligned tableHead" value="habitat_name" id="tableHabitat">Habitat</th>
             <th class="center aligned tableHead" value="site_name" id="tableSite">Site</th>
         </tr>
-    </thead>
-    <tbody id="resultsTable">
-    </tbody>
-    <tfoot id="tableFooter" class="hidden">
+        </thead>
+        <tbody id="resultsTable">
+        </tbody>
+        <tfoot id="tableFooter" class="hidden">
         <tr>
             <th colspan="7">
-              <div class="ui three column grid" style="text-align:center; visibilty:visible" id="pageInfo">
-                <div class="column middle aligned content">
-                    <label style="margin-right: 5px" for="resPerPage">Results per page:</label><select class="ui compact dropdown" id="resPerPage" onchange="updateResPerPage(this.value)">
+                <div class="ui three column grid" style="text-align:center; visibilty:visible" id="pageInfo">
+                    <div class="column middle aligned content">
+                        <label style="margin-right: 5px" for="resPerPage">Results per page:</label><select
+                            class="ui compact dropdown" id="resPerPage" onchange="updateResPerPage(this.value)">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -131,38 +132,36 @@
                         <option value="500">500</option>
                         <option value="All">All</option>
                     </select>
-                </div>
-                <div style="transform: translateY(17%);" class="column" id="pageNum">Showing page 1 of 18</div>
-                
-
-                <div class="column">                
-                    <div id="paginationMenu" class="ui right floated pagination menu ">
-                        <a onclick="firstPage()" class="icon item">
-                            <i class="angle double left icon"></i>
-                        </a>
-                        <a id="prevPageBtn" onclick="prevPage()" class="icon item">
-                            <i class="angle left icon"></i>
-                        </a>
-                        <a onclick="nextPage()" class="icon item">
-                            <i class="angle right icon"></i>
-                        </a>
-                        <a onclick="lastPage()" class="icon item">
-                            <i class="angle double right icon"></i>
-                        </a>
                     </div>
+                    <div style="transform: translateY(17%);" class="column" id="pageNum">Showing page 1 of 18</div>
+
+
+                    <div class="column">
+                        <div id="paginationMenu" class="ui right floated pagination menu ">
+                            <a onclick="firstPage()" class="icon item">
+                                <i class="angle double left icon"></i>
+                            </a>
+                            <a id="prevPageBtn" onclick="prevPage()" class="icon item">
+                                <i class="angle left icon"></i>
+                            </a>
+                            <a onclick="nextPage()" class="icon item">
+                                <i class="angle right icon"></i>
+                            </a>
+                            <a onclick="lastPage()" class="icon item">
+                                <i class="angle double right icon"></i>
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
 
-            </div>
+            </th>
 
-        </th>
+        </tr>
+        </tfoot>
+    </table>
 
-    </tr>
-</tfoot>
-</table>
-
-<br/>
-
-<br/><br/>
+    <div style="height:150px"></div>
 </div>
 
 
