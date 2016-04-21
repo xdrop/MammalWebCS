@@ -165,6 +165,7 @@ class FilterQuery extends PageableQuery
                 $site_id = $element["site_id"];
                 $filename = $element["filename"];
                 $element['url'] = ImageURL::getURL($person_id,$site_id,$filename);
+                $element["habitat_name"] = explode('-',$element["habitat_name"])[0];
                 unset($element['filename']);
             }
         }
