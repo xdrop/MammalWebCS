@@ -16,12 +16,17 @@ var taken_end = "2100-01-01 00:00:00";
 var filterResults = []; //Holds the json of the most recent filter results 
 var resStart = 0; //The index of the first result to be shown 
 var resPerPage = 10; //How many results shown per page 
+var currentPage = 1;
 
 //ORDERING VARIABLES 
 var isAscending = true; //Whether the column being sorted is ascending or descending
 var currentSort = ""; //The attribute (table heading) currently being sorted
 var iconIndex = 0; //The direction of the icon. 0 is down, 1 is up.
 var icons = ['<i class="dropdown icon"></i>', '<i class="dropdown icon vertically flipped"></i>']; //The two icons
+
+var $paginationMenu;
+
+
 
 
 //UPDATE THE NUMBER OF ROWS OF THE RESULT TABLE TO BE SHOWN
@@ -127,7 +132,25 @@ function displayTable(json) {
         }
     }
     updatePageNum();
-    populatePagesDropdown(document.getElementById("pagesDropdown").value);
+}
+
+function lastPage() {
+    if (filterResults.length != 0) {
+        displayTable(filterResults);
+        currentPage = numberOfPages();
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
+    }
+}
+
+
+function firstPage() {
+    if (filterResults.length != 0) {
+        displayTable(filterResults);
+        currentPage = 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
+    }
 }
 
 //CHANGE THE CURRENT VIEW PAGE FROM A VALUE CHOSEN FROM A DROPDOWN
@@ -137,52 +160,25 @@ function goToPage(pageNum) {
     displayTable(filterResults);
 }
 
-//GO TO THE FIRST PAGE OF THE TABLE 
-function firstPage() {
-    if (filterResults.length != 0) //Only works if something in the table
-    {
-        resStart = 0;
-        document.getElementById("pagesDropdown").options[0].setAttribute("selected", true);
-        displayTable(filterResults);
-    }
-}
 
 //GO TH THE NEXT PAGE IN THE TABLE 
 function nextPage() {
-    if ((resStart + resPerPage) < filterResults.length) //If not on last page
-    {
-        resStart += resPerPage;
-        document.getElementById("pagesDropdown").options[((resStart / resPerPage))].setAttribute("selected", true);
-        displayTable(filterResults);
+    if(currentPage < numberOfPages()){
+        currentPage = currentPage + 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
     }
 }
 
 //GO TO THE PREVIOUS PAGE
 function prevPage() {
-    if ((resStart - resPerPage) >= 0) //If not on first page
-    {
-        resStart -= resPerPage;
-        document.getElementById("pagesDropdown").options[((resStart / resPerPage))].setAttribute("selected", true);
-        displayTable(filterResults);
+    if(currentPage > 1){
+        currentPage = currentPage - 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
     }
 }
 
-//GO TO THE LAST PAGE OF THE TABLE 
-function lastPage() {
-    if (filterResults.length != 0) {
-        if (filterResults.length % resPerPage != 0) //i.e. the length of filterResults = resPerPage. Ths stops it from showing empty last page when showing all
-        {
-            resStart = filterResults.length - (filterResults.length % resPerPage);
-            console.log(resStart, resPerPage, resStart / resPerPage);
-            document.getElementById("pagesDropdown").options[resStart / resPerPage].setAttribute("selected", true);
-        }
-        else //filterResults is a multiple of resPerPage. Need this stop a blank last page.
-        {
-            resStart = filterResults.length - resPerPage;
-        }
-        displayTable(filterResults);
-    }
-}
 
 //UPDATE THE PAGE NUMBER 
 function updatePageNum() {
@@ -194,17 +190,49 @@ function updatePageNum() {
     }
 }
 
+function numberOfPages(){
+    // var extra = 1;
+    // if (filterResults.length % resPerPage != 0) {
+    //     extra = 2; //Otherwise 2 would make a blank last page
+    // }
+    return Math.ceil((filterResults.length / resPerPage));
+}
+
+/**
+ *
+ * @param menu selector
+ */
+function updatePaginationMenu(menu){
+    /* unhide the menu */
+    $("#tableFooter").removeClass('hidden');
+    /* remove any page buttons already there */
+    menu.find(".deletable").remove();
+    var maxPages = numberOfPages();
+    /* Display 2 pages before and 2 pages after the current page */
+    for (var i = 2; i >= -2; i--){
+        if(currentPage + i >= 1 && currentPage + i <= maxPages){
+            var pageLink;
+            if(i == 0){
+                /* mark the current page as active */
+                pageLink = $('<a class="item deletable active">' + (currentPage + i) + '</a>');
+            } else{
+                pageLink = $('<a class="item deletable">' + (currentPage + i) + '</a>');
+            }
+            pageLink.click( function() {
+                var page = parseInt($(this).text());
+                currentPage = page;
+                goToPage(page);
+                updatePaginationMenu(menu);
+            });
+            $("#prevPageBtn").after(pageLink);
+        }
+    }
+}
+
 //POPULATE THE PAGE CHANGE DROPDOWN WITH THE POSSIBLE PAGE NUMBERS
 function populatePagesDropdown(currentValue) {
-    var extra;
-    if (filterResults.length % resPerPage == 0) {
-        extra = 1; //Otherwise 2 would make a blank last page
-    }
-    else {
-        extra = 2;
-    }
     $("#pagesDropdown").empty(); //Clear current options so don't keep adding them
-    for (var i = 1; i < Math.floor((filterResults.length / resPerPage) + extra); i++) {
+    for (var i = 1; i < numberOfPages(); i++) {
         var currentOption = document.getElementById("pagesDropdown"); //The current page the table is on
         currentOption.add(new Option(i)); //Add a new option
         if (i == currentValue) //If the option to be added is the current option
@@ -237,6 +265,9 @@ $("#applyFilterButton").click(function () //If the filter button is pressed
         filters.taken_end = taken_end;
     }
 
+    currentPage = 1;
+
+
     $.ajax({
         url: "../backend/src/api/internal/filter.php",
         type: "POST",
@@ -251,6 +282,7 @@ $("#applyFilterButton").click(function () //If the filter button is pressed
             {
                 tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0];
             }
+            updatePaginationMenu($paginationMenu);
         },
         error: function () {
             //alert("It does not work...");
@@ -270,8 +302,10 @@ $(document).ready(function () {
     var $siteDrop = $("#siteDrop");
     var $dateFrom = $("#dateFrom");
     var $dateTo = $("#dateTo");
+    $paginationMenu = $("#paginationMenu");
 
     $("#resultsTable").html("<tr class='center aligned'><td colspan='7' class='align right'>Results go here...</td></tr>"); //Show were results will go
+
 
     populatePagesDropdown(0); //Make the dropdown have only the value of 0 in. Looks better than a dropdown with nothing
 
