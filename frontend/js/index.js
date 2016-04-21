@@ -126,7 +126,7 @@ function displayTable(json) {
             data += "<td>" + obj.time_classified + "</td>"; //Add time classified
             data += "<td>" + obj.taken + "</td>"; //Add time taken
             data += "<td>" + obj.habitat_name + "</td>"; //Add habitat
-            data += "<td>" + obj.site_name + "</td>"; //Add site
+            data += "<td>" + truncate(obj.site_name, 10) + "</td>"; //Add site
 
             $(data + "</tr>").appendTo("#resultsTable");
         }
@@ -197,6 +197,17 @@ function numberOfPages(){
     // }
     return Math.ceil((filterResults.length / resPerPage));
 }
+
+
+
+function truncate(string, len){
+    if (string.length > len)
+        return string.substring(0,len)+'...';
+    else
+        return string;
+}
+
+
 
 /**
  *
