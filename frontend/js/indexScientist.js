@@ -345,6 +345,8 @@ $("#applyFilterButton").click(function () //If the filter button is pressed
         type:    "POST",
         data:    {"params": JSON.stringify(filters)}, 
         success: function (json) {
+			$("#tableHeadings").attr("style", "visibilty:visible");
+			$(".pageInfo").attr("style", "text-align:center; visibility:visible;");
 			resStart = 0; //Start at the first result 
             filterResults = json.results; //Store the result 
 			displayTable(filterResults); //Display the result 
@@ -356,6 +358,7 @@ $("#applyFilterButton").click(function () //If the filter button is pressed
 			}
             // TODO: add a link to "filter.php?csv=" + csv_filename which will download the csv output
 			csv_filename = json.csv; //Get and store the csv file name
+			//console.log(csv_filename);
 			document.getElementById("csvButton").disabled = false;
         },
         error:   function () {
@@ -547,7 +550,6 @@ $(document).ready(function () {
 			beforeSend: function(settings) {
 				if(usesApi.indexOf(event.target.parentNode.id) != -1)
 				{
-					console.log(settings.url);
 					settings.url = '../backend/src/api/internal/list.php?item=' + info[event.target.parentNode.id][3]; //used instead of the url parameter because cannot seem to reference DOM element to get necessary api query (species, habitats etc.)
 					return settings;
 				}
@@ -667,7 +669,6 @@ $(document).ready(function () {
 	//$('.test.checkbox').checkbox('attach events', '.toggle.button');
 	$("#scientistCheck").checkbox({
 		onChange: function(text, value){
-			console.log("OK");
 			scientist_dataset = !scientist_dataset;
 		}
 	})
