@@ -294,11 +294,6 @@ $(document).ready(function () {
 	url = '../backend/src/api/internal/list.php?item=counts';
 	$.getJSON(url, function(data){
 		speciesToCounts = data;
-		document.getElementById("demo").innerHTML = cars;		
-		
-		$("#divOne")[0].innerHTML=data["answer"];
-		$("#divTwo")[0].innerHTML=data["twitter"];
-		
 	});
 });
 
