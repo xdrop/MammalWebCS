@@ -294,8 +294,9 @@ $(document).ready(function () {
 	url = '../backend/src/api/internal/list.php?item=counts';
 	$.getJSON(url, function(data){
 		speciesToCounts = data;
+		change(getData());
 	});
-	change(getData());
+	
 });
 
 </script>
