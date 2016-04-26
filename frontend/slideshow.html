@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>Slideshow</title>
+    <style type="text/css">
+        .container{
+            padding-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- jQuery library (served from Google) -->
+<script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
+<script src="js/semantic.js"></script>
+
+<!-- bxSlider Javascript file -->
+<script src="slideshow/js/jquery.bxslider.min.js"></script>
+<!-- bxSlider CSS file -->
+<link href="slideshow/lib/jquery.bxslider.css" rel="stylesheet" />
+
+<div class="ui top attached menu">
+    <div class="ui header item">MammalWeb</div>
+    <a class="ui item" href="index.html">User Filter</a>
+  <a class="ui item" href="indexScientist.html">Scientist Filter</a>
+  <a class="ui item" href="classify.html">Classify</a>
+</div>
+<div class="ui container">
+    <ul class="bxslider">
+      <li><img src="slideshow/images/1.jpg" title="Leopard" /></li>
+      <li><img src="slideshow/images/2.jpg" title="Rhino" /></li>
+      <li><img src="slideshow/images/3.jpg" title="Elephant" /></li>
+      <li><img src="slideshow/images/4.jpg" title="Giraffe" /></li>
+      <li><img src="slideshow/images/5.jpg" title="Chimp" /></li>
+      <li><img src="slideshow/images/6.jpg" title="Panda" /></li>
+    </ul>
+</div>
+
+<script>
+$(document).ready(function(){
+  var pa = {
+    "species_include": [],
+    "species_exclude": [],
+    "users_include": [],
+    "users_exclude": [],
+    "no_of_classifications": 9,
+    "no_of_classifications_from": 5,
+    "no_of_classifications_to":10,
+    "no_of_species" : 1,
+    "habitat_id": 104,
+    "flagged": false,
+    "photo_id": 1039,
+    "site_id": 2,
+    "taken_start": "2014-04-19 14:55:22",
+    "taken_end": "2015-04-19 14:55:22",
+    "contains_human": false,
+    "scientist_dataset": false,
+    "limit" : 10,
+    "page" : 1
+};
+  $.ajax({
+      url: "http://164.132.197.56/mammalwebcs/backend/src/api/internal/filter.php",
+      type: "POST",
+      data: {"params": {pa}},
+      success: function (json) {
+        //ADD x amount of random images to slideshow (x=10?)
+      },
+      error: function (msg) {
+          alert(JSON.stringify(msg));
+      }
+  });
+  $('.bxslider').bxSlider(
+  {
+  autoControls: true,
+  auto: true,
+  captions: true
+  });
+});
+</script>
+
+
+
+
+</body>
+</html>
