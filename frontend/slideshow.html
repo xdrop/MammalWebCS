@@ -60,10 +60,11 @@ $(document).ready(function(){
     "page" : 1
 };
   $.ajax({
-      url: "http://164.132.197.56/mammalwebcs/backend/src/api/internal/filter.php",
+      url: "../backend/src/api/internal/filter.php",
       type: "POST",
-      data: {"params": {pa}},
+      data: {"params": JSON.stringify(pa)},
       success: function (json) {
+        alert(JSON.stringify(json));
         //ADD x amount of random images to slideshow (x=10?)
       },
       error: function (msg) {
