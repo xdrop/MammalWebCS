@@ -112,7 +112,7 @@ function renderPie(data){
 
         var percent = Math.round(1000 * d.data.count / total) / 10;
         tooltip.select('.g-label').html(d.data.label);
-        tooltip.select('.g-count').html(d.data.count);
+        tooltip.select('.g-count').html(Math.ceil(Math.pow(d.data.count,Math.E)));
         tooltip.select('.g-percent').html(percent + '%');
         // set from none to block
         tooltip.style('display', 'block')
