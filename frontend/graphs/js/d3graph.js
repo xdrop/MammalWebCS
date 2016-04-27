@@ -63,15 +63,6 @@ function render(data){
 
 function renderPie(data){
 
-    pr = [
-    {label: "Giraffe", count: 4},
-    {label: "Tiger", count: 8},
-    {label: "Goose", count: 6},
-    {label: "Antelope", count: 22},
-    {label: "Tiger", count: 1}
-];
-
-
     // bind
     var arcs = svg.selectAll('g.arc').data(pie(data));
 
@@ -173,7 +164,7 @@ function renderLegend(data){
 
 
 $(document).ready(function() {
-    url = '../../../backend/src/api/internal/list.php?item=counts';
+    url = '../../backend/src/api/internal/list.php?item=counts';
 
         $.getJSON(url, function(data){
             var reg = /([\w\s]+).*/;
