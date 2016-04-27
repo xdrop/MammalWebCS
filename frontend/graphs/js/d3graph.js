@@ -2,7 +2,7 @@
  * Created by xdrop on 03/02/2016.
  */
 
-var dataset = [
+var preinit = [
     {label: "Giraffe", count: 4},
     {label: "Tiger", count: 8},
     {label: "Goose", count: 6},
@@ -63,6 +63,15 @@ function render(data){
 
 function renderPie(data){
 
+    pr = [
+    {label: "Giraffe", count: 4},
+    {label: "Tiger", count: 8},
+    {label: "Goose", count: 6},
+    {label: "Antelope", count: 22},
+    {label: "Tiger", count: 1}
+];
+
+
     // bind
     var arcs = svg.selectAll('g.arc').data(pie(data));
 
@@ -81,6 +90,7 @@ function renderPie(data){
             return colors(datum.data.label);
     });
 
+    
     //draw the percentage
     arcs.append('text')
         .attr('transform', function (datum){
@@ -98,6 +108,7 @@ function renderPie(data){
             var percent = Math.round(1000 * datum.data.count / total) / 10;
             return percent + '%';
         });
+    
 
     // exit
     arcs.exit().remove();
@@ -161,7 +172,24 @@ function renderLegend(data){
 }
 
 
+$(document).ready(function() {
+    url = '../../../backend/src/api/internal/list.php?item=counts';
+
+        $.getJSON(url, function(data){
+            var reg = /([\w\s]+).*/;
+            dataset = data.map(function(currentArrayEntry){
+                return { label: reg.exec(currentArrayEntry.name)[1], count: Math.log(currentArrayEntry.count) }
+            }).filter(function(d) {
+                return d.count > 0;
+            })
+            .sort(function(a,b) {
+                return d3.ascending(a.label, b.label);
+            });
+            render(dataset);
+        });
+});
 
 
-render(dataset);
+
+
 
