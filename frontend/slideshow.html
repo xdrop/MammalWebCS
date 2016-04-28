@@ -50,17 +50,18 @@ $(document).ready(function(){
         var imageSrc = json.results[0].url;
         console.log(imageSrc);
         $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
+        $('.bxslider').bxSlider(
+        {
+        autoControls: true,
+        auto: true,
+        captions: true
+        });
       },
       error: function (msg) {
           alert(JSON.stringify(msg));
       }
   });
-  $('.bxslider').bxSlider(
-  {
-  autoControls: true,
-  auto: true,
-  captions: true
-  });
+
 });
 </script>
 
