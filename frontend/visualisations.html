@@ -299,9 +299,15 @@ $(document).ready(function () {
 		speciesToCounts = data;
 		change(getData());
 	});
+
 	
 	$(".change").on("click", function() {
-		change(getData());	
+			
+		url = '../backend/src/api/internal/list.php?item=habitat_counts';
+		$.getJSON(url, function(data){
+			speciesToCounts = data;
+			change(getData());
+		});	
 	});
 	
 });
