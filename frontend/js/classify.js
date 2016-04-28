@@ -47,6 +47,16 @@ function getFields(_callback) {
     _callback(json);
 }
 
+function updateProgress(){
+    $.ajax({
+        url:     "../backend/src/api/internal/algorithm.php?action=status",
+        type:    "GET",
+        success: function(json){
+            alert("yay");
+        }
+    });
+}
+
 // To reclassify data:
 // Get -> Set new settings
 // Rerun classify with new settings
@@ -56,9 +66,27 @@ $("#reclassify").click(function() {
     });
 });
 
+$("#run").click(function(){
+    $.ajax({
+        url:     "../backend/src/api/internal/settings.php",
+        type:    "POST",
+        data:     {
+            "action": "run",
+            "scientist_dataset": true
+        },
+        error:   function () {
+            alert("Failed to set settings");
+        }
+    });
+    $("#run").addClass("disabled");
+    $("#progress").show();
+    updateProgress();
+});
+
 // Get the current settings and populate the HTML form
 $(document).ready(function () {
     getSettings(function(json) {
         updateFields(json);
     });
+    $("#progress").hide();
 });
