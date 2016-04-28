@@ -49,7 +49,7 @@ $(document).ready(function(){
       success: function (json) {
         var imageSrc = json.results[0].url;
         console.log(imageSrc);
-        $('#slide').append("<li><img src='" + imageSrc +"' /></li>");
+        $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
       },
       error: function (msg) {
           alert(JSON.stringify(msg));
