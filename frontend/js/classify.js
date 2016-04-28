@@ -1,3 +1,4 @@
+var myInterval;
 // Gets the current settings
 function getSettings(_callback) {
     $.ajax({
@@ -52,7 +53,14 @@ function updateProgress(){
         url:     "../backend/src/api/internal/algorithm.php?action=status",
         type:    "GET",
         success: function(json){
-            alert("yay");
+            var progress = parseInt(json.progress);
+            var total = parseInt(json.total);
+            if (progress == total) {
+                clearInterval(myInterval);
+            }
+            $("#progress").progress({
+                percent: Math.floor((progress / total) * 100)
+            })
         }
     });
 }
@@ -68,7 +76,7 @@ $("#reclassify").click(function() {
 
 $("#run").click(function(){
     $.ajax({
-        url:     "../backend/src/api/internal/settings.php",
+        url:     "../backend/src/api/internal/algorithm.php",
         type:    "POST",
         data:     {
             "action": "run",
@@ -80,7 +88,7 @@ $("#run").click(function(){
     });
     $("#run").addClass("disabled");
     $("#progress").show();
-    updateProgress();
+    myInterval = setInterval(updateProgress, 1000);
 });
 
 // Get the current settings and populate the HTML form
@@ -88,5 +96,6 @@ $(document).ready(function () {
     getSettings(function(json) {
         updateFields(json);
     });
+    $('#progress').progress();
     $("#progress").hide();
 });
