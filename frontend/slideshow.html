@@ -27,21 +27,15 @@
   <a class="ui item" href="classify.html">Classify</a>
 </div>
 <div class="ui container">
-    <ul class="bxslider">
-      <li><img src="slideshow/images/1.jpg" title="Leopard" /></li>
-      <li><img src="slideshow/images/2.jpg" title="Rhino" /></li>
-      <li><img src="slideshow/images/3.jpg" title="Elephant" /></li>
-      <li><img src="slideshow/images/4.jpg" title="Giraffe" /></li>
-      <li><img src="slideshow/images/5.jpg" title="Chimp" /></li>
-      <li><img src="slideshow/images/6.jpg" title="Panda" /></li>
-    </ul>
+    <ul id="slide" class="bxslider">
+      </ul>
 </div>
 
 <script>
 $(document).ready(function(){
-  var pa = {
+  var filter = {
     "species_include": [],
-    "species_exclude": [],
+    "species_exclude": [86,87],
     "users_include": [],
     "users_exclude": [],
     "limit" : 10,
@@ -50,21 +44,24 @@ $(document).ready(function(){
   $.ajax({
       url: "../backend/src/api/internal/filter.php",
       type: "POST",
-      data: {"params": JSON.stringify(pa)},
+      data: {"params": JSON.stringify(filter)},
       success: function (json) {
-        alert(JSON.stringify(json));
-        //ADD x amount of random images to slideshow (x=10?)
+        for (i = 0; i < 10; i++) {
+          var imageSrc = json.results[i].url;
+          $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
+        }
+        $('.bxslider').bxSlider(
+        {
+        autoControls: true,
+        auto: true,
+        captions: true
+        });
       },
       error: function (msg) {
           alert(JSON.stringify(msg));
       }
   });
-  $('.bxslider').bxSlider(
-  {
-  autoControls: true,
-  auto: true,
-  captions: true
-  });
+
 });
 </script>
 
