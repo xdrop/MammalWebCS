@@ -6,23 +6,21 @@ function getSettings(_callback) {
         success: function (json) {
             _callback(json);
         },
-        error:   function () {
+        error:   function (msg) {
+            alert(JSON.stringify(msg));
         }
     });
 }
 
 // Sets the settings to the user specified
 function setSettings(json_settings) {
-    json = {};
-    json.action = "store";
-    json.settings = json_settings;
     $.ajax({
         url:     "../backend/src/api/internal/settings.php",
         type:    "POST",
         data:     {
             "action": "store",
-            "settings": JSON.stringify(json)
-        }
+            "settings": JSON.stringify(json_settings)
+        },
         error:   function () {
             alert("Failed to set settings");
         }
