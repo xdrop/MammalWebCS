@@ -40,6 +40,8 @@
     </style>
 </head>
 <body>
+	
+	<button class="change">Switch</button>
 
 <div class="ui top attached menu">
     <div class="ui header item">MammalWeb</div>
@@ -136,8 +138,9 @@ var color = d3.scale.category20()
 	.range(["#9f1414", "#b24242", "#c57272", "#d8a1a1", "#ebd0d0", "#db1d1d", "#e56060", "#80d4ff", "#cceeff", "#66ccff"]);
 
 function getData (){
+    var reg = /([\w\s]+).*/;
     return speciesToCounts.map(function(currentArrayEntry){
-        return { label: currentArrayEntry.name, value: Math.log(currentArrayEntry.count) }
+        return { label: reg.exec(currentArrayEntry.name)[1], value: Math.log(currentArrayEntry.count) }
         }).sort(function(a,b) {
         return d3.ascending(a.label, b.label);
     });
@@ -295,6 +298,10 @@ $(document).ready(function () {
 	$.getJSON(url, function(data){
 		speciesToCounts = data;
 		change(getData());
+	});
+	
+	$(".change").on("click", function() {
+		change(getData());	
 	});
 	
 });
