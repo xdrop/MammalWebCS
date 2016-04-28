@@ -40,6 +40,8 @@
     </style>
 </head>
 <body>
+	
+	<button class="change">Switch</button>
 
 <div class="ui top attached menu">
     <div class="ui header item">MammalWeb</div>
@@ -296,6 +298,10 @@ $(document).ready(function () {
 	$.getJSON(url, function(data){
 		speciesToCounts = data;
 		change(getData());
+	});
+	
+	$(".change").on("click", function() {
+		change(getData());	
 	});
 	
 });
