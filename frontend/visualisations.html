@@ -137,7 +137,7 @@ var color = d3.scale.category20()
 
 function getData (){
     return speciesToCounts.map(function(currentArrayEntry){
-        return { label: currentArrayEntry.name, value: currentArrayEntry.count }
+        return { label: currentArrayEntry.name, value: Math.log(currentArrayEntry.count) }
         }).sort(function(a,b) {
         return d3.ascending(a.label, b.label);
     });
