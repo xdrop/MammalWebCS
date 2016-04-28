@@ -12,7 +12,7 @@ class HabitatCountsQuery extends Query
     protected function fetchQuery(&$params)
     {
         $query = $this->db->from("classified")
-            ->select(["options.option_name as name","site.site_id","COUNT(classified.photo_id) as count"])
+            ->select(["options.option_name as name","site.habitat_id","COUNT(classified.photo_id) as count"])
             ->leftJoin("photo on classified.photo_id = photo.photo_id")
             ->leftJoin("site on photo.site_id = site.site_id")
             ->leftJoin("options on site.habitat_id = options.option_id")
