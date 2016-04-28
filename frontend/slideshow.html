@@ -39,7 +39,7 @@
 
 <script>
 $(document).ready(function(){
-  var pa = {
+  var filter = {
     "species_include": [],
     "species_exclude": [],
     "users_include": [],
@@ -50,9 +50,9 @@ $(document).ready(function(){
   $.ajax({
       url: "../backend/src/api/internal/filter.php",
       type: "POST",
-      data: {"params": JSON.stringify(pa)},
+      data: {"params": JSON.stringify(filter)},
       success: function (json) {
-        alert(JSON.stringify(json));
+        console.log(JSON.stringify(json));
         //ADD x amount of random images to slideshow (x=10?)
       },
       error: function (msg) {
