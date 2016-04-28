@@ -28,7 +28,6 @@
 </div>
 <div class="ui container">
     <ul id="slide" class="bxslider">
-      <li><img src="slideshow/images/1.jpg" title="Leopard" /></li>
     </ul>
 </div>
 
@@ -47,9 +46,10 @@ $(document).ready(function(){
       type: "POST",
       data: {"params": JSON.stringify(filter)},
       success: function (json) {
-        var imageSrc = json.results[0].url;
-        console.log(imageSrc);
-        $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
+        for (i = 0; i < 10; i++) {
+          var imageSrc = json.results[0].url;
+          $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
+        }
         $('.bxslider').bxSlider(
         {
         autoControls: true,
