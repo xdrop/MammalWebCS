@@ -29,8 +29,11 @@ if (isset($_GET['item'])) {
             echo json_encode(["species" => $species->fetch()->asArray(),
                 "habitats" => $habitats->fetch()->asArray(),
                 "sites" => $sites->fetch()->asArray()]);
-        } else if($apiParam === "counts"){
+        } else if($apiParam === "counts") {
             $counts = new SpeciesCountsQuery();
+            echo $counts->fetch()->asJSON();
+        }else if($apiParam === "habitat_counts") {
+            $counts = new HabitatCountsQuery();
             echo $counts->fetch()->asJSON();
         } else if($apiParam === "queries") {
             $recentQueries = new RecentQueries();
