@@ -19,7 +19,10 @@ function setSettings(json_settings) {
     $.ajax({
         url:     "../backend/src/api/internal/settings.php",
         type:    "POST",
-        data:     json,
+        data:     {
+            "action": "store",
+            "settings": JSON.stringify(json)
+        }
         error:   function () {
             alert("Failed to set settings");
         }
