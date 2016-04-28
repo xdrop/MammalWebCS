@@ -29,11 +29,6 @@
 <div class="ui container">
     <ul class="bxslider">
       <li><img src="slideshow/images/1.jpg" title="Leopard" /></li>
-      <li><img src="slideshow/images/2.jpg" title="Rhino" /></li>
-      <li><img src="slideshow/images/3.jpg" title="Elephant" /></li>
-      <li><img src="slideshow/images/4.jpg" title="Giraffe" /></li>
-      <li><img src="slideshow/images/5.jpg" title="Chimp" /></li>
-      <li><img src="slideshow/images/6.jpg" title="Panda" /></li>
     </ul>
 </div>
 
@@ -52,8 +47,8 @@ $(document).ready(function(){
       type: "POST",
       data: {"params": JSON.stringify(filter)},
       success: function (json) {
-        console.log(JSON.stringify(json));
-        //ADD x amount of random images to slideshow (x=10?)
+        var imageSrc = json.results[0].url;
+        $('.bxsider').append("<li><img src='" + imageSrc +"' /></li>");
       },
       error: function (msg) {
           alert(JSON.stringify(msg));
