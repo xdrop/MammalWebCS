@@ -28,7 +28,7 @@
 </div>
 <div class="ui container">
     <ul id="slide" class="bxslider">
-    </ul>
+      </ul>
 </div>
 
 <script>
@@ -47,7 +47,7 @@ $(document).ready(function(){
       data: {"params": JSON.stringify(filter)},
       success: function (json) {
         for (i = 0; i < 10; i++) {
-          var imageSrc = json.results[0].url;
+          var imageSrc = json.results[i].url;
           $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
         }
         $('.bxslider').bxSlider(
