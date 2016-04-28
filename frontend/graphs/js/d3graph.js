@@ -2,7 +2,7 @@
  * Created by xdrop on 03/02/2016.
  */
 
-var dataset = [
+var preinit = [
     {label: "Giraffe", count: 4},
     {label: "Tiger", count: 8},
     {label: "Goose", count: 6},
@@ -81,6 +81,7 @@ function renderPie(data){
             return colors(datum.data.label);
     });
 
+    
     //draw the percentage
     arcs.append('text')
         .attr('transform', function (datum){
@@ -98,6 +99,7 @@ function renderPie(data){
             var percent = Math.round(1000 * datum.data.count / total) / 10;
             return percent + '%';
         });
+    
 
     // exit
     arcs.exit().remove();
@@ -110,7 +112,7 @@ function renderPie(data){
 
         var percent = Math.round(1000 * d.data.count / total) / 10;
         tooltip.select('.g-label').html(d.data.label);
-        tooltip.select('.g-count').html(d.data.count);
+        tooltip.select('.g-count').html(Math.ceil(Math.pow(d.data.count,Math.E)));
         tooltip.select('.g-percent').html(percent + '%');
         // set from none to block
         tooltip.style('display', 'block')
@@ -161,7 +163,24 @@ function renderLegend(data){
 }
 
 
+$(document).ready(function() {
+    url = '../../backend/src/api/internal/list.php?item=counts';
+
+        $.getJSON(url, function(data){
+            var reg = /([\w\s]+).*/;
+            dataset = data.map(function(currentArrayEntry){
+                return { label: reg.exec(currentArrayEntry.name)[1], count: Math.log(currentArrayEntry.count) }
+            }).filter(function(d) {
+                return d.count > 0;
+            })
+            .sort(function(a,b) {
+                return d3.ascending(a.label, b.label);
+            });
+            render(dataset);
+        });
+});
 
 
-render(dataset);
+
+
 
