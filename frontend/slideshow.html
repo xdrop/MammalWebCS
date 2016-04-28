@@ -27,7 +27,7 @@
   <a class="ui item" href="classify.html">Classify</a>
 </div>
 <div class="ui container">
-    <ul class="bxslider">
+    <ul id="slide" class="bxslider">
       <li><img src="slideshow/images/1.jpg" title="Leopard" /></li>
     </ul>
 </div>
@@ -48,7 +48,8 @@ $(document).ready(function(){
       data: {"params": JSON.stringify(filter)},
       success: function (json) {
         var imageSrc = json.results[0].url;
-        $('.bxsider').append("<li><img src='" + imageSrc +"' /></li>");
+        console.log(imageSrc);
+        $('#slide').append("<li><img src='" + imageSrc +"' /></li>");
       },
       error: function (msg) {
           alert(JSON.stringify(msg));
