@@ -16,7 +16,7 @@ class RecentQueries extends Query
         if($value){
             $this->addFetchQuery($this->db->from('recent_queries')->select('*')->where('id',$value));
         } else{
-            $this->addFetchQuery($this->db->from('recent_queries')->select('*')->orderBy("id DESC")->limit(10));
+            $this->addFetchQuery($this->db->from('recent_queries')->select('*')->orderBy("id DESC")->limit(8));
         }
     }
 
