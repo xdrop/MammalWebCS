@@ -58,6 +58,8 @@ function updateProgress(){
             if (progress == total) {
                 clearInterval(myInterval);
                 $("#progress").hide();
+                $("#run").removeClass("disabled");
+
             }
             $("#progress").progress({
                 percent: Math.floor((progress / total) * 100)
@@ -89,7 +91,7 @@ $("#run").click(function(){
     });
     $("#run").addClass("disabled");
     $("#progress").show();
-    myInterval = setInterval(updateProgress, 5000);
+    myInterval = setInterval(updateProgress, 4000);
 });
 
 // Get the current settings and populate the HTML form
