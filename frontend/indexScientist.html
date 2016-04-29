@@ -50,7 +50,7 @@
 </div>
 
 <div class = "ui container">
-	<div class="ui large header">Filter Classifications</div>
+	<div class="ui center aligned large header">Filter Classifications</div>
 
 	<!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
 	<div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
@@ -59,171 +59,50 @@
 		<i class="delete icon" id="clearMaster" style="cursor:pointer; line-height:100%; margin-top: -4px"></i>
 		<div class="menu"></div>
 	</div>
-	<div class="ui secondary borderless four item bottom attached menu">
+	<div class="ui stackable eight item text menu">
 	  <div id="newSpeciesDrop" class="filterOpt apiSpecies ui pointing dropdown item">
 	    <span class="text">Species Include</span>
 	    <i class="dropdown icon"></i>
 	    <div class="menu">
 	    </div>
 	  </div>
-	  <div class="ui pointing dropdown item">
-	    <span class="text">Shopping</span>
+	  <div id="speciesExcludeDrop" class="filterOpt apiSpecies ui pointing dropdown item">
+	    <span class="text">Species Exclude</span>
 	    <i class="dropdown icon"></i>
 	    <div class="menu">
-	      <div class="header">Categories</div>
-	      <div class="item">
-	        <i class="dropdown icon"></i>
-	        <span class="text">Clothing</span>
-	        <div class="menu">
-	          <div class="header">Mens</div>
-	          <div class="item">Shirts</div>
-	          <div class="item">Pants</div>
-	          <div class="item">Jeans</div>
-	          <div class="item">Shoes</div>
-	          <div class="divider"></div>
-	          <div class="header">Womens</div>
-	          <div class="item">Dresses</div>
-	          <div class="item">Shoes</div>
-	          <div class="item">Bags</div>
-	        </div>
-	      </div>
-	      <div class="item">Home Goods</div>
-	      <div class="item">Bedroom</div>
-	      <div class="divider"></div>
-	      <div class="header">Order</div>
-	      <div class="item">Status</div>
-	      <div class="item">Cancellations</div>
 	    </div>
 	  </div>
-	  <a class="item">
-	    Forums
-	  </a>
-	  <a class="item">
-	    Contact Us
-	  </a>
+	  <div id="habitatDrop" class="filterOpt apiHabitat ui pointing dropdown item">
+	    <span class="text">Habitat</span>
+	    <i class="dropdown icon"></i>
+	    <div class="menu">
+	    </div>
+	  </div>
+	  <div id="siteDrop" class="filterOpt apiSite ui pointing dropdown item">
+	    <span class="text">Site</span>
+	    <i class="dropdown icon"></i>
+	    <div class="menu">
+	    </div>
+	  </div>
+	  <div id="dateFrom" class="ui pointing dropdown item">
+	    <span class="text">Date From</span>
+	    <i class="dropdown icon"></i>
+	    <div class="menu">
+	    </div>
+	  </div>
+	  <div id="dateTo" class="ui pointing dropdown item">
+	    <span class="text">Date To</span>
+	    <i class="dropdown icon"></i>
+	    <div class="menu">
+	    </div>
+	  </div>
+	  <div id="moreOptions" class="filterOpt apiSpecies ui dropdown item">
+	    <span class="text">More Options</span>
+	    <i class="dropdown icon"></i>
+	    <div class="menu">
+	    </div>
+	  </div>
 	</div>
-	<br/>
-	<!-- FILTER CATEGORY BUTTONS -->
-	<div style="margin-top: 10px">
-		<!--Species include-->
-		<button id="speciesIncludeDrop" style="text-align: center; width:16%; height:8%; align-items:center;" class="filterOpt apiSpecies ui dropdown search basic button ">
-			<span class="text" style="color:black; font-size:105%">Species Include</span>
-			<div class="menu">
-			</div>
-			<i class="dropdown icon" style="color:black; font-size:105%"></i>
-		</button>
-		<!--Species exclude-->
-		<button id="speciesExcludeDrop" style="text-align: center; width:16%; height:8%; align-items:center;" class="filterOpt apiSpecies ui dropdown search basic button">
-			<span class="text" style="color:black; font-size:105%">Species Exclude</span>
-			<div class="menu">
-			</div>
-			<i class="dropdown icon" style="color:black; font-size:105%"></i>
-		</button>
-		<!--Habitat-->
-		<button id="habitatDrop" style="text-align: center; width:16%; height:8%; align-items:center; " class="filterOpt apiHabitat ui dropdown search basic button">
-			<span class="text" style="color:black; font-size:105%">Habitat</span>
-			<div class="menu">
-			</div>
-			<i class="dropdown icon" style="color:black; font-size:105%"></i>
-		</button>
-		<!--Site-->
-		<button id="siteDrop" style="text-align:center; width:16%; height:8%; align-items:center;" class="filterOpt apiSite ui dropdown search basic button">
-			<span class="text" style="color:black; font-size:105%">Site</span>
-			<div class="menu">
-			</div>
-			<i class="dropdown icon" style="color:black; font-size:105%"></i>
-		</button>
-		<!--Time from-->
-		<button class="ui basic button" style="text-align: center; width:16%; height:8%; align-items:center; color:black;" id="dateFrom">
-			<span class="text" style="color:black;">Date Taken From<span>
-			<i class="dropdown icon"></i>
-		</button>
-		<!--Time to-->
-		<button class="ui basic button" style="text-align: center;width:16%; height:8%; align-items:center;" id="dateTo">
-			<span class="text" style="color:black;">Date Taken To<span>
-			<i class="dropdown icon"></i>
-		</button>
-	</div>
-
-	<br/>
-
-	<!--Non dropdown options-->
-	<div class="ui grid">
-		<!-- Num of species-->
-		<div class="ui four wide column middle attached" >
-				 Number of species
-				<form class="ui form filterForm" id="numSpecies" style="display: inline-block;">
-					<input type="text" name="first-name" style="float:left; width:70%" autocomplete="off">
-					<button class="ui button" style="float:left">Add</button>
-				</form>
-		</div>
-		<!-- Num of classifications-->
-		<div class="ui four wide column middle">
-			Number of classifications
-			<form class="ui form filterForm" id="numClassifications">
-				<form class="ui form" id="filterForm" style="display: inline-block;">
-					<input type="text" name="first-name" style="float:left; width:70%" autocomplete="off">
-					<button class="ui button" style="float:left">Add</button>
-				</form>
-			</form>
-		</div>
-		<!-- Min num of classifications-->
-		<div class="ui four wide column middle">
-			Minimum number of classifications
-			<form class="ui form filterForm" id="minNumClassifications">
-				<form class="ui form" id="filterForm" style="display: inline-block;">
-					<input type="text" name="first-name" style="float:left; width:70%" autocomplete="off">
-					<button class="ui button" style="float:left">Add</button>
-				</form>
-			</form>
-		</div>
-		<!-- Max num of classifications-->
-		<div class="ui four wide column middle">
-			Maximim number of classifications
-			<form class="ui form filterForm" id="maxNumClassifications">
-				<form class="ui form" id="filterForm" style="display: inline-block;">
-					<input type="text" name="first-name" style="float:left; width:70%" autocomplete="off">
-					<button class="ui button" style="float:left">Add</button>
-				</form>
-			</form>
-		</div>
-	</div>
-
-	<div class="ui grid">
-		<!-- Include user-->
-		<div class="ui four wide column middle">
-			Include user
-			<form class="ui form filterForm" id="includeUser">
-				<form class="ui form" id="filterForm" style="display: inline-block;">
-					<input type="text" name="first-name" style="float:left; width:70%" autocomplete="off">
-					<button class="ui button" style="float:left">Add</button>
-				</form>
-		</div>
-		<!-- Exclude user-->
-		<div class="ui four wide column middle">
-			Exclude user
-			<form class="ui form filterForm" id="excludeUser">
-				<form class="ui form" id="filterForm" style="display: inline-block;">
-					<input type="text" name="first-name" style="float:left; width:70%" autocomplete="off">
-					<button class="ui button" style="float:left">Add</button>
-				</form>
-			</form>
-		</div>
-		<!--Contains Human-->
-		<div class="ui checkbox four wide column middle check" style="display:flex; align-items:center; text-align:center;" >
-			<input type="checkbox">
-			<label id="humanCheck" style="margin:auto">Contains human</label>
-		</div>
-
-		<!--Flagged-->
-		<div class="ui checkbox four wide column check" style="display:flex; align-items:center;">
-			<label id="flaggedCheck" style="margin:auto">Flagged</label>
-			<input type="checkbox">
-		</div>
-	</div>
-
-	<br/>
-
 	<!-- APPLY FILTER BUTTON -->
 	<div class="ui grid">
 		<div class="six wide column"></div>
@@ -297,6 +176,58 @@
 	</div>
 
 	<br/><br/>
+	</div>
+
+	<div class="ui small basic modal">
+	<div class="content">
+	<form class="ui equal width inverted form">
+	<div class="fields">
+	  <div class="field">
+	    <!-- <label>Number of Species</label> -->
+	    <input id="numSpecies" type="number" name="num-species" placeholder="Number of species">
+	  </div>
+	  <div class="field">
+	    <!-- <label>Number of classifications</label> -->
+	    <input id="numClassifications "type="number" name="num-classifications" placeholder="Number of Classifications">
+	  </div>
+	  </div>
+	  <div class="fields">
+	  <div class="field">
+	    <!-- <label>Minimum number of classifications</label> -->
+	    <input id="minNumClassifications "type="number" name="min-num-classifications" placeholder="Minimum number of Classifications">
+	  </div>
+	  <div class="field">
+	    <!-- <label>Maximim number of classifications</label> -->
+	    <input id="maxNumClassifications"type="number" name="max-num-classifications" placeholder="Maximum number of Classifications">
+	  </div>
+	  </div>
+	  <div class="fields">
+	  <div class="field">
+	    <!-- <label>Include user</label> -->
+	    <input id="includeUser"type="number" name="include-user" placeholder="Include user">
+	  </div>
+	  <div class="field">
+	    <!-- <label>Include user</label> -->
+	    <input id="excludeUser"type="number" name="exclude-user" placeholder="Exclude user">
+	  </div>
+	  </div>
+	  <div class="inline fields">
+	  <div class="field">
+	    <div class="ui checkbox">
+	      <input id="humanCheck" type="checkbox" tabindex="0" class="hidden">
+	      <label>Contains human</label>
+	    </div>
+	  </div>
+	  <div class="field">
+	    <div class="ui checkbox">
+	      <input id="flaggedCheck" type="checkbox" tabindex="0" class="hidden">
+	      <label>Flagged</label>
+	    </div>
+	  </div>
+	  </div>
+	  <button class="ui fluid inverted green button" type="submit">Save</button>
+	</form>
+	</div>
 	</div>
 
 	<!-- Index.js -->
