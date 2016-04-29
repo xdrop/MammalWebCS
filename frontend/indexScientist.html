@@ -5,6 +5,40 @@
 	<title>
 		MammalWeb
 	</title>
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
+	<script src="js/semantic.js"></script>
+
+	<!--Moment (used for date range picker)-->
+	<script type="text/javascript" src="lib/moment.min.js"></script>
+
+	<!--Lightbox (used for viewing images)-->
+	<link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
+	<script src="lib/lightbox/js/lightbox.js"></script>
+
+	<!--Date range picker-->
+	<link rel="stylesheet" type="text/css" href="lib/daterangepicker.min.css" />
+	<script type="text/javascript" src="lib/daterangepicker.min.js"></script>
+
+	<style type="text/css">
+		.container{
+			padding-top: 25px;
+		}
+
+	       .ui.button-bold {
+	             font-weight: 700 !important;
+	        }
+
+		#resPerPage {
+			width: 33%;
+		}
+
+		.pageChange{
+			cursor: hand;
+		}
+
+	</style>
 </head>
 <body>
 
@@ -17,9 +51,9 @@
 
 <div class = "ui container">
 	<div class="ui large header">Filter Classifications</div>
-	
+
 	<!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
-	<div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default"> 
+	<div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
 		<input name="country" type="hidden"></input>
 		<div class="default text">Filter Items</div>
 		<i class="delete icon" id="clearMaster" style="cursor:pointer; line-height:100%; margin-top: -4px"></i>
@@ -29,7 +63,7 @@
 	<!-- FILTER CATEGORY BUTTONS -->
 	<div style="margin-top: 10px">
 		<!--Species include-->
-		<button id="speciesIncludeDrop" style="text-align: center; width:16%; height:8%; align-items:center;" class="filterOpt apiSpecies ui dropdown search basic button "> 
+		<button id="speciesIncludeDrop" style="text-align: center; width:16%; height:8%; align-items:center;" class="filterOpt apiSpecies ui dropdown search basic button ">
 			<span class="text" style="color:black; font-size:105%">Species Include</span>
 			<div class="menu">
 			</div>
@@ -67,9 +101,9 @@
 			<i class="dropdown icon"></i>
 		</button>
 	</div>
-	
+
 	<br/>
-	
+
 	<!--Non dropdown options-->
 	<div class="ui grid">
 		<!-- Num of species-->
@@ -111,7 +145,7 @@
 			</form>
 		</div>
 	</div>
-	
+
 	<div class="ui grid">
 		<!-- Include user-->
 		<div class="ui four wide column middle">
@@ -137,34 +171,34 @@
 			<input type="checkbox">
 			<label id="humanCheck" style="margin:auto">Contains human</label>
 		</div>
-		
+
 		<!--Flagged-->
 		<div class="ui checkbox four wide column check" style="display:flex; align-items:center;">
 			<label id="flaggedCheck" style="margin:auto">Flagged</label>
 			<input type="checkbox">
 		</div>
 	</div>
-	
+
 	<br/>
-	
+
 	<!-- APPLY FILTER BUTTON -->
 	<div class="ui grid">
 		<div class="six wide column"></div>
 		<div style="text-align:center" class="four wide column">
 			<button id="applyFilterButton" style="margin:auto; width:80%" class="ui large primary labelled button">Apply filter</button>
 		</div>
-		
+
 		<div class="ui toggle checkbox four wide column" style="display:flex; align-items:center;" id="scientistCheck">
 			<input type="checkbox" tabindex="0" class="hidden" checked="checked" >
 			<label>Apply to scientist dataset</label>
 		</div>
 		<div class="three wide column"></div>
 	</div>
-	
+
 	<div style="text-align:center" class="four wide column">
 		<a onclick="return downloadCSV()" href="" id="downloadCSVLink"><button disabled id="csvButton" style="margin:auto; background-color:#4CAF50" class="ui large primary labelled button">Download data as CSV</button></a>
 	</div>
-	
+
 	<br/>
 	<!-- TABLE OF RESULTS -->
 	<table class="ui basic selectable sortable celled table" style="visibility:hidden;" id="tableHeadings">
@@ -186,15 +220,15 @@
 		 <tbody id="resultsTable">
 		</tbody>
 	</table>
-	
+
 	<br/>
-	
+
 	<!-- TABLE PAGE INFORMATION -->
 	<div class="ui grid pageInfo" style="text-align:center; visibility:hidden;">
 		<div class="six wide column"></div>
 		<div class="four wide column middle" id="pageNum">Showing page 0 of 0</div>
 		<div class="two wide column"></div>
-		<div class="three wide column middle"> Go to page: 
+		<div class="three wide column middle"> Go to page:
 			<select id="pagesDropdown" onchange="goToPage(this.value)"></select>
 		</div>
 	</div>
@@ -205,7 +239,7 @@
 		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="prevPage()"> <u>< Prev page</u> </a> </div>
 		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="nextPage()"> <u>Next page ></u> </a> </div>
 		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="lastPage()"> <u>Last page >></u> </a> </div>
-		<div class="three wide column middle aligned content"> 
+		<div class="three wide column middle aligned content">
 			Results per page:
 			<select id="resPerPage" onchange="updateResPerPage(this.value)">
 				<option value="10">10</option>
@@ -218,46 +252,10 @@
 		</div>
 		<div class="one wide column middle aligned content"></div>
 	</div>
-	
+
 	<br/><br/>
 	</div>
-	
-	
-	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
-	<script src="js/semantic.js"></script>
-	
-	<!--Moment (used for date range picker)-->
-	<script type="text/javascript" src="lib/moment.min.js"></script>
-	
-	<!--Lightbox (used for viewing images)-->
-	<link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
-	<script src="lib/lightbox/js/lightbox.js"></script>
-	
-	<!--Date range picker-->
-	<link rel="stylesheet" type="text/css" href="lib/daterangepicker.min.css" />
-	<script type="text/javascript" src="lib/daterangepicker.min.js"></script>
-	
-	<style type="text/css">
-		.container{
-			padding-top: 25px;
-		}
- 
-	       .ui.button-bold {
-	             font-weight: 700 !important;
-	        }
-	 
-		#resPerPage {
-			width: 33%;
-		}
-		
-		.pageChange{
-			cursor: hand;
-		}
-		
-	</style>
-	
+
 	<!-- Index.js -->
 	<script src="js/indexScientist.js" type="text/javascript"></script>
 </body>
