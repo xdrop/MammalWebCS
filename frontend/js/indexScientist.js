@@ -281,7 +281,7 @@ $("#moreOptions").click(function(){
 })
 
 //APPLY THE FILTER (2)
-$("#applyFilterButton").click(function () //If the filter button is pressed
+function applyFilter() //If the filter button is pressed
 {
 	filters = {}; //reset filters
 	if(species_include.length != 0)
@@ -503,7 +503,6 @@ $(document).ready(function () {
 				}
 				else if(filterCategory == "includeUser")
 				{
-					console.log(filterValue);
 					includedUsers.push(parseInt(filterValue));
 				}
 				else if(filterCategory == "excludeUser")
@@ -511,10 +510,11 @@ $(document).ready(function () {
 					excludedUsers.push(parseInt(filterValue));
 				}
 			}
+			applyFilter();
 		}
 	});
 
-	var usesApi = ["newSpeciesDrop", "speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
+	var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
 
 	//The information needed for each dropdown (4)
 	var info = {

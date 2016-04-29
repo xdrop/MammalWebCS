@@ -103,80 +103,68 @@
 	    </div>
 	  </div>
 	</div>
-	<!-- APPLY FILTER BUTTON -->
-	<div class="ui grid">
-		<div class="six wide column"></div>
-		<div style="text-align:center" class="four wide column">
-			<button id="applyFilterButton" style="margin:auto; width:80%" class="ui large primary labelled button">Apply filter</button>
-		</div>
-
-		<div class="ui toggle checkbox four wide column" style="display:flex; align-items:center;" id="scientistCheck">
-			<input type="checkbox" tabindex="0" class="hidden" checked="checked" >
-			<label>Apply to scientist dataset</label>
-		</div>
-		<div class="three wide column"></div>
-	</div>
-
-	<div style="text-align:center" class="four wide column">
-		<a href="" id="downloadCSVLink"><button disabled id="csvButton" style="margin:auto; background-color:#4CAF50" class="ui large primary labelled button">Download data as CSV</button></a>
-	</div>
-
-	<br/>
 	<!-- TABLE OF RESULTS -->
-	<table class="ui basic selectable sortable celled table" style="visibility:hidden;" id="tableHeadings">
-		<thead>
-			<tr>
-				<th></th>
-				<th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>
-				<th class="center aligned tableHead" value="species_name" id="tableSpecies">Species</th>
-				<th class="center aligned tableHead" value="contains_human" id="tableHuman">Contains human</th>
-				<th class="center aligned tableHead" value="time_classified" id="tableTime">Time Classified</th>
-				<th class="center aligned tableHead" value="taken" id="tableTaken">Time Taken</th>
-				<th class="center aligned tableHead" value="person_id" id="tablePerson">Person ID</th>
-				<th class="center aligned tableHead" value="site_name" id="tableSite">Site</th>
-				<th class="center aligned tableHead" value="habitat_name" id="tableHabitat">Habitat</th>
-				<th class="center aligned tableHead" value="evenness_species" id="tableEvennessSpecies">Species evenness</th>
-				<th class="center aligned tableHead" value="eveness_count" id="tableEvennessCount">Evenness count</th>
-			</tr>
-		</thead>
-		 <tbody id="resultsTable">
-		</tbody>
+	<!-- <table class="ui attached basic selectable sortable celled table" style="visibility: hidden;" id="tableHeadings">
+	    <thead>
+	    <tr>
+	        <th></th>
+	        <th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>
+	        <th class="center aligned tableHead" value="species_name" id="tableSpecies">Species</th>
+	        <th class="center aligned tableHead" value="time_classified" id="tableTime">Time Classified</th>
+	        <th class="center aligned tableHead" value="taken" id="tableTaken">Time Taken</th>
+	        <th class="center aligned tableHead" value="habitat_name" id="tableHabitat">Habitat</th>
+	        <th class="center aligned tableHead" value="site_name" id="tableSite">Site</th>
+	    </tr>
+	    </thead>
+	    <tbody id="resultsTable">
+	    </tbody>
+	    <tfoot id="tableFooter">
+	    <tr>
+	        <th colspan="7">
+	            <div class="ui three column grid" style="text-align:center;visibility: hidden;" id="pageInfo">
+	                <div class="column middle aligned content" style="visibility: hidden;">
+	                    <label style="margin-right: 5px" for="resPerPage">Results per page:</label><select
+	                        class="ui compact dropdown" id="resPerPage" onchange="updateResPerPage(this.value)">
+	                    <option value="10">10</option>
+	                    <option value="25">25</option>
+	                    <option value="50">50</option>
+	                    <option value="100">100</option>
+	                    <option value="500">500</option>
+	                    <option value="All">All</option>
+	                </select>
+	                </div>
+	                <div style="transform: translateY(17%);" class="column" id="pageNum">Showing page 1 of 18</div>
+
+
+	                <div class="column">
+	                    <div id="paginationMenu" class="ui right floated pagination menu ">
+	                        <a onclick="firstPage()" class="icon item">
+	                            <i class="angle double left icon"></i>
+	                        </a>
+	                        <a id="prevPageBtn" onclick="prevPage()" class="icon item">
+	                            <i class="angle left icon"></i>
+	                        </a>
+	                        <a onclick="nextPage()" class="icon item">
+	                            <i class="angle right icon"></i>
+	                        </a>
+	                        <a onclick="lastPage()" class="icon item">
+	                            <i class="angle double right icon"></i>
+	                        </a>
+	                    </div>
+	                </div>
+
+	            </div>
+
+	        </th>
+
+	    </tr>
+	    </tfoot>
 	</table>
 
-	<br/>
-
-	<!-- TABLE PAGE INFORMATION -->
-	<div class="ui grid pageInfo" style="text-align:center; visibility:hidden;">
-		<div class="six wide column"></div>
-		<div class="four wide column middle" id="pageNum">Showing page 0 of 0</div>
-		<div class="two wide column"></div>
-		<div class="three wide column middle"> Go to page:
-			<select id="pagesDropdown" onchange="goToPage(this.value)"></select>
-		</div>
-	</div>
-	<br/>
-	<div style="text-align:center; visibility:hidden;" class="ui grid pageInfo">
-		<div class="four wide column middle"></div>
-		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="firstPage()"> <u><< First page</u> </a> </div>
-		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="prevPage()"> <u>< Prev page</u> </a> </div>
-		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="nextPage()"> <u>Next page ></u> </a> </div>
-		<div class="two wide column middle aligned content"> <a class="pageChange" onclick="lastPage()"> <u>Last page >></u> </a> </div>
-		<div class="three wide column middle aligned content">
-			Results per page:
-			<select id="resPerPage" onchange="updateResPerPage(this.value)">
-				<option value="10">10</option>
-				<option value="25">25</option>
-				<option value="50">50</option>
-				<option value="100">100</option>
-				<option value="500">500</option>
-				<option value="All">All</option>
-			</select>
-		</div>
-		<div class="one wide column middle aligned content"></div>
-	</div>
-
-	<br/><br/>
-	</div>
+	<a href="" id="downloadCSVLink"><button id="csvButton" class="ui hidden bottom attached fluid basic primary labelled icon button">
+	<i class="Download icon"></i>
+	Download CSV</button></a>
+	</div> -->
 
 	<div class="ui small basic modal">
 	<div class="content">
@@ -211,7 +199,7 @@
 	    <input id="excludeUser"type="number" name="exclude-user" placeholder="Exclude user">
 	  </div>
 	  </div>
-	  <div class="inline fields">
+	  <div class= "fields">
 	  <div class="field">
 	    <div class="ui checkbox">
 	      <input id="humanCheck" type="checkbox" tabindex="0" class="hidden">
@@ -223,6 +211,12 @@
 	      <input id="flaggedCheck" type="checkbox" tabindex="0" class="hidden">
 	      <label>Flagged</label>
 	    </div>
+	  </div>
+	  <div class="field">
+	  <div id="scientistCheck" class="ui checkbox">
+	  	<input type="checkbox" tabindex="0" class="hidden" checked="checked" >
+	  	<label>Apply to scientist dataset</label>
+	  </div>
 	  </div>
 	  </div>
 	  <button class="ui fluid inverted green button" type="submit">Save</button>
