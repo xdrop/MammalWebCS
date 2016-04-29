@@ -89,7 +89,7 @@ $("#run").click(function(){
     });
     $("#run").addClass("disabled");
     $("#progress").show();
-    myInterval = setInterval(updateProgress, 1000);
+    myInterval = setInterval(updateProgress, 5000);
 });
 
 // Get the current settings and populate the HTML form
