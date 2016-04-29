@@ -57,6 +57,7 @@ function updateProgress(){
             var total = parseInt(json.total);
             if (progress == total) {
                 clearInterval(myInterval);
+                $("#progress").hide();
             }
             $("#progress").progress({
                 percent: Math.floor((progress / total) * 100)
