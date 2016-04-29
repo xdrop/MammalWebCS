@@ -281,69 +281,74 @@ $("#moreOptions").click(function(){
 })
 
 //APPLY THE FILTER (2)
-function applyFilter() //If the filter button is pressed
+function applyFilter(customFilter) //If the filter button is pressed
 {
-	filters = {}; //reset filters
-	if(species_include.length != 0)
-	{
-		filters.species_include = species_include; //Add the included species to filters
+	if(arguments.length > 0){
+		filters = customFilter;
+	} else {
+			filters = {}; //reset filters
+			if(species_include.length != 0)
+			{
+				filters.species_include = species_include; //Add the included species to filters
+			}
+			if(species_exclude.length != 0)
+			{
+				filters.species_exclude = species_exclude;
+			}
+			if(habitats.length != 0)
+			{
+				filters.habitat_id = habitats;
+		    }
+			if(sites.length != 0)
+			{
+				filters.site_id = sites;
+		    }
+			if(contains_human == true)
+			{
+				filters.contains_human = true;
+			}
+			if(is_flagged == true)
+			{
+				filters.flagged = true;
+			}
+			if(taken_start != "")
+			{
+				filters.taken_start = taken_start;
+			}
+			if(taken_end != "")
+			{
+				filters.taken_end = taken_end;
+			}
+			if(includedUsers.length != 0)
+			{
+				filters.users_include = includedUsers;
+			}
+			if(excludedUsers.length != 0)
+			{
+				filters.users_exclude = excludedUsers;
+			}
+			if(numSpecies != 0)
+			{
+				filters.no_of_species = numSpecies;
+			}
+			if(numClassifications != 0)
+			{
+				filters.no_of_classifications = numClassifications;
+			}
+			if(minNumClassifications != 0)
+			{
+				filters.no_of_classifications_from = minNumClassifications;
+			}
+			if(maxNumClassifications != 0)
+			{
+				filters.no_of_classifications_to = maxNumClassifications;
+			}
+			if(scientist_dataset != false)
+			{
+				filters.scientist_dataset = true;
+			}
 	}
-	if(species_exclude.length != 0)
-	{
-		filters.species_exclude = species_exclude;
-	}
-	if(habitats.length != 0)
-	{
-		filters.habitat_id = habitats;
-    }
-	if(sites.length != 0)
-	{
-		filters.site_id = sites;
-    }
-	if(contains_human == true)
-	{
-		filters.contains_human = true;
-	}
-	if(is_flagged == true)
-	{
-		filters.flagged = true;
-	}
-	if(taken_start != "")
-	{
-		filters.taken_start = taken_start;
-	}
-	if(taken_end != "")
-	{
-		filters.taken_end = taken_end;
-	}
-	if(includedUsers.length != 0)
-	{
-		filters.users_include = includedUsers;
-	}
-	if(excludedUsers.length != 0)
-	{
-		filters.users_exclude = excludedUsers;
-	}
-	if(numSpecies != 0)
-	{
-		filters.no_of_species = numSpecies;
-	}
-	if(numClassifications != 0)
-	{
-		filters.no_of_classifications = numClassifications;
-	}
-	if(minNumClassifications != 0)
-	{
-		filters.no_of_classifications_from = minNumClassifications;
-	}
-	if(maxNumClassifications != 0)
-	{
-		filters.no_of_classifications_to = maxNumClassifications;
-	}
-	if(scientist_dataset != false)
-	{
-		filters.scientist_dataset = true;
-	}
+	
 	//alert(JSON.stringify(filters));
 	$.ajax({
         url:     "../backend/src/api/internal/filter.php",
@@ -386,12 +391,37 @@ $("#downloadCSVButton").click(function (){
 
 });
 
+function getRecentQueries(){
+	$.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function(data) {
+		var resQueries = $("#recentQueries");
+		var total = data.length;
+		$.each(data, function(index,value) {
+			var text = "Query #" + value.id + "- " + value.time;
+			var clazz = "ui attached header";
+			if(index == 0){
+				clazz = "ui bottom attached header";
+			} else if (index == total - 1){
+				clazz = "ui top attached header";
+			}
+			var $elem = $('<a href="#"><div class="' + clazz + '">' + text + '</div></a>');
+			// On click get the json of the filter and run the filter ajax
+			$elem.click(function() {
+				applyFilter(JSON.parse(value.json));
+			});
+			resQueries.after($elem);
+		});
+	});
+}
+
 $(document).ready(function () {
     var $masterDrop = $("#masterDrop");
     var $speciesIncludeDrop = $("#speciesIncludeDrop");
     var $speciesExcludeDrop = $("#speciesExcludeDrop");
     var $habitatDrop = $("#habitatDrop");
     var $siteDrop = $("#siteDrop");
+
+    getRecentQueries();
+
 
 	$('.ui.checkbox').checkbox(); //Initialise checkbox
 

@@ -1,251 +1,261 @@
 <html>
 <head>
-	<title>MammalWeb</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>
-		MammalWeb
-	</title>
-	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
-	<script src="js/semantic.js"></script>
+    <title>MammalWeb</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        MammalWeb
+    </title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
+    <script src="js/semantic.js"></script>
 
-	<!--Moment (used for date range picker)-->
-	<script type="text/javascript" src="lib/moment.min.js"></script>
+    <!--Moment (used for date range picker)-->
+    <script type="text/javascript" src="lib/moment.min.js"></script>
 
-	<!--Lightbox (used for viewing images)-->
-	<link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
-	<script src="lib/lightbox/js/lightbox.js"></script>
+    <!--Lightbox (used for viewing images)-->
+    <link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
+    <script src="lib/lightbox/js/lightbox.js"></script>
 
-	<!--Date range picker-->
-	<link rel="stylesheet" type="text/css" href="lib/daterangepicker.min.css" />
-	<script type="text/javascript" src="lib/daterangepicker.min.js"></script>
+    <!--Date range picker-->
+    <link rel="stylesheet" type="text/css" href="lib/daterangepicker.min.css" />
+    <script type="text/javascript" src="lib/daterangepicker.min.js"></script>
 
-	<style type="text/css">
-		.container{
-			padding-top: 25px;
-		}
+    <style type="text/css">
+        .container{
+            padding-top: 25px;
+        }
 
-	       .ui.button-bold {
-	             font-weight: 700 !important;
-	        }
+           .ui.button-bold {
+                 font-weight: 700 !important;
+            }
 
-		#resPerPage {
-			width: 33%;
-		}
+        #resPerPage {
+            width: 33%;
+        }
 
-		.pageChange{
-			cursor: hand;
-		}
+        .pageChange{
+            cursor: hand;
+        }
 
-	</style>
+    </style>
 </head>
 <body>
 
 <div class="ui top attached secondary pointing menu">
-	<a class="active item" href="indexScientist.html"><i class="filter icon"></i>Filtering</a>
-	<a class="right item" href="configuration.html"><i class="setting icon"></i>Configuration</a>
+    <a class="active item" href="indexScientist.html"><i class="filter icon"></i>Filtering</a>
+    <a class="right item" href="configuration.html"><i class="setting icon"></i>Configuration</a>
 </div>
 
     <div style="margin-top: 30px;" class="ui grid">
     <div class="row">
-    <div class="three wide column"></div>
+    <div class="three wide column">
+    </div>
     <div class="ten wide column">
-	<div class="ui center aligned large header">Filter Classifications</div>
+    <div class="ui center aligned large header">Filter Classifications</div>
 
-	<!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
-	<div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
-		<input name="country" type="hidden"></input>
-		<div class="default text">Filter Items</div>
-		<i class="delete icon" id="clearMaster" style="cursor:pointer; line-height:100%; margin-top: -4px"></i>
-		<div class="menu"></div>
-	</div>
+    <!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
+    <div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
+        <input name="country" type="hidden"></input>
+        <div class="default text">Filter Items</div>
+        <i class="delete icon" id="clearMaster" style="cursor:pointer; line-height:100%; margin-top: -4px"></i>
+        <div class="menu"></div>
+    </div>
     <div style="width: 100%;" class="ui red segment container">
-	<div style="margin: 0 0; min-height: 2em" class="ui stackable eight item text menu">
-	  <div id="newSpeciesDrop" class="filterOpt apiSpecies ui pointing dropdown item">
-	    <span class="text">Species Include</span>
-	    <i class="dropdown icon"></i>
-	    <div class="menu">
-	    </div>
-	  </div>
-	  <div id="speciesExcludeDrop" class="filterOpt apiSpecies ui pointing dropdown item">
-	    <span class="text">Species Exclude</span>
-	    <i class="dropdown icon"></i>
-	    <div class="menu">
-	    </div>
-	  </div>
-	  <div id="habitatDrop" class="filterOpt apiHabitat ui pointing dropdown item">
-	    <span class="text">Habitat</span>
-	    <i class="dropdown icon"></i>
-	    <div class="menu">
-	    </div>
-	  </div>
-	  <div id="siteDrop" class="filterOpt apiSite ui pointing dropdown item">
-	    <span class="text">Site</span>
-	    <i class="dropdown icon"></i>
-	    <div class="menu">
-	    </div>
-	  </div>
-	  <div id="dateFrom" class="ui pointing dropdown item">
-	    <span class="text">Date From</span>
-	    <i class="dropdown icon"></i>
-	    <div class="menu">
-	    </div>
-	  </div>
-	  <div id="dateTo" class="ui pointing dropdown item">
-	    <span class="text">Date To</span>
-	    <i class="dropdown icon"></i>
-	    <div class="menu">
-	    </div>
-	  </div>
-	  <div id="moreOptions" class="filterOpt apiSpecies ui dropdown item">
-	    <span class="text">More Options</span>
-	    <i class="dropdown icon"></i>
-	    <div class="menu">
-	    </div>
-	  </div>
-	</div>
-    </div>
-<!-- 	<div class="ui top attached two item tabular menu">
-	  <a class="item active">
-	    Results
-	  </a>
-	  <a class="item">
-	    Interactive Chart
-	  </a>
-	</div>
-	<div class="ui bottom attached tab segment">
-		<p></p>
-		<p></p>
-		<p></p>
-		<p></p>
-	</div> -->
-	<!-- TABLE OF RESULTS -->
-	<!-- <table class="ui attached basic selectable sortable celled table" style="visibility: hidden;" id="tableHeadings">
-	    <thead>
-	    <tr>
-	        <th></th>
-	        <th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>
-	        <th class="center aligned tableHead" value="species_name" id="tableSpecies">Species</th>
-	        <th class="center aligned tableHead" value="time_classified" id="tableTime">Time Classified</th>
-	        <th class="center aligned tableHead" value="taken" id="tableTaken">Time Taken</th>
-	        <th class="center aligned tableHead" value="habitat_name" id="tableHabitat">Habitat</th>
-	        <th class="center aligned tableHead" value="site_name" id="tableSite">Site</th>
-	    </tr>
-	    </thead>
-	    <tbody id="resultsTable">
-	    </tbody>
-	    <tfoot id="tableFooter">
-	    <tr>
-	        <th colspan="7">
-	            <div class="ui three column grid" style="text-align:center;visibility: hidden;" id="pageInfo">
-	                <div class="column middle aligned content" style="visibility: hidden;">
-	                    <label style="margin-right: 5px" for="resPerPage">Results per page:</label><select
-	                        class="ui compact dropdown" id="resPerPage" onchange="updateResPerPage(this.value)">
-	                    <option value="10">10</option>
-	                    <option value="25">25</option>
-	                    <option value="50">50</option>
-	                    <option value="100">100</option>
-	                    <option value="500">500</option>
-	                    <option value="All">All</option>
-	                </select>
-	                </div>
-	                <div style="transform: translateY(17%);" class="column" id="pageNum">Showing page 1 of 18</div>
-
-
-	                <div class="column">
-	                    <div id="paginationMenu" class="ui right floated pagination menu ">
-	                        <a onclick="firstPage()" class="icon item">
-	                            <i class="angle double left icon"></i>
-	                        </a>
-	                        <a id="prevPageBtn" onclick="prevPage()" class="icon item">
-	                            <i class="angle left icon"></i>
-	                        </a>
-	                        <a onclick="nextPage()" class="icon item">
-	                            <i class="angle right icon"></i>
-	                        </a>
-	                        <a onclick="lastPage()" class="icon item">
-	                            <i class="angle double right icon"></i>
-	                        </a>
-	                    </div>
-	                </div>
-
-	            </div>
-
-	        </th>
-
-	    </tr>
-	    </tfoot>
-	</table>
-
-	<a href="" id="downloadCSVLink"><button id="csvButton" class="ui hidden bottom attached fluid basic primary labelled icon button">
-	<i class="Download icon"></i>
-	Download CSV</button></a>
-	</div> -->
-
-	<div class="ui small basic modal">
-	<div class="content">
-	<form class="ui large equal width inverted form">
-	<div class="fields">
-	  <div class="field">
-	    <!-- <label>Number of Species</label> -->
-	    <input id="numSpecies" type="number" name="num-species" placeholder="Number of species">
-	  </div>
-	  <div class="field">
-	    <!-- <label>Number of classifications</label> -->
-	    <input id="numClassifications "type="number" name="num-classifications" placeholder="Number of Classifications">
-	  </div>
-	  </div>
-	  <div class="fields">
-	  <div class="field">
-	    <!-- <label>Minimum number of classifications</label> -->
-	    <input id="minNumClassifications "type="number" name="min-num-classifications" placeholder="Minimum number of Classifications">
-	  </div>
-	  <div class="field">
-	    <!-- <label>Maximim number of classifications</label> -->
-	    <input id="maxNumClassifications"type="number" name="max-num-classifications" placeholder="Maximum number of Classifications">
-	  </div>
-	  </div>
-	  <div class="fields">
-	  <div class="field">
-	    <!-- <label>Include user</label> -->
-	    <input id="includeUser"type="number" name="include-user" placeholder="Include user">
-	  </div>
-	  <div class="field">
-	    <!-- <label>Include user</label> -->
-	    <input id="excludeUser"type="number" name="exclude-user" placeholder="Exclude user">
-	  </div>
-	  </div>
-	  <div class= "fields">
-	  <div class="field">
-	    <div class="ui checkbox">
-	      <input id="humanCheck" type="checkbox" tabindex="0" class="hidden">
-	      <label>Contains human</label>
-	    </div>
-	  </div>
-	  <div class="field">
-	    <div class="ui checkbox">
-	      <input id="flaggedCheck" type="checkbox" tabindex="0" class="hidden">
-	      <label>Flagged</label>
-	    </div>
-	  </div>
-	  <div class="field">
-	  <div id="scientistCheck" class="ui checkbox">
-	  	<input type="checkbox" tabindex="0" class="hidden" checked="checked" >
-	  	<label>Apply to scientist dataset</label>
-	  </div>
-	  </div>
-	  </div>
-	  <button class="ui large fluid inverted green button" type="submit">Save</button>
-	</form>
-	</div>
+    <div style="margin: 0 0; min-height: 2em" class="ui stackable eight item text menu">
+      <div id="newSpeciesDrop" class="filterOpt apiSpecies ui pointing dropdown item">
+        <span class="text">Species Include</span>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+        </div>
+      </div>
+      <div id="speciesExcludeDrop" class="filterOpt apiSpecies ui pointing dropdown item">
+        <span class="text">Species Exclude</span>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+        </div>
+      </div>
+      <div id="habitatDrop" class="filterOpt apiHabitat ui pointing dropdown item">
+        <span class="text">Habitat</span>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+        </div>
+      </div>
+      <div id="siteDrop" class="filterOpt apiSite ui pointing dropdown item">
+        <span class="text">Site</span>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+        </div>
+      </div>
+      <div id="dateFrom" class="ui pointing dropdown item">
+        <span class="text">Date From</span>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+        </div>
+      </div>
+      <div id="dateTo" class="ui pointing dropdown item">
+        <span class="text">Date To</span>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+        </div>
+      </div>
+      <div id="moreOptions" class="filterOpt apiSpecies ui dropdown item">
+        <span class="text">More Options</span>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+        </div>
+      </div>
     </div>
     </div>
-    <div class="three wide column"></div>
+<!--    <div class="ui top attached two item tabular menu">
+      <a class="item active">
+        Results
+      </a>
+      <a class="item">
+        Interactive Chart
+      </a>
+    </div>
+    <div class="ui bottom attached tab segment">
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+    </div> -->
+    <!-- TABLE OF RESULTS -->
+    <!-- <table class="ui attached basic selectable sortable celled table" style="visibility: hidden;" id="tableHeadings">
+        <thead>
+        <tr>
+            <th></th>
+            <th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>
+            <th class="center aligned tableHead" value="species_name" id="tableSpecies">Species</th>
+            <th class="center aligned tableHead" value="time_classified" id="tableTime">Time Classified</th>
+            <th class="center aligned tableHead" value="taken" id="tableTaken">Time Taken</th>
+            <th class="center aligned tableHead" value="habitat_name" id="tableHabitat">Habitat</th>
+            <th class="center aligned tableHead" value="site_name" id="tableSite">Site</th>
+        </tr>
+        </thead>
+        <tbody id="resultsTable">
+        </tbody>
+        <tfoot id="tableFooter">
+        <tr>
+            <th colspan="7">
+                <div class="ui three column grid" style="text-align:center;visibility: hidden;" id="pageInfo">
+                    <div class="column middle aligned content" style="visibility: hidden;">
+                        <label style="margin-right: 5px" for="resPerPage">Results per page:</label><select
+                            class="ui compact dropdown" id="resPerPage" onchange="updateResPerPage(this.value)">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="500">500</option>
+                        <option value="All">All</option>
+                    </select>
+                    </div>
+                    <div style="transform: translateY(17%);" class="column" id="pageNum">Showing page 1 of 18</div>
+
+
+                    <div class="column">
+                        <div id="paginationMenu" class="ui right floated pagination menu ">
+                            <a onclick="firstPage()" class="icon item">
+                                <i class="angle double left icon"></i>
+                            </a>
+                            <a id="prevPageBtn" onclick="prevPage()" class="icon item">
+                                <i class="angle left icon"></i>
+                            </a>
+                            <a onclick="nextPage()" class="icon item">
+                                <i class="angle right icon"></i>
+                            </a>
+                            <a onclick="lastPage()" class="icon item">
+                                <i class="angle double right icon"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </th>
+
+        </tr>
+        </tfoot>
+    </table>
+
+    <a href="" id="downloadCSVLink"><button id="csvButton" class="ui hidden bottom attached fluid basic primary labelled icon button">
+    <i class="Download icon"></i>
+    Download CSV</button></a>
+    </div> -->
+
+    <div class="ui small basic modal">
+    <div class="content">
+    <form class="ui large equal width inverted form">
+    <div class="fields">
+      <div class="field">
+        <!-- <label>Number of Species</label> -->
+        <input id="numSpecies" type="number" name="num-species" placeholder="Number of species">
+      </div>
+      <div class="field">
+        <!-- <label>Number of classifications</label> -->
+        <input id="numClassifications "type="number" name="num-classifications" placeholder="Number of Classifications">
+      </div>
+      </div>
+      <div class="fields">
+      <div class="field">
+        <!-- <label>Minimum number of classifications</label> -->
+        <input id="minNumClassifications "type="number" name="min-num-classifications" placeholder="Minimum number of Classifications">
+      </div>
+      <div class="field">
+        <!-- <label>Maximim number of classifications</label> -->
+        <input id="maxNumClassifications"type="number" name="max-num-classifications" placeholder="Maximum number of Classifications">
+      </div>
+      </div>
+      <div class="fields">
+      <div class="field">
+        <!-- <label>Include user</label> -->
+        <input id="includeUser"type="number" name="include-user" placeholder="Include user">
+      </div>
+      <div class="field">
+        <!-- <label>Include user</label> -->
+        <input id="excludeUser"type="number" name="exclude-user" placeholder="Exclude user">
+      </div>
+      </div>
+      <div class= "fields">
+      <div class="field">
+        <div class="ui checkbox">
+          <input id="humanCheck" type="checkbox" tabindex="0" class="hidden">
+          <label>Contains human</label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui checkbox">
+          <input id="flaggedCheck" type="checkbox" tabindex="0" class="hidden">
+          <label>Flagged</label>
+        </div>
+      </div>
+      <div class="field">
+      <div id="scientistCheck" class="ui checkbox">
+        <input type="checkbox" tabindex="0" class="hidden" checked="checked" >
+        <label>Apply to scientist dataset</label>
+      </div>
+      </div>
+      </div>
+      <button class="ui large fluid inverted green button" type="submit">Save</button>
+    </form>
+    </div>
+    </div>
+    </div>
+    <div class="three wide column"><div class="ui container" style="margin-top: 150px ! important; margin-right: 50px ! important;"> <div id="recentQueries" class="ui red dividing header">
+        <i class="settings icon"></i>
+        <div style="margin-left: 10px" class="content">
+          Recent Queries
+          <div class="sub header">Click to re-run</div>
+        </div>
+            </div>
+
+  
+          </div></div>
     </div>
 
-	<!-- Index.js -->
-	<script src="js/indexScientist.js" type="text/javascript"></script>
+    <!-- Index.js -->
+    <script src="js/indexScientist.js" type="text/javascript"></script>
 </body>
 </html>
 
