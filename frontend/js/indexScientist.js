@@ -374,7 +374,7 @@ function applyFilter() //If the filter button is pressed
         }
     });
 
-});
+};
 
 function downloadCSV()
 {
