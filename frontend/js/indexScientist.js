@@ -1,16 +1,16 @@
 /* TO DO:
-	- Make filter buttons either not searchable (preferred), or make search work 
+	- Make filter buttons either not searchable (preferred), or make search work
 */
 /*
-WHEN ADDING A NEW FILTER CATEGORY MUST ADD DATA AT MULTIPLE PLACES - THEY ARE NUMBERED LIKE THIS (1) 
+WHEN ADDING A NEW FILTER CATEGORY MUST ADD DATA AT MULTIPLE PLACES - THEY ARE NUMBERED LIKE THIS (1)
 */
 
 //FILTER CRITERIA (1)
 var filters = {}; //Stores the filters to be applied. The different filters are ANDed together i.e. badger AND forest. Within filter they are ORed e.g. badger OR fox
-var species_include = []; //Stores the species to be included i.e. photos with any of these animals in 
-var species_exclude = []; //Stores the species to be exluded i.e. photos without any of these animals in 
-var habitats = []; //Stores the habitats to be included i.e. photos featuring any of these habitats 
-var sites = []; //Stores the sites to be included i.e. photos from any of these sites 
+var species_include = []; //Stores the species to be included i.e. photos with any of these animals in
+var species_exclude = []; //Stores the species to be exluded i.e. photos without any of these animals in
+var habitats = []; //Stores the habitats to be included i.e. photos featuring any of these habitats
+var sites = []; //Stores the sites to be included i.e. photos from any of these sites
 var contains_human = false;
 var is_flagged = false;
 var includedUsers = [];
@@ -19,16 +19,16 @@ var numSpecies = 0;
 var minNumClassifications = 0;
 var maxNumClassifications = 0;
 var numClassifications = 0;
-var taken_start = "1970-01-01 00:00:00"; //Must have both dates/time so these are the default values 
+var taken_start = "1970-01-01 00:00:00"; //Must have both dates/time so these are the default values
 var taken_end = "2100-01-01 00:00:00";
 var scientist_dataset = true;
 
 //RESULTS AND TABLE VARIABLES
-var filterResults = []; //Holds the json of the most recent filter results 
-var resStart = 0; //The index of the first result to be shown 
-var resPerPage = 10; //How many results shown per page 
+var filterResults = []; //Holds the json of the most recent filter results
+var resStart = 0; //The index of the first result to be shown
+var resPerPage = 10; //How many results shown per page
 
-//ORDERING VARIABLES 
+//ORDERING VARIABLES
 var isAscending = true; //Whether the column being sorted is ascending or descending
 var currentSort = ""; //The attribute (table heading) currently being sorted
 var iconIndex = 0; //The direction of the icon. 0 is down, 1 is up.
@@ -37,7 +37,7 @@ var icons = ['<i class="dropdown icon"></i>', '<i class="dropdown icon verticall
 var csv_filename;
 
 //UPDATE THE NUMBER OF ROWS OF THE RESULT TABLE TO BE SHOWN
-//@param value - the number of results to be show. Options are 10, 25, 50, 100, 500 or All 
+//@param value - the number of results to be show. Options are 10, 25, 50, 100, 500 or All
 function updateResPerPage(value)
 {
 	if(filterResults.length == 0 && value == "All") //If want to have all. Has to give -1 as dont know size of next filter.  The size is updated in drawTable
@@ -48,28 +48,28 @@ function updateResPerPage(value)
 	{
 		if(value == "All")
 		{
-			resPerPage = -1; //Don't know how many will have 
+			resPerPage = -1; //Don't know how many will have
 		}
 		else
 		{
 			resPerPage = parseInt(value);
 		}
-		resStart = 0; //Go back to first reault 
+		resStart = 0; //Go back to first reault
 		displayTable(sortJson(filterResults, isAscending, currentSort));
 	}
 }
 
-/*SORT THE JSON RESULT 
+/*SORT THE JSON RESULT
   @param json - the json object to be sorted
   @param isAsc - whether the list is to be sorted in ascending or descending order. True if ascending
   @param attrib - the attribute to be sorted by e.g. species name */
-function sortJson(json, isAsc, attrib) //sorts json by attrib in ascending order (if isAsc == true, descending if not) 
+function sortJson(json, isAsc, attrib) //sorts json by attrib in ascending order (if isAsc == true, descending if not)
 {
-	var sorted = json.slice(); //Create deep copy of the list 
+	var sorted = json.slice(); //Create deep copy of the list
 	if(currentSort != "")
 	{
 		sorted = sorted.sort(function(a, b){
-				var thing1 = a[attrib].toLowerCase(); //Since it treats uppercase as before lowercase (e.g. B > a) 
+				var thing1 = a[attrib].toLowerCase(); //Since it treats uppercase as before lowercase (e.g. B > a)
 				var thing2 = b[attrib].toLowerCase();
 				if(isAsc)
 				{
@@ -107,61 +107,61 @@ function sortJson(json, isAsc, attrib) //sorts json by attrib in ascending order
 }
 
 //DISPLAY THE RESULTS OF THE FILTER AS A TABLE
-//@param json - the json object that contains the data 
-function displayTable(json) 
+//@param json - the json object that contains the data
+function displayTable(json)
 {
-	if(json == "NO RESULT") //No photos for the given criteria 
+	if(json == "NO RESULT") //No photos for the given criteria
 	{
 		$("#resultsTable").html("<tr class='center aligned'><td colspan='11' class='align right'><b>No results</b></td></tr>");
 	}
-	else 
+	else
 	{
-		$("#resultsTable").html(''); //Clear the table first 
-		if(resPerPage == -1) //Wants all shown 
+		$("#resultsTable").html(''); //Clear the table first
+		if(resPerPage == -1) //Wants all shown
 		{
 			resPerPage = json.length;
 		}
-		var resLimit = 0; //The index of the final image to be shown 
-		if((resStart + resPerPage) > json.length) //If the index of the final image is greater than the number of images... 
+		var resLimit = 0; //The index of the final image to be shown
+		if((resStart + resPerPage) > json.length) //If the index of the final image is greater than the number of images...
 		{
-			resLimit = json.length; //...make the final image the number of the final image (e.g. 23 as opposed to 30) 
+			resLimit = json.length; //...make the final image the number of the final image (e.g. 23 as opposed to 30)
 		}
 		else
 		{
-			resLimit = resStart + resPerPage; //Else make it the start plus the number of images shown 
+			resLimit = resStart + resPerPage; //Else make it the start plus the number of images shown
 		}
 
-		for (var i = resStart; i < resLimit; i++) //Go through each specified image in the json of each result and use the information to make arow in the table 
+		for (var i = resStart; i < resLimit; i++) //Go through each specified image in the json of each result and use the information to make arow in the table
 		{
-			var obj = json[i]; //The information in json form of the image. Included information can be seen here: https://github.com/xdrop/MammalWebCS/wiki/Filtering#filter  
+			var obj = json[i]; //The information in json form of the image. Included information can be seen here: https://github.com/xdrop/MammalWebCS/wiki/Filtering#filter
 			//Create the link tag for the photograph. Will be in the form <a data-lightbox:"i" data-title:"species_name" href="http://www.mammalweb.org/..."> View </a>
-			a = document.createElement('a'); //Create a temporary element of the a (link) type 
+			a = document.createElement('a'); //Create a temporary element of the a (link) type
 			a.setAttribute("data-lightbox", "" + i); //Add the lightbox atribute (lets you view the image)
 			a.setAttribute("data-title", obj.species_name); //The name that appears on the light box
-			a.href = obj.url; // Insted of calling setAttribute, sets the link to the image 
+			a.href = obj.url; // Insted of calling setAttribute, sets the link to the image
 			a.innerHTML = "View"; // <a>INNER_TEXT</a>
-			
-			if (obj.flagged == 0) //If the object is flagged 
+
+			if (obj.flagged == 0) //If the object is flagged
 			{
-				data = "<tr class='center aligned'>"; //The start of the row 
-			} 
-			else 
-			{
-				data = "<tr class='center aligned error'>"; //Alternate start of the row 
+				data = "<tr class='center aligned'>"; //The start of the row
 			}
-			
-			data += "<td>" + a.outerHTML + "</td>"; //The first cell in the table is the link to the image 
-			
-			if (obj.flagged == 0) //If not flagged 
+			else
 			{
-				data += "<td></td>"; //Next cell shows nothing 
-			} 
-			else //If flagged 
-			{
-				data += "<td class='centered'><i class='flag icon'></i></td>"; //Next cell shows a flag 
+				data = "<tr class='center aligned error'>"; //Alternate start of the row
 			}
-			
-			data += "<td>" + obj.species_name + "</td>"; //Add species 
+
+			data += "<td>" + a.outerHTML + "</td>"; //The first cell in the table is the link to the image
+
+			if (obj.flagged == 0) //If not flagged
+			{
+				data += "<td></td>"; //Next cell shows nothing
+			}
+			else //If flagged
+			{
+				data += "<td class='centered'><i class='flag icon'></i></td>"; //Next cell shows a flag
+			}
+
+			data += "<td>" + obj.species_name + "</td>"; //Add species
 			data += "<td>" + obj.contains_human + "</td>"; //Add if it contains human
 			data += "<td>" + obj.time_classified + "</td>"; //Add time classified
 			data += "<td>" + obj.taken + "</td>"; //Add time taken
@@ -185,10 +185,10 @@ function goToPage(pageNum)
 	displayTable(filterResults);
 }
 
-//GO TO THE FIRST PAGE OF THE TABLE 
+//GO TO THE FIRST PAGE OF THE TABLE
 function firstPage()
 {
-	if(filterResults.length != 0) //Only works if something in the table 
+	if(filterResults.length != 0) //Only works if something in the table
 	{
 		resStart = 0;
 		document.getElementById("pagesDropdown").options[0].setAttribute("selected", true);
@@ -196,10 +196,10 @@ function firstPage()
 	}
 }
 
-//GO TH THE NEXT PAGE IN THE TABLE 
+//GO TH THE NEXT PAGE IN THE TABLE
 function nextPage()
 {
-	if((resStart + resPerPage) < filterResults.length) //If not on last page 
+	if((resStart + resPerPage) < filterResults.length) //If not on last page
 	{
 		resStart += resPerPage;
 		document.getElementById("pagesDropdown").options[((resStart/resPerPage))].setAttribute("selected", true);
@@ -210,7 +210,7 @@ function nextPage()
 //GO TO THE PREVIOUS PAGE
 function prevPage()
 {
-	if((resStart - resPerPage) >= 0) //If not on first page 
+	if((resStart - resPerPage) >= 0) //If not on first page
 	{
 		resStart -= resPerPage;
 		document.getElementById("pagesDropdown").options[((resStart/resPerPage))].setAttribute("selected", true);
@@ -218,7 +218,7 @@ function prevPage()
 	}
 }
 
-//GO TO THE LAST PAGE OF THE TABLE 
+//GO TO THE LAST PAGE OF THE TABLE
 function lastPage()
 {
 	if(filterResults.length != 0)
@@ -237,7 +237,7 @@ function lastPage()
 	}
 }
 
-//UPDATE THE PAGE NUMBER 
+//UPDATE THE PAGE NUMBER
 function updatePageNum()
 {
 	if(filterResults.length != 0)
@@ -262,26 +262,26 @@ function populatePagesDropdown(currentValue)
 	{
 		extra = 2;
 	}
-	$("#pagesDropdown").empty(); //Clear current options so don't keep adding them 
+	$("#pagesDropdown").empty(); //Clear current options so don't keep adding them
 	for(var i = 1 ; i < Math.floor((filterResults.length/resPerPage) + extra) ; i++)
 	{
-		var currentOption =  document.getElementById("pagesDropdown"); //The current page the table is on 
-		currentOption.add(new Option(i)); //Add a new option 
-		if(i == currentValue) //If the option to be added is the current option 
+		var currentOption =  document.getElementById("pagesDropdown"); //The current page the table is on
+		currentOption.add(new Option(i)); //Add a new option
+		if(i == currentValue) //If the option to be added is the current option
 		{
-			currentOption.options[i-1].setAttribute("selected", true); //Make it the option shown in the dropdown 
+			currentOption.options[i-1].setAttribute("selected", true); //Make it the option shown in the dropdown
 		}
 	}
 }
 
 
-//APPLY THE FILTER (2) 
-$("#applyFilterButton").click(function () //If the filter button is pressed 
-{ 
+//APPLY THE FILTER (2)
+$("#applyFilterButton").click(function () //If the filter button is pressed
+{
 	filters = {}; //reset filters
 	if(species_include.length != 0)
 	{
-		filters.species_include = species_include; //Add the included species to filters 
+		filters.species_include = species_include; //Add the included species to filters
 	}
 	if(species_exclude.length != 0)
 	{
@@ -343,16 +343,16 @@ $("#applyFilterButton").click(function () //If the filter button is pressed
 	$.ajax({
         url:     "../backend/src/api/internal/filter.php",
         type:    "POST",
-        data:    {"params": JSON.stringify(filters)}, 
+        data:    {"params": JSON.stringify(filters)},
         success: function (json) {
 			$("#tableHeadings").attr("style", "visibilty:visible");
 			$(".pageInfo").attr("style", "text-align:center; visibility:visible;");
-			resStart = 0; //Start at the first result 
-            filterResults = json.results; //Store the result 
-			displayTable(filterResults); //Display the result 
+			resStart = 0; //Start at the first result
+            filterResults = json.results; //Store the result
+			displayTable(filterResults); //Display the result
 			updatePageNum(); //Update the page numbers
 			var tableHeads = $(".tableHead");
-			for(var i = 0 ; i < tableHeads.length ; i++) //Remove dropdown arrows from other headings 
+			for(var i = 0 ; i < tableHeads.length ; i++) //Remove dropdown arrows from other headings
 			{
 				tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0];
 			}
@@ -363,22 +363,22 @@ $("#applyFilterButton").click(function () //If the filter button is pressed
         },
         error:   function () {
             //alert("It does not work...");
-			filterResults = []; //Store the result as empty 
+			filterResults = []; //Store the result as empty
 			displayTable("NO RESULT");
 			updatePageNum();
         }
     });
-	
+
 });
 
 function downloadCSV()
 {
 	$("#downloadCSVLink").attr("href", "../backend/src/storage/csv/" + csv_filename);
-	return true; //return makes the href wait 
+	return true; //return makes the href wait
 }
 
 $("#downloadCSVButton").click(function (){
-	
+
 });
 
 $(document).ready(function () {
@@ -387,46 +387,46 @@ $(document).ready(function () {
     var $speciesExcludeDrop = $("#speciesExcludeDrop");
     var $habitatDrop = $("#habitatDrop");
     var $siteDrop = $("#siteDrop");
-	
+
 	$('.ui.checkbox').checkbox(); //Initialise checkbox
-	
+
 	$("#resultsTable").html("<tr class='center aligned'><td colspan='11' class='align right'>Results go here...</td></tr>"); //Show were results will go (5)
-	
-	populatePagesDropdown(0); //Make the dropdown have only the value of 0 in. Looks better than a dropdown with nothing 
-	
-	//SORT A COLUMN OF THE TABLE 
+
+	populatePagesDropdown(0); //Make the dropdown have only the value of 0 in. Looks better than a dropdown with nothing
+
+	//SORT A COLUMN OF THE TABLE
 	$(".tableHead").click(function(){ //If a column heading clicked
-		var tableHeads = $(".tableHead"); //All the column headings 
-		for(var i = 0 ; i < tableHeads.length ; i++) //Remove dropdown arrows from other headings 
+		var tableHeads = $(".tableHead"); //All the column headings
+		for(var i = 0 ; i < tableHeads.length ; i++) //Remove dropdown arrows from other headings
 		{
-			tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0]; //Get the column heading name - ignore the rest of the html (the icon) 
+			tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0]; //Get the column heading name - ignore the rest of the html (the icon)
 		}
-		var newSort = $(this).attr("value"); //The column being sorted. Stored so can check if same as column already being sorted. 'this' is used because coud be any of the column headings - 'this' is the one that was clicked 
+		var newSort = $(this).attr("value"); //The column being sorted. Stored so can check if same as column already being sorted. 'this' is used because coud be any of the column headings - 'this' is the one that was clicked
 		if(currentSort == newSort) //Change ordering
 		{
-			isAscending = !isAscending; //Make next click change direction 
-			iconIndex = (iconIndex + 1)%2; //Make next click change arrow direction 
+			isAscending = !isAscending; //Make next click change direction
+			iconIndex = (iconIndex + 1)%2; //Make next click change arrow direction
 		}
-		else //If sort a different column, make it so ascending by default 
+		else //If sort a different column, make it so ascending by default
 		{
 			isAscending = true;
 			iconIndex = 0;
 		}
 		currentSort = newSort;
-		filterResults = sortJson(filterResults, isAscending, $(this).attr("value")); //Update filterResults with the new, sorted results 
-		displayTable(filterResults); //Display results 
+		filterResults = sortJson(filterResults, isAscending, $(this).attr("value")); //Update filterResults with the new, sorted results
+		displayTable(filterResults); //Display results
 		this.innerHTML = this.innerHTML.split("<")[0] + icons[iconIndex];
 	});
-	
+
 	//Clear the master dropdown of all labels
 	$("#clearMaster").click(function(){
 		$masterDrop.dropdown('clear');
 	});
-	
-	$('.ui.dropdown').dropdown(); //Initialise dropdown 
 
-	//WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3) 
-	$masterDrop.dropdown({onChange: function(value,text){ 
+	$('.ui.dropdown').dropdown(); //Initialise dropdown
+
+	//WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3)
+	$masterDrop.dropdown({onChange: function(value,text){
 			species_include.length = 0; //Resets the array. arr = [] does not work.
 			species_exclude.length = 0;
 			habitats.length = 0;
@@ -439,15 +439,15 @@ $(document).ready(function () {
 			minNumClassifications = 0;
 			maxNumClassifications = 0;
 			numClassifications = 0;
-			taken_start = "1970-01-01 00:00:00"; //Set dated to default values 
+			taken_start = "1970-01-01 00:00:00"; //Set dated to default values
 			taken_end = "2100-01-01 00:00:00";
 			values = $masterDrop.dropdown("get values");
-			for(var i = 0 ; i < values.length ; i++) //Go through everything stored in the main dropdown 
+			for(var i = 0 ; i < values.length ; i++) //Go through everything stored in the main dropdown
 			{
 				var val = values[i].split('=');
 				var filterCategory = val[0]; //The name of the filter category
-				var filterValue = val[1]; //The value of that specific filter 
-				//Add the desired filters to their arrays 
+				var filterValue = val[1]; //The value of that specific filter
+				//Add the desired filters to their arrays
 				if(filterCategory == "animal")
 				{
 					species_include.push(parseInt(filterValue));
@@ -508,11 +508,12 @@ $(document).ready(function () {
 			}
 		}
 	});
-	
-	var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
-	
-	//The information needed for each dropdown (4) 
+
+	var usesApi = ["newSpeciesDrop", "speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
+
+	//The information needed for each dropdown (4)
 	var info = {
+		"newSpeciesDrop": ["animal", "Include species", "green", "species"],
 		"speciesIncludeDrop": ["animal", "Include species", "green", "species"],
 		"speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
 		"habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
@@ -527,21 +528,21 @@ $(document).ready(function () {
 		"excludeUser":["excludeUser", "Excluded user", "red"]
 	};
 
-	//Add dropdown selection to main selection, and populate dropdown with api 
+	//Add dropdown selection to main selection, and populate dropdown with api
 	$(".filterOpt").dropdown({
         action: function(text, value) {	//When an option from the dropdown is chosen
-			var chosenDropdown = event.target.parentElement.parentElement.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown 
+			var chosenDropdown = event.target.parentElement.parentElement.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
 			var filterType = info[chosenDropdown][0] + "=";
 			var labelName = info[chosenDropdown][1];
 			var colour = info[chosenDropdown][2];
-            $masterDrop.dropdown("add value", filterType + value)//, labelName + ": " + text); //Add the value 
+            $masterDrop.dropdown("add value", filterType + value)//, labelName + ": " + text); //Add the value
 			if(chosenDropdown == "habitatDrop") //Only show the first word of the habitat
 			{
 				$masterDrop.dropdown("add label", filterType + value, labelName + ": " + text.substr(0,text.indexOf(' ')), colour);
 			}
 			else
 			{
-				$masterDrop.dropdown("add label", filterType + value, labelName + ": " + text, colour); //Add the label 
+				$masterDrop.dropdown("add label", filterType + value, labelName + ": " + text, colour); //Add the label
             }
 			//$speciesIncludeDrop.dropdown("action hide");
         },
@@ -557,7 +558,7 @@ $(document).ready(function () {
 				{
 					return false;
 				}
-				
+
 			},
 			//url: "../backend/src/api/internal/list.php?",
 			onResponse: function (response) {
@@ -565,10 +566,10 @@ $(document).ready(function () {
             }
 		}
     });
-	
+
 	var prevDateTimeFrom = ""; //Stores the most recent datetime. Used so can replace datetime if a new one decided.
 	var prevDateTimeTo = "";
-	
+
 	//DATE FROM
 	$('#dateFrom').daterangepicker(
 		{
@@ -580,7 +581,7 @@ $(document).ready(function () {
 			timePickerIncrement: 1
 		}
 	);
-	
+
 	$('#dateFrom').on('apply.daterangepicker', function(ev, picker) { //Executed when the apply button is clicked
 		var datetime = picker.startDate.format('YYYY-MM-DD HH:mm:ss');
 		//Remove previous datetime since only allowed one
@@ -591,7 +592,7 @@ $(document).ready(function () {
 		$masterDrop.dropdown("add label", "datetimeFrom=" + datetime, "Date from: " + datetime, "pink");
 		prevDateTimeFrom = datetime;
 	});
-	
+
 	//DATE TO
 	$('#dateTo').daterangepicker(
 		{
@@ -603,9 +604,9 @@ $(document).ready(function () {
 			timePickerIncrement: 1
 		}
 	);
-	
+
 	//Executed when the apply button is clicked
-	$('#dateTo').on('apply.daterangepicker', function(ev, picker) { 
+	$('#dateTo').on('apply.daterangepicker', function(ev, picker) {
 		var datetime = picker.startDate.format('YYYY-MM-DD HH:mm:ss');
 		$masterDrop.dropdown("remove label", "datetimeTo=" + prevDateTimeTo);
 		$masterDrop.dropdown("remove value", "datetimeTo=" + prevDateTimeTo);
@@ -613,24 +614,24 @@ $(document).ready(function () {
 		$masterDrop.dropdown("add label", "datetimeTo=" + datetime, "Date to: " + datetime, "purple");
 		prevDateTimeTo = datetime;
 	});
-	
-	
+
+
 	var prevValues = {
 		"numSpecies":"",
 		"numClassifications":"",
 		"minNumClassifications":"",
 		"maxNumClassifications":""
 	};
-		
+
 	$(".filterForm").submit(function( event ) {
 		event.preventDefault();
 		//console.log(event.target.children[0].value);
-		var chosenCheck = event.target.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown 
+		var chosenCheck = event.target.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
 		var enteredValue = event.target.children[0].value;
 		var filterType = info[chosenCheck][0] + "=";
 		var labelName = info[chosenCheck][1];
 		var colour = info[chosenCheck][2];
-		if(prevValues.hasOwnProperty(chosenCheck) == true) //Remve any labels already there 
+		if(prevValues.hasOwnProperty(chosenCheck) == true) //Remve any labels already there
 		{
 			if(prevValues[chosenCheck] != "")
 			{
@@ -638,31 +639,31 @@ $(document).ready(function () {
 				$masterDrop.dropdown("remove value", prevValues[chosenCheck]);
 			}
 		}
-        $masterDrop.dropdown("add value", filterType + enteredValue); //Add the value 
-		$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue, colour); //Add the label 
+        $masterDrop.dropdown("add value", filterType + enteredValue); //Add the value
+		$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue, colour); //Add the label
 		if(prevValues.hasOwnProperty(chosenCheck) == true) //Store the values so any values already there are known so dows not put more than one label for categories that are not allowed
 		{
 			prevValues[chosenCheck] = filterType + enteredValue;
 		}
 		event.target.children[0].value = ""; //Reset the form
 	});
-	
-	
+
+
 	$(".check").checkbox({
 		onChecked: function(text, value) {
-			var chosenCheck = event.target.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown 
+			var chosenCheck = event.target.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
 			var filterType = info[chosenCheck][0] + "=";
 			var labelName = info[chosenCheck][1];
 			var colour = info[chosenCheck][2];
-            $masterDrop.dropdown("add value", filterType + "1"); //Add the value 
-			$masterDrop.dropdown("add label", filterType + "1", labelName + ": " + "yes", colour); //Add the label 
+            $masterDrop.dropdown("add value", filterType + "1"); //Add the value
+			$masterDrop.dropdown("add label", filterType + "1", labelName + ": " + "yes", colour); //Add the label
 		},
 		onUnchecked: function(text, value){
-			var chosenCheck = event.target.id 
+			var chosenCheck = event.target.id
 			var filterType = info[chosenCheck][0] + "=";
 			var labelName = info[chosenCheck][1];
 			var colour = info[chosenCheck][2];
-			$masterDrop.dropdown("remove value", filterType + "1"); //Rremove the value 
+			$masterDrop.dropdown("remove value", filterType + "1"); //Rremove the value
 			$masterDrop.dropdown("remove label", filterType + "1", labelName + ": " + "yes", colour); //Remove the label
 		}
 	});
@@ -672,5 +673,5 @@ $(document).ready(function () {
 			scientist_dataset = !scientist_dataset;
 		}
 	})
-	
+
 });
