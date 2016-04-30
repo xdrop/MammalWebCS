@@ -21,7 +21,7 @@ var maxNumClassifications = 0;
 var numClassifications = 0;
 var taken_start = "1970-01-01 00:00:00"; //Must have both dates/time so these are the default values
 var taken_end = "2100-01-01 00:00:00";
-var scientist_dataset = true;
+var scientist_dataset = false;
 
 //RESULTS AND TABLE VARIABLES
 var filterResults = []; //Holds the json of the most recent filter results
@@ -34,7 +34,38 @@ var currentSort = ""; //The attribute (table heading) currently being sorted
 var iconIndex = 0; //The direction of the icon. 0 is down, 1 is up.
 var icons = ['<i class="dropdown icon"></i>', '<i class="dropdown icon vertically flipped"></i>']; //The two icons
 
+//Dropdown population
+var usesApi = ["newSpeciesDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
+//The information needed for each dropdown (4)
+var info = {
+	"newSpeciesDrop": ["animal", "Include species", "green", "species"],
+	"speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
+	"habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
+	"siteDrop": ["site", "Site", "yellow", "sites"],
+	"humanCheck": ["contains_human", "Contains human", "olive"],
+	"flaggedCheck": ["is_flagged", "Flagged", "orange"],
+	"scientistCheck":["scientist_dataset", "Scientist dataset", "blue"],
+	"numSpecies": ["numSpecies", "Number of species", "black"],
+	"numClassifications": ["numClassifications", "Number of classifications", "violet"],
+	"minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
+	"maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
+	"includeUser": ["includeUser", "Include user", "green"],
+	"excludeUser": ["excludeUser", "Exclude user", "red"]
+};
+
+//Date/time variables
+var prevDateTimeFrom = ""; //Stores the most recent datetime. Used so can replace datetime if a new one decided.
+var prevDateTimeTo = "";
+
+//CSV
 var csv_filename;
+
+//DROPDOWNS
+var $masterDrop = $("#masterDrop");
+var $speciesIncludeDrop = $("#speciesIncludeDrop");
+var $speciesExcludeDrop = $("#speciesExcludeDrop");
+var $habitatDrop = $("#habitatDrop");
+var $siteDrop = $("#siteDrop");
 
 //UPDATE THE NUMBER OF ROWS OF THE RESULT TABLE TO BE SHOWN
 //@param value - the number of results to be show. Options are 10, 25, 50, 100, 500 or All
@@ -125,28 +156,17 @@ function displayTable(json) {
             a.setAttribute("data-title", obj.species_name); //The name that appears on the light box
             a.href = obj.url; // Insted of calling setAttribute, sets the link to the image
             a.innerHTML = "View"; // <a>INNER_TEXT</a>
-
-            if (obj.flagged == 0) //If the object is flagged
+			
+			if (obj.flagged == 0) //If not flagged
             {
-                data = "<tr class='center aligned'>"; //The start of the row
-            }
-            else {
-                data = "<tr class='center aligned error'>"; //Alternate start of the row
-            }
-
-            data += "<td>" + a.outerHTML + "</td>"; //The first cell in the table is the link to the image
-
-            if (obj.flagged == 0) //If not flagged
-            {
-                data += "<td></td>"; //Next cell shows nothing
+                data = "<tr class='center aligned'>"; 
             }
             else //If flagged
             {
-                data += "<td class='centered'><i class='flag icon'></i></td>"; //Next cell shows a flag
+                data = "<tr class='center aligned negative'>"; 
             }
-
+            data += "<td>" + a.outerHTML + "</td>"; //The first cell in the table is the link to the image        
             data += "<td>" + obj.species_name + "</td>"; //Add species
-            data += "<td>" + obj.contains_human + "</td>"; //Add if it contains human
             data += "<td>" + obj.time_classified + "</td>"; //Add time classified
             data += "<td>" + obj.taken + "</td>"; //Add time taken
             data += "<td>" + obj.person_id + "</td>"; //Add person ID
@@ -158,7 +178,7 @@ function displayTable(json) {
         }
     }
     updatePageNum();
-    populatePagesDropdown(document.getElementById("pagesDropdown").value);
+    //populatePagesDropdown(document.getElementById("pagesDropdown").value);
 }
 
 //CHANGE THE CURRENT VIEW PAGE FROM A VALUE CHOSEN FROM A DROPDOWN
@@ -254,6 +274,7 @@ $("#moreOptions").click(function () {
 //APPLY THE FILTER (2)
 function applyFilter(customFilter) //If the filter button is pressed
 {
+	//alert("OK");
     if (arguments.length > 0) {
         filters = customFilter;
     } else {
@@ -304,7 +325,7 @@ function applyFilter(customFilter) //If the filter button is pressed
             filters.scientist_dataset = true;
         }
     }
-
+	//filters.query = true;
     //alert(JSON.stringify(filters));
     $.ajax({
         url: "../backend/src/api/internal/filter.php",
@@ -322,9 +343,8 @@ function applyFilter(customFilter) //If the filter button is pressed
             {
                 tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0];
             }
-            // TODO: add a link to "filter.php?csv=" + csv_filename which will download the csv output
-            csv_filename = json.csv; //Get and store the csv file name
-            //console.log(csv_filename);
+			console.log(JSON.stringify(filters));
+            //$("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json);
             document.getElementById("csvButton").disabled = false;
         },
         error: function () {
@@ -336,15 +356,6 @@ function applyFilter(customFilter) //If the filter button is pressed
     });
 
 };
-
-function downloadCSV() {
-    $("#downloadCSVLink").attr("href", "../backend/src/storage/csv/" + csv_filename);
-    return true; //return makes the href wait
-}
-
-$("#downloadCSVButton").click(function () {
-
-});
 
 function getRecentQueries() {
     $.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function (data) {
@@ -383,40 +394,23 @@ $(".tableHead").click(function () { //If a column heading clicked
     currentSort = newSort;
     filterResults = sortJson(filterResults, isAscending, $(this).attr("value")); //Update filterResults with the new, sorted results
     displayTable(filterResults); //Display results
-    this.innerHTML = this.innerHTML.split("<")[0] + icons[iconIndex];
+    this.innerHTML = this.innerHTML.split("<")[0] + "<br/>" + icons[iconIndex];
 });
 
 function populateDropdowns(){
-	var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
-
-	//The information needed for each dropdown (4)
-	var info = {
-	    "speciesIncludeDrop": ["animal", "Include species", "green", "species"],
-	    "speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
-	    "habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
-	    "siteDrop": ["site", "Site", "yellow", "sites"],
-	    "humanCheck": ["contains_human", "Contains human", "olive"],
-	    "flaggedCheck": ["is_flagged", "Flagged", "orange"],
-	    "numSpecies": ["numSpecies", "Number of species", "black"],
-	    "numClassifications": ["numClassifications", "Number of classifications", "violet"],
-	    "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
-	    "maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
-	    "includeUser": ["includeUser", "Included user", "green"],
-	    "excludeUser": ["excludeUser", "Excluded user", "red"]
-	};
-
 	$.each(usesApi, function( index, dropName ) {
-		alert(dropName);
 	  $.getJSON('../backend/src/api/internal/list.php?item=' + info[dropName][3], function(data) {
-	  	//POPULATE HERE!
-	  }
-	  	);
+		for(var i = 0 ; i < data.length ; i++)
+		{
+			$("#" + dropName).find(".menu").append("<div class='item' data-value=" + data[i].id + ">" + data[i].name + "</div>");
+		}
+	  })
 	});
 }
 
 //WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3)
-$("#masterDrop").dropdown({
-    onChange: function (value, text) {
+$("#filterStore").change(function(){
+		$('.filterOpt').dropdown('hide');
         species_include.length = 0; //Resets the array. arr = [] does not work.
         species_exclude.length = 0;
         habitats.length = 0;
@@ -429,7 +423,7 @@ $("#masterDrop").dropdown({
         minNumClassifications = 0;
         maxNumClassifications = 0;
         numClassifications = 0;
-        taken_start = "1970-01-01 00:00:00"; //Set dated to default values
+        taken_start = "1970-01-01 00:00:00"; //Set dates to default values
         taken_end = "2100-01-01 00:00:00";
         values = $masterDrop.dropdown("get values");
         for (var i = 0; i < values.length; i++) //Go through everything stored in the main dropdown
@@ -482,12 +476,11 @@ $("#masterDrop").dropdown({
             }
         }
         applyFilter();
-    }
-});
+    });
 
 //Clear the master dropdown of all labels
 $("#clearMaster").click(function () {
-    $masterDrop.dropdown('clear');
+    $("#masterDrop").dropdown('clear');
 });
 
 $('#dateFrom').on('apply.daterangepicker', function (ev, picker) { //Executed when the apply button is clicked
@@ -513,14 +506,7 @@ $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
 });
 
 $(document).ready(function () {
-    var $masterDrop = $("#masterDrop");
-    var $speciesIncludeDrop = $("#speciesIncludeDrop");
-    var $speciesExcludeDrop = $("#speciesExcludeDrop");
-    var $habitatDrop = $("#habitatDrop");
-    var $siteDrop = $("#siteDrop");
-
     getRecentQueries();
-
 
     $('.ui.checkbox').checkbox(); //Initialise checkbox
 
@@ -534,7 +520,6 @@ $(document).ready(function () {
     $(".filterOpt").dropdown({
         action: function (text, value) {	//When an option from the dropdown is chosen
             var chosenDropdown = event.target.parentElement.parentElement.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
-            console.log(chosenDropdown);
             var filterType = info[chosenDropdown][0] + "=";
             var labelName = info[chosenDropdown][1];
             var colour = info[chosenDropdown][2];
@@ -549,9 +534,6 @@ $(document).ready(function () {
         }
     });
     populateDropdowns();
-
-    var prevDateTimeFrom = ""; //Stores the most recent datetime. Used so can replace datetime if a new one decided.
-    var prevDateTimeTo = "";
 
     //DATE FROM
     $('#dateFrom').daterangepicker(
@@ -577,7 +559,7 @@ $(document).ready(function () {
         }
     );
 
-    var prevValues = {
+    var prevValues = { //Categories that can only have one value at a time.
         "numSpecies": "",
         "numClassifications": "",
         "minNumClassifications": "",
@@ -585,52 +567,62 @@ $(document).ready(function () {
     };
 
     $(".filterForm").submit(function (event) {
-        event.preventDefault();
-        //console.log(event.target.children[0].value);
-        var chosenCheck = event.target.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
-        var enteredValue = event.target.children[0].value;
-        var filterType = info[chosenCheck][0] + "=";
-        var labelName = info[chosenCheck][1];
-        var colour = info[chosenCheck][2];
-        if (prevValues.hasOwnProperty(chosenCheck) == true) //Remve any labels already there
-        {
-            if (prevValues[chosenCheck] != "") {
-                $masterDrop.dropdown("remove label", prevValues[chosenCheck]);
-                $masterDrop.dropdown("remove value", prevValues[chosenCheck]);
-            }
-        }
-        $masterDrop.dropdown("add value", filterType + enteredValue); //Add the value
-        $masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue, colour); //Add the label
-        if (prevValues.hasOwnProperty(chosenCheck) == true) //Store the values so any values already there are known so dows not put more than one label for categories that are not allowed
-        {
-            prevValues[chosenCheck] = filterType + enteredValue;
-        }
-        event.target.children[0].value = ""; //Reset the form
+		event.preventDefault();
+		for(var e = 0 ; e < 9 ; e++) //Go through all the forms
+		{
+			var filterOption = event.target[e];
+			//console.log(filterOption.id);
+			var enteredValue = "";
+			if(filterOption.classList[0] == "filterField") //If an input field
+			{
+				enteredValue = filterOption.value; 
+			}
+			else if(filterOption.classList[0] == "filterCheck") //If a checkbox
+			{
+				if(filterOption.checked)
+				{
+					enteredValue = "true";
+				}
+				else
+				{
+					enteredValue = "false";
+				}
+				
+			}
+			var chosenCheck = filterOption.id; //The filter that has been chosen.
+			var filterType = info[chosenCheck][0] + "="; //Name of the filter 
+			var labelName = info[chosenCheck][1]; //What goes on the label 
+			var colour = info[chosenCheck][2]; //Colour of the label
+			if(enteredValue != "false" && enteredValue != "") //If a value has been chosen
+			{
+				if (prevValues.hasOwnProperty(chosenCheck) == true) //If it is a filter that can only be added once 
+				{
+					if (prevValues[chosenCheck] != "") //Remove any labels already there
+					{
+						$masterDrop.dropdown("remove value", prevValues[chosenCheck]); //Remove the value 
+						$masterDrop.dropdown("remove label", prevValues[chosenCheck]); //Remove the label 
+					}
+				}
+				$masterDrop.dropdown("add value", filterType + enteredValue); //Add the value
+				if(filterOption.classList[0] == "filterCheck") //If a checkbox 
+				{
+					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": Yes", colour); //Add the label for a checkbox
+				}
+				else //If a form that has a number entered
+				{
+					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue, colour); //Add the label
+				}
+				if (prevValues.hasOwnProperty(chosenCheck) == true) //Store the values so any values already there are known so does not put more than one label for categories that are not allowed
+				{
+					prevValues[chosenCheck] = filterType + enteredValue;
+				}
+			}
+			else if(filterOption.classList[0] == "filterCheck")
+			{
+				$masterDrop.dropdown("remove label", filterType + "true");
+				$masterDrop.dropdown("remove value", filterType + "true");
+			}
+		}        
     });
-
-
-    $(".check").checkbox({
-        onChecked: function (text, value) {
-            var chosenCheck = event.target.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
-            var filterType = info[chosenCheck][0] + "=";
-            var labelName = info[chosenCheck][1];
-            var colour = info[chosenCheck][2];
-            $masterDrop.dropdown("add value", filterType + "1"); //Add the value
-            $masterDrop.dropdown("add label", filterType + "1", labelName + ": " + "yes", colour); //Add the label
-        },
-        onUnchecked: function (text, value) {
-            var chosenCheck = event.target.id
-            var filterType = info[chosenCheck][0] + "=";
-            var labelName = info[chosenCheck][1];
-            var colour = info[chosenCheck][2];
-            $masterDrop.dropdown("remove value", filterType + "1"); //Rremove the value
-            $masterDrop.dropdown("remove label", filterType + "1", labelName + ": " + "yes", colour); //Remove the label
-        }
-    });
-    $("#scientistCheck").checkbox({
-        onChange: function (text, value) {
-            scientist_dataset = !scientist_dataset;
-        }
-    })
 
 });
