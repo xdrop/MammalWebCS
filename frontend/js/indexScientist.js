@@ -87,39 +87,18 @@ function updateResPerPage(value) {
     }
 }
 
-/*SORT THE JSON RESULT
+/*SORT THE JSON RESULT 
  @param json - the json object to be sorted
  @param isAsc - whether the list is to be sorted in ascending or descending order. True if ascending
  @param attrib - the attribute to be sorted by e.g. species name */
-function sortJson(json, isAsc, attrib) //sorts json by attrib in ascending order (if isAsc == true, descending if not)
+function sortJson(json, isAsc, attrib) //sorts json by attrib in ascending order (if isAsc == true, descending if not) 
 {
     var sorted = json.slice(); //Create deep copy of the list
     if (currentSort != "") {
         sorted = sorted.sort(function (a, b) {
-            var thing1 = a[attrib].toLowerCase(); //Since it treats uppercase as before lowercase (e.g. B > a)
-            var thing2 = b[attrib].toLowerCase();
-            if (isAsc) {
-                if (thing1 > thing2) {
-                    return 1;
-                }
-                else if (thing1 < thing2) {
-                    return -1;
-                }
-                else {
-                    return 0;
-                }
-            }
-            else {
-                if (thing1 < thing2) {
-                    return 1;
-                }
-                else if (thing1 > thing2) {
-                    return -1;
-                }
-                else {
-                    return 0;
-                }
-            }
+            var strA = a[attrib].toLowerCase(); //Since it treats uppercase as before lowercase (e.g. B > a)
+            var strB = b[attrib].toLowerCase();
+            return isAsc ? strA.localeCompare(strB) : strB.localeCompare(strA);
         });
     }
     return sorted;
@@ -181,6 +160,19 @@ function displayTable(json) {
     //populatePagesDropdown(document.getElementById("pagesDropdown").value);
 }
 
+function numberOfPages(){
+    return Math.ceil((filterResults.length / resPerPage));
+}
+
+function truncate(string, len){
+    if (string.length > len)
+        return string.substring(0,len)+'...';
+    else
+        return string;
+}
+
+
+
 //CHANGE THE CURRENT VIEW PAGE FROM A VALUE CHOSEN FROM A DROPDOWN
 //@param pageNum - the page to go to
 function goToPage(pageNum) {
@@ -188,52 +180,43 @@ function goToPage(pageNum) {
     displayTable(filterResults);
 }
 
-//GO TO THE FIRST PAGE OF THE TABLE
-function firstPage() {
-    if (filterResults.length != 0) //Only works if something in the table
-    {
-        resStart = 0;
-        document.getElementById("pagesDropdown").options[0].setAttribute("selected", true);
+function lastPage() {
+    if (filterResults.length != 0) {
         displayTable(filterResults);
+        currentPage = numberOfPages();
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
     }
 }
 
-//GO TH THE NEXT PAGE IN THE TABLE
-function nextPage() {
-    if ((resStart + resPerPage) < filterResults.length) //If not on last page
-    {
-        resStart += resPerPage;
-        document.getElementById("pagesDropdown").options[((resStart / resPerPage))].setAttribute("selected", true);
+
+function firstPage() {
+    if (filterResults.length != 0) {
         displayTable(filterResults);
+        currentPage = 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
+    }
+}
+
+//GO TH THE NEXT PAGE IN THE TABLE 
+function nextPage() {
+    if(currentPage < numberOfPages()){
+        currentPage = currentPage + 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
     }
 }
 
 //GO TO THE PREVIOUS PAGE
 function prevPage() {
-    if ((resStart - resPerPage) >= 0) //If not on first page
-    {
-        resStart -= resPerPage;
-        document.getElementById("pagesDropdown").options[((resStart / resPerPage))].setAttribute("selected", true);
-        displayTable(filterResults);
+    if(currentPage > 1){
+        currentPage = currentPage - 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
     }
 }
 
-//GO TO THE LAST PAGE OF THE TABLE
-function lastPage() {
-    if (filterResults.length != 0) {
-        if (filterResults.length % resPerPage != 0) //i.e. the length of filterResults = resPerPage. Ths stops it from showing empty last page when showing all
-        {
-            resStart = filterResults.length - (filterResults.length % resPerPage);
-            //console.log(resStart, resPerPage, resStart/resPerPage);
-            document.getElementById("pagesDropdown").options[resStart / resPerPage].setAttribute("selected", true);
-        }
-        else //filterResults is a multiple of resPerPage. Need this stop a blank last page.
-        {
-            resStart = filterResults.length - resPerPage;
-        }
-        displayTable(filterResults);
-    }
-}
 
 //UPDATE THE PAGE NUMBER
 function updatePageNum() {
