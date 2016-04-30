@@ -361,7 +361,7 @@ function applyFilter(customFilter) //If the filter button is pressed
             {
                 tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0];
             }
-			console.log(JSON.stringify(filters));
+			//console.log(JSON.stringify(filters));
             //$("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json);
             document.getElementById("csvButton").disabled = false;
         },
@@ -589,7 +589,6 @@ $(document).ready(function () {
 		for(var e = 0 ; e < 9 ; e++) //Go through all the forms
 		{
 			var filterOption = event.target[e];
-			//console.log(filterOption.id);
 			var enteredValue = "";
 			if(filterOption.classList[0] == "filterField") //If an input field
 			{
@@ -640,7 +639,8 @@ $(document).ready(function () {
 				$masterDrop.dropdown("remove label", filterType + "true");
 				$masterDrop.dropdown("remove value", filterType + "true");
 			}
-		}        
+		}       
+		$("#filterModal").modal("hide");
     });
 
 });
