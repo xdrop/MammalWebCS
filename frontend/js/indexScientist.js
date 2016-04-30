@@ -62,6 +62,7 @@ var csv_filename;
 
 //Page changing
 var currentPage = 1;
+var $paginationMenu = $("#paginationMenu");
 
 //DROPDOWNS
 var $masterDrop = $("#masterDrop");
