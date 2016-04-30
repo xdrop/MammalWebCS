@@ -60,6 +60,9 @@ var prevDateTimeTo = "";
 //CSV
 var csv_filename;
 
+//Page changing
+var currentPage = 1;
+
 //DROPDOWNS
 var $masterDrop = $("#masterDrop");
 var $speciesIncludeDrop = $("#speciesIncludeDrop");
@@ -225,6 +228,37 @@ function updatePageNum() {
     }
     else {
         $("#pageNum").html("Showing page 0 of 0");
+    }
+}
+
+/**
+ *
+ * @param menu selector
+ */
+function updatePaginationMenu(menu){
+    /* unhide the menu */
+    $("#tableFooter").removeClass('hidden');
+    /* remove any page buttons already there */
+    menu.find(".deletable").remove();
+    var maxPages = numberOfPages();
+    /* Display 2 pages before and 2 pages after the current page */
+    for (var i = 2; i >= -2; i--){
+        if(currentPage + i >= 1 && currentPage + i <= maxPages){
+            var pageLink;
+            if(i == 0){
+                /* mark the current page as active */
+                pageLink = $('<a class="item deletable active">' + (currentPage + i) + '</a>');
+            } else{
+                pageLink = $('<a class="item deletable">' + (currentPage + i) + '</a>');
+            }
+            pageLink.click( function() {
+                var page = parseInt($(this).text());
+                currentPage = page;
+                goToPage(page);
+                updatePaginationMenu(menu);
+            });
+            $("#prevPageBtn").after(pageLink);
+        }
     }
 }
 
