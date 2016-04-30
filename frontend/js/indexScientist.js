@@ -157,23 +157,21 @@ function firstPage() {
     }
 }
 
-//GO TH THE NEXT PAGE IN THE TABLE
+//GO TH THE NEXT PAGE IN THE TABLE 
 function nextPage() {
-    if ((resStart + resPerPage) < filterResults.length) //If not on last page
-    {
-        resStart += resPerPage;
-        document.getElementById("pagesDropdown").options[((resStart / resPerPage))].setAttribute("selected", true);
-        displayTable(filterResults);
+    if(currentPage < numberOfPages()){
+        currentPage = currentPage + 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
     }
 }
 
 //GO TO THE PREVIOUS PAGE
 function prevPage() {
-    if ((resStart - resPerPage) >= 0) //If not on first page
-    {
-        resStart -= resPerPage;
-        document.getElementById("pagesDropdown").options[((resStart / resPerPage))].setAttribute("selected", true);
-        displayTable(filterResults);
+    if(currentPage > 1){
+        currentPage = currentPage - 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
     }
 }
 
