@@ -362,6 +362,156 @@ function getRecentQueries() {
     });
 }
 
+//SORT A COLUMN OF THE TABLE
+$(".tableHead").click(function () { //If a column heading clicked
+    var tableHeads = $(".tableHead"); //All the column headings
+    for (var i = 0; i < tableHeads.length; i++) //Remove dropdown arrows from other headings
+    {
+        tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0]; //Get the column heading name - ignore the rest of the html (the icon)
+    }
+    var newSort = $(this).attr("value"); //The column being sorted. Stored so can check if same as column already being sorted. 'this' is used because coud be any of the column headings - 'this' is the one that was clicked
+    if (currentSort == newSort) //Change ordering
+    {
+        isAscending = !isAscending; //Make next click change direction
+        iconIndex = (iconIndex + 1) % 2; //Make next click change arrow direction
+    }
+    else //If sort a different column, make it so ascending by default
+    {
+        isAscending = true;
+        iconIndex = 0;
+    }
+    currentSort = newSort;
+    filterResults = sortJson(filterResults, isAscending, $(this).attr("value")); //Update filterResults with the new, sorted results
+    displayTable(filterResults); //Display results
+    this.innerHTML = this.innerHTML.split("<")[0] + icons[iconIndex];
+});
+
+function populateDropdowns(){
+	var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
+
+	//The information needed for each dropdown (4)
+	var info = {
+	    "speciesIncludeDrop": ["animal", "Include species", "green", "species"],
+	    "speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
+	    "habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
+	    "siteDrop": ["site", "Site", "yellow", "sites"],
+	    "humanCheck": ["contains_human", "Contains human", "olive"],
+	    "flaggedCheck": ["is_flagged", "Flagged", "orange"],
+	    "numSpecies": ["numSpecies", "Number of species", "black"],
+	    "numClassifications": ["numClassifications", "Number of classifications", "violet"],
+	    "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
+	    "maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
+	    "includeUser": ["includeUser", "Included user", "green"],
+	    "excludeUser": ["excludeUser", "Excluded user", "red"]
+	};
+
+	$.each(usesApi, function( index, dropName ) {
+		alert(dropName);
+	  $.getJSON('../backend/src/api/internal/list.php?item=' + info[dropName][3], function(data) {
+	  	alert(JSON.stringify(data));
+	  }
+	  	);
+	});
+}
+
+//WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3)
+$masterDrop.dropdown({
+    onChange: function (value, text) {
+        species_include.length = 0; //Resets the array. arr = [] does not work.
+        species_exclude.length = 0;
+        habitats.length = 0;
+        sites.length = 0;
+        contains_human = false;
+        is_flagged = false;
+        includedUsers.length = 0;
+        excludedUsers.length = 0;
+        numSpecies = 0;
+        minNumClassifications = 0;
+        maxNumClassifications = 0;
+        numClassifications = 0;
+        taken_start = "1970-01-01 00:00:00"; //Set dated to default values
+        taken_end = "2100-01-01 00:00:00";
+        values = $masterDrop.dropdown("get values");
+        for (var i = 0; i < values.length; i++) //Go through everything stored in the main dropdown
+        {
+            var val = values[i].split('=');
+            var filterCategory = val[0]; //The name of the filter category
+            var filterValue = val[1]; //The value of that specific filter
+            //Add the desired filters to their arrays
+            if (filterCategory == "animal") {
+                species_include.push(parseInt(filterValue));
+            }
+            else if (filterCategory == "no_animal") {
+                species_exclude.push(parseInt(filterValue));
+            }
+            else if (filterCategory == "habitat") {
+                habitats.push(parseInt(filterValue));
+            }
+            else if (filterCategory == "site") {
+                sites.push(parseInt(filterValue));
+            }
+            else if (filterCategory == "contains_human") {
+                contains_human = true;
+            }
+            else if (filterCategory == "is_flagged") {
+                is_flagged = true;
+            }
+            else if (filterCategory == "datetimeFrom") {
+                taken_start = filterValue;
+            }
+            else if (filterCategory == "datetimeTo") {
+                taken_end = filterValue;
+            }
+            else if (filterCategory == "numSpecies") {
+                numSpecies = filterValue;
+            }
+            else if (filterCategory == "numClassifications") {
+                numClassifications = filterValue;
+            }
+            else if (filterCategory == "minNumClassifications") {
+                minNumClassifications = filterValue;
+            }
+            else if (filterCategory == "maxNumClassifications") {
+                maxNumClassifications = filterValue;
+            }
+            else if (filterCategory == "includeUser") {
+                includedUsers.push(parseInt(filterValue));
+            }
+            else if (filterCategory == "excludeUser") {
+                excludedUsers.push(parseInt(filterValue));
+            }
+        }
+        applyFilter();
+    }
+});
+
+//Clear the master dropdown of all labels
+$("#clearMaster").click(function () {
+    $masterDrop.dropdown('clear');
+});
+
+$('#dateFrom').on('apply.daterangepicker', function (ev, picker) { //Executed when the apply button is clicked
+    var datetime = picker.startDate.format('YYYY-MM-DD HH:mm:ss');
+    //Remove previous datetime since only allowed one
+    $masterDrop.dropdown("remove label", "datetimeFrom=" + prevDateTimeFrom);
+    $masterDrop.dropdown("remove value", "datetimeFrom=" + prevDateTimeFrom);
+    //Add new datetime
+    $masterDrop.dropdown("add value", "datetimeFrom=" + datetime, "Date from: " + datetime);
+    $masterDrop.dropdown("add label", "datetimeFrom=" + datetime, "Date from: " + datetime, "pink");
+    prevDateTimeFrom = datetime;
+});
+
+
+//Executed when the apply button is clicked
+$('#dateTo').on('apply.daterangepicker', function (ev, picker) {
+    var datetime = picker.startDate.format('YYYY-MM-DD HH:mm:ss');
+    $masterDrop.dropdown("remove label", "datetimeTo=" + prevDateTimeTo);
+    $masterDrop.dropdown("remove value", "datetimeTo=" + prevDateTimeTo);
+    $masterDrop.dropdown("add value", "datetimeTo=" + datetime, "Date to: " + datetime);
+    $masterDrop.dropdown("add label", "datetimeTo=" + datetime, "Date to: " + datetime, "purple");
+    prevDateTimeTo = datetime;
+});
+
 $(document).ready(function () {
     var $masterDrop = $("#masterDrop");
     var $speciesIncludeDrop = $("#speciesIncludeDrop");
@@ -378,126 +528,7 @@ $(document).ready(function () {
 
     populatePagesDropdown(0); //Make the dropdown have only the value of 0 in. Looks better than a dropdown with nothing
 
-    //SORT A COLUMN OF THE TABLE
-    $(".tableHead").click(function () { //If a column heading clicked
-        var tableHeads = $(".tableHead"); //All the column headings
-        for (var i = 0; i < tableHeads.length; i++) //Remove dropdown arrows from other headings
-        {
-            tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0]; //Get the column heading name - ignore the rest of the html (the icon)
-        }
-        var newSort = $(this).attr("value"); //The column being sorted. Stored so can check if same as column already being sorted. 'this' is used because coud be any of the column headings - 'this' is the one that was clicked
-        if (currentSort == newSort) //Change ordering
-        {
-            isAscending = !isAscending; //Make next click change direction
-            iconIndex = (iconIndex + 1) % 2; //Make next click change arrow direction
-        }
-        else //If sort a different column, make it so ascending by default
-        {
-            isAscending = true;
-            iconIndex = 0;
-        }
-        currentSort = newSort;
-        filterResults = sortJson(filterResults, isAscending, $(this).attr("value")); //Update filterResults with the new, sorted results
-        displayTable(filterResults); //Display results
-        this.innerHTML = this.innerHTML.split("<")[0] + icons[iconIndex];
-    });
-
-    //Clear the master dropdown of all labels
-    $("#clearMaster").click(function () {
-        $masterDrop.dropdown('clear');
-    });
-
     $('.ui.dropdown').dropdown(); //Initialise dropdown
-
-    //WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3)
-    $masterDrop.dropdown({
-        onChange: function (value, text) {
-            species_include.length = 0; //Resets the array. arr = [] does not work.
-            species_exclude.length = 0;
-            habitats.length = 0;
-            sites.length = 0;
-            contains_human = false;
-            is_flagged = false;
-            includedUsers.length = 0;
-            excludedUsers.length = 0;
-            numSpecies = 0;
-            minNumClassifications = 0;
-            maxNumClassifications = 0;
-            numClassifications = 0;
-            taken_start = "1970-01-01 00:00:00"; //Set dated to default values
-            taken_end = "2100-01-01 00:00:00";
-            values = $masterDrop.dropdown("get values");
-            for (var i = 0; i < values.length; i++) //Go through everything stored in the main dropdown
-            {
-                var val = values[i].split('=');
-                var filterCategory = val[0]; //The name of the filter category
-                var filterValue = val[1]; //The value of that specific filter
-                //Add the desired filters to their arrays
-                if (filterCategory == "animal") {
-                    species_include.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "no_animal") {
-                    species_exclude.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "habitat") {
-                    habitats.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "site") {
-                    sites.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "contains_human") {
-                    contains_human = true;
-                }
-                else if (filterCategory == "is_flagged") {
-                    is_flagged = true;
-                }
-                else if (filterCategory == "datetimeFrom") {
-                    taken_start = filterValue;
-                }
-                else if (filterCategory == "datetimeTo") {
-                    taken_end = filterValue;
-                }
-                else if (filterCategory == "numSpecies") {
-                    numSpecies = filterValue;
-                }
-                else if (filterCategory == "numClassifications") {
-                    numClassifications = filterValue;
-                }
-                else if (filterCategory == "minNumClassifications") {
-                    minNumClassifications = filterValue;
-                }
-                else if (filterCategory == "maxNumClassifications") {
-                    maxNumClassifications = filterValue;
-                }
-                else if (filterCategory == "includeUser") {
-                    includedUsers.push(parseInt(filterValue));
-                }
-                else if (filterCategory == "excludeUser") {
-                    excludedUsers.push(parseInt(filterValue));
-                }
-            }
-            applyFilter();
-        }
-    });
-
-    var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
-
-    //The information needed for each dropdown (4)
-    var info = {
-        "newSpeciesDrop": ["animal", "Include species", "green", "species"],
-        "speciesIncludeDrop": ["animal", "Include species", "green", "species"],
-        "speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
-        "habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
-        "siteDrop": ["site", "Site", "yellow", "sites"],
-        "humanCheck": ["contains_human", "Contains human", "olive"],
-        "flaggedCheck": ["is_flagged", "Flagged", "orange"],
-        "numSpecies": ["numSpecies", "Number of species", "black"],
-        "numClassifications": ["numClassifications", "Number of classifications", "violet"],
-        "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
-        "maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
-        "includeUser": ["includeUser", "Included user", "green"],
-        "excludeUser": ["excludeUser", "Excluded user", "red"]
-    };
 
     //Add dropdown selection to main selection, and populate dropdown with api
     $(".filterOpt").dropdown({
@@ -515,26 +546,9 @@ $(document).ready(function () {
             else {
                 $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text, colour); //Add the label
             }
-            //$speciesIncludeDrop.dropdown("action hide");
-        },
-        fields: {name: "name", value: "id"},
-        apiSettings: {
-            beforeSend: function (settings) {
-                if (usesApi.indexOf(event.target.parentNode.id) != -1) {
-                    settings.url = '../backend/src/api/internal/list.php?item=' + info[event.target.parentNode.id][3]; //used instead of the url parameter because cannot seem to reference DOM element to get necessary api query (species, habitats etc.)
-                    return settings;
-                }
-                else {
-                    return false;
-                }
-
-            },
-            //url: "../backend/src/api/internal/list.php?",
-            onResponse: function (response) {
-                return {success: true, results: response};
-            }
         }
     });
+    populateDropdowns();
 
     var prevDateTimeFrom = ""; //Stores the most recent datetime. Used so can replace datetime if a new one decided.
     var prevDateTimeTo = "";
@@ -551,17 +565,6 @@ $(document).ready(function () {
         }
     );
 
-    $('#dateFrom').on('apply.daterangepicker', function (ev, picker) { //Executed when the apply button is clicked
-        var datetime = picker.startDate.format('YYYY-MM-DD HH:mm:ss');
-        //Remove previous datetime since only allowed one
-        $masterDrop.dropdown("remove label", "datetimeFrom=" + prevDateTimeFrom);
-        $masterDrop.dropdown("remove value", "datetimeFrom=" + prevDateTimeFrom);
-        //Add new datetime
-        $masterDrop.dropdown("add value", "datetimeFrom=" + datetime, "Date from: " + datetime);
-        $masterDrop.dropdown("add label", "datetimeFrom=" + datetime, "Date from: " + datetime, "pink");
-        prevDateTimeFrom = datetime;
-    });
-
     //DATE TO
     $('#dateTo').daterangepicker(
         {
@@ -573,17 +576,6 @@ $(document).ready(function () {
             timePickerIncrement: 1
         }
     );
-
-    //Executed when the apply button is clicked
-    $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
-        var datetime = picker.startDate.format('YYYY-MM-DD HH:mm:ss');
-        $masterDrop.dropdown("remove label", "datetimeTo=" + prevDateTimeTo);
-        $masterDrop.dropdown("remove value", "datetimeTo=" + prevDateTimeTo);
-        $masterDrop.dropdown("add value", "datetimeTo=" + datetime, "Date to: " + datetime);
-        $masterDrop.dropdown("add label", "datetimeTo=" + datetime, "Date to: " + datetime, "purple");
-        prevDateTimeTo = datetime;
-    });
-
 
     var prevValues = {
         "numSpecies": "",
@@ -635,7 +627,6 @@ $(document).ready(function () {
             $masterDrop.dropdown("remove label", filterType + "1", labelName + ": " + "yes", colour); //Remove the label
         }
     });
-    //$('.test.checkbox').checkbox('attach events', '.toggle.button');
     $("#scientistCheck").checkbox({
         onChange: function (text, value) {
             scientist_dataset = !scientist_dataset;
