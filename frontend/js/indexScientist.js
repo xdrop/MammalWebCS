@@ -408,7 +408,7 @@ function populateDropdowns(){
 	$.each(usesApi, function( index, dropName ) {
 		alert(dropName);
 	  $.getJSON('../backend/src/api/internal/list.php?item=' + info[dropName][3], function(data) {
-	  	alert(JSON.stringify(data));
+	  	//POPULATE HERE!
 	  }
 	  	);
 	});
