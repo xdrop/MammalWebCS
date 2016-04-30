@@ -36,6 +36,24 @@ var icons = ['<i class="dropdown icon"></i>', '<i class="dropdown icon verticall
 
 var csv_filename;
 
+var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
+
+//The information needed for each dropdown (4)
+var info = {
+    "speciesIncludeDrop": ["animal", "Include species", "green", "species"],
+    "speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
+    "habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
+    "siteDrop": ["site", "Site", "yellow", "sites"],
+    "humanCheck": ["contains_human", "Contains human", "olive"],
+    "flaggedCheck": ["is_flagged", "Flagged", "orange"],
+    "numSpecies": ["numSpecies", "Number of species", "black"],
+    "numClassifications": ["numClassifications", "Number of classifications", "violet"],
+    "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
+    "maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
+    "includeUser": ["includeUser", "Included user", "green"],
+    "excludeUser": ["excludeUser", "Excluded user", "red"]
+};
+
 //UPDATE THE NUMBER OF ROWS OF THE RESULT TABLE TO BE SHOWN
 //@param value - the number of results to be show. Options are 10, 25, 50, 100, 500 or All
 function updateResPerPage(value) {
@@ -417,6 +435,23 @@ function populateDropdowns(){
 //WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3)
 $("#masterDrop").dropdown({
     onChange: function (value, text) {
+    		var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
+
+	//The information needed for each dropdown (4)
+	var info = {
+	    "speciesIncludeDrop": ["animal", "Include species", "green", "species"],
+	    "speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
+	    "habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
+	    "siteDrop": ["site", "Site", "yellow", "sites"],
+	    "humanCheck": ["contains_human", "Contains human", "olive"],
+	    "flaggedCheck": ["is_flagged", "Flagged", "orange"],
+	    "numSpecies": ["numSpecies", "Number of species", "black"],
+	    "numClassifications": ["numClassifications", "Number of classifications", "violet"],
+	    "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
+	    "maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
+	    "includeUser": ["includeUser", "Included user", "green"],
+	    "excludeUser": ["excludeUser", "Excluded user", "red"]
+	};
         species_include.length = 0; //Resets the array. arr = [] does not work.
         species_exclude.length = 0;
         habitats.length = 0;
@@ -532,7 +567,8 @@ $(document).ready(function () {
 
     //Add dropdown selection to main selection, and populate dropdown with api
     $(".filterOpt").dropdown({
-        action: function (text, value) {	//When an option from the dropdown is chosen
+        action: function (text, value) {
+	//When an option from the dropdown is chosen
             var chosenDropdown = event.target.parentElement.parentElement.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
             console.log(chosenDropdown);
             var filterType = info[chosenDropdown][0] + "=";
