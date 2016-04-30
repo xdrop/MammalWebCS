@@ -140,6 +140,19 @@ function displayTable(json) {
     populatePagesDropdown(document.getElementById("pagesDropdown").value);
 }
 
+function numberOfPages(){
+    return Math.ceil((filterResults.length / resPerPage));
+}
+
+function truncate(string, len){
+    if (string.length > len)
+        return string.substring(0,len)+'...';
+    else
+        return string;
+}
+
+
+
 //CHANGE THE CURRENT VIEW PAGE FROM A VALUE CHOSEN FROM A DROPDOWN
 //@param pageNum - the page to go to
 function goToPage(pageNum) {
@@ -147,13 +160,22 @@ function goToPage(pageNum) {
     displayTable(filterResults);
 }
 
-//GO TO THE FIRST PAGE OF THE TABLE
-function firstPage() {
-    if (filterResults.length != 0) //Only works if something in the table
-    {
-        resStart = 0;
-        document.getElementById("pagesDropdown").options[0].setAttribute("selected", true);
+function lastPage() {
+    if (filterResults.length != 0) {
         displayTable(filterResults);
+        currentPage = numberOfPages();
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
+    }
+}
+
+
+function firstPage() {
+    if (filterResults.length != 0) {
+        displayTable(filterResults);
+        currentPage = 1;
+        goToPage(currentPage);
+        updatePaginationMenu($paginationMenu);
     }
 }
 
@@ -175,22 +197,6 @@ function prevPage() {
     }
 }
 
-//GO TO THE LAST PAGE OF THE TABLE
-function lastPage() {
-    if (filterResults.length != 0) {
-        if (filterResults.length % resPerPage != 0) //i.e. the length of filterResults = resPerPage. Ths stops it from showing empty last page when showing all
-        {
-            resStart = filterResults.length - (filterResults.length % resPerPage);
-            //console.log(resStart, resPerPage, resStart/resPerPage);
-            document.getElementById("pagesDropdown").options[resStart / resPerPage].setAttribute("selected", true);
-        }
-        else //filterResults is a multiple of resPerPage. Need this stop a blank last page.
-        {
-            resStart = filterResults.length - resPerPage;
-        }
-        displayTable(filterResults);
-    }
-}
 
 //UPDATE THE PAGE NUMBER
 function updatePageNum() {
