@@ -67,12 +67,7 @@ function sortJson(json, isAsc, attrib) //sorts json by attrib in ascending order
         sorted = sorted.sort(function (a, b) {
             var strA = a[attrib].toLowerCase(); //Since it treats uppercase as before lowercase (e.g. B > a)
             var strB = b[attrib].toLowerCase();
-            if (isAsc) {
-                return strA.localeCompare(strB);
-            }
-            else {
-                return strB.localeCompare(strA);
-            }
+            return isAsc ? strA.localeCompare(strB) : strB.localeCompare(strA);
         });
     }
     return sorted;
