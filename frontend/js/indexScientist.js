@@ -415,7 +415,7 @@ function populateDropdowns(){
 }
 
 //WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3)
-$masterDrop.dropdown({
+$("#masterDrop").dropdown({
     onChange: function (value, text) {
         species_include.length = 0; //Resets the array. arr = [] does not work.
         species_exclude.length = 0;
