@@ -56,38 +56,22 @@ function updateResPerPage(value) {
     }
 }
 
-/*SORT THE JSON RESULT
+/*SORT THE JSON RESULT 
  @param json - the json object to be sorted
  @param isAsc - whether the list is to be sorted in ascending or descending order. True if ascending
  @param attrib - the attribute to be sorted by e.g. species name */
-function sortJson(json, isAsc, attrib) //sorts json by attrib in ascending order (if isAsc == true, descending if not)
+function sortJson(json, isAsc, attrib) //sorts json by attrib in ascending order (if isAsc == true, descending if not) 
 {
     var sorted = json.slice(); //Create deep copy of the list
     if (currentSort != "") {
         sorted = sorted.sort(function (a, b) {
-            var thing1 = a[attrib].toLowerCase(); //Since it treats uppercase as before lowercase (e.g. B > a)
-            var thing2 = b[attrib].toLowerCase();
+            var strA = a[attrib].toLowerCase(); //Since it treats uppercase as before lowercase (e.g. B > a)
+            var strB = b[attrib].toLowerCase();
             if (isAsc) {
-                if (thing1 > thing2) {
-                    return 1;
-                }
-                else if (thing1 < thing2) {
-                    return -1;
-                }
-                else {
-                    return 0;
-                }
+                return strA.localeCompare(strB);
             }
             else {
-                if (thing1 < thing2) {
-                    return 1;
-                }
-                else if (thing1 > thing2) {
-                    return -1;
-                }
-                else {
-                    return 0;
-                }
+                return strB.localeCompare(strA);
             }
         });
     }
