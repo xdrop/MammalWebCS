@@ -35,6 +35,9 @@ if (isset($_GET['item'])) {
         }else if($apiParam === "habitat_counts") {
             $counts = new HabitatCountsQuery();
             echo $counts->fetch()->asJSON();
+        }else if($apiParam === "species_sites") {
+            $counts = new ChartStatsQuery();
+            echo $counts->fetch()->asJSON();
         } else if($apiParam === "queries") {
             $recentQueries = new RecentQueries();
             echo $recentQueries->fetch()->asJSON();
