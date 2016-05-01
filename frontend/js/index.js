@@ -509,6 +509,7 @@ function applyFilter(customFilter) //If the filter button is pressed
 	//alert("OK");
     if (arguments.length > 0) {
         filters = customFilter;
+        console.log(filters);
     } else {
         filters = {}; //reset filters
         if (species_include.length != 0) {
