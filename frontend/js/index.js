@@ -1,11 +1,4 @@
-/* TO DO:
- - Make filter buttons either not searchable (preferred), or make search work
- */
-/*
- WHEN ADDING A NEW FILTER CATEGORY MUST ADD DATA AT MULTIPLE PLACES - THEY ARE NUMBERED LIKE THIS (1)
- */
-
- var slider;
+var slider;
 
 //FILTER CRITERIA (1)
 var filters = {}; //Stores the filters to be applied. The different filters are ANDed together i.e. badger AND forest. Within filter they are ORed e.g. badger OR fox
@@ -35,25 +28,6 @@ var isAscending = true; //Whether the column being sorted is ascending or descen
 var currentSort = ""; //The attribute (table heading) currently being sorted
 var iconIndex = 0; //The direction of the icon. 0 is down, 1 is up.
 var icons = ['<i class="dropdown icon"></i>', '<i class="dropdown icon vertically flipped"></i>']; //The two icons
-
-//Dropdown population
-var usesApi = ["newSpeciesDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
-//The information needed for each dropdown (4)
-var info = {
-	"newSpeciesDrop": ["animal", "Include species", "green", "species"],
-	"speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
-	"habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
-	"siteDrop": ["site", "Site", "yellow", "sites"],
-	"humanCheck": ["contains_human", "Contains human", "olive"],
-	"flaggedCheck": ["is_flagged", "Flagged", "orange"],
-	"scientistCheck":["scientist_dataset", "Scientist dataset", "blue"],
-	"numSpecies": ["numSpecies", "Number of species", "black"],
-	"numClassifications": ["numClassifications", "Number of classifications", "violet"],
-	"minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
-	"maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
-	"includeUser": ["includeUser", "Include user", "green"],
-	"excludeUser": ["excludeUser", "Exclude user", "red"]
-};
 
 //Date/time variables
 var prevDateTimeFrom = ""; //Stores the most recent datetime. Used so can replace datetime if a new one decided.
@@ -466,7 +440,7 @@ function updatePaginationMenu(menu){
     menu.find(".deletable").remove();
     var maxPages = numberOfPages();
     /* Display 2 pages before and 2 pages after the current page */
-    for (var i = 2; i >= -2; i--){
+    for (var i = 1; i >= -1; i--){
         if(currentPage + i >= 1 && currentPage + i <= maxPages){
             var pageLink;
             if(i == 0){
@@ -567,7 +541,6 @@ function applyFilter(customFilter) //If the filter button is pressed
             filters.scientist_dataset = true;
         }
     }
-	//filters.query = true;
     //alert(JSON.stringify(filters));
     $.ajax({
         url: "../backend/src/api/internal/filter.php",
@@ -665,28 +638,6 @@ function populateDropdowns(){
 	});
 }
 
-//WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3)
-$("#masterDrop").dropdown({
-    onChange: function (value, text) {
-    		var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
-
-	//The information needed for each dropdown (4)
-	var info = {
-	    "speciesIncludeDrop": ["animal", "Include species", "green", "species"],
-	    "speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
-	    "habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
-	    "siteDrop": ["site", "Site", "yellow", "sites"],
-	    "humanCheck": ["contains_human", "Contains human", "olive"],
-	    "flaggedCheck": ["is_flagged", "Flagged", "orange"],
-	    "numSpecies": ["numSpecies", "Number of species", "black"],
-	    "numClassifications": ["numClassifications", "Number of classifications", "violet"],
-	    "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
-	    "maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
-	    "includeUser": ["includeUser", "Included user", "green"],
-	    "excludeUser": ["excludeUser", "Excluded user", "red"]
-	};
-}
-});
 $("#filterStore").change(function(){
 		$('.filterOpt').dropdown('hide');
         species_include.length = 0; //Resets the array. arr = [] does not work.
@@ -768,7 +719,7 @@ $('#dateFrom').on('apply.daterangepicker', function (ev, picker) { //Executed wh
     $masterDrop.dropdown("remove value", "datetimeFrom=" + prevDateTimeFrom);
     //Add new datetime
     $masterDrop.dropdown("add value", "datetimeFrom=" + datetime, "Date from: " + datetime);
-    $masterDrop.dropdown("add label", "datetimeFrom=" + datetime, "Date from: " + datetime, "pink");
+    $masterDrop.dropdown("add label", "datetimeFrom=" + datetime, "Date from: " + datetime);
     prevDateTimeFrom = datetime;
 });
 
@@ -779,7 +730,7 @@ $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
     $masterDrop.dropdown("remove label", "datetimeTo=" + prevDateTimeTo);
     $masterDrop.dropdown("remove value", "datetimeTo=" + prevDateTimeTo);
     $masterDrop.dropdown("add value", "datetimeTo=" + datetime, "Date to: " + datetime);
-    $masterDrop.dropdown("add label", "datetimeTo=" + datetime, "Date to: " + datetime, "purple");
+    $masterDrop.dropdown("add label", "datetimeTo=" + datetime, "Date to: " + datetime);
     prevDateTimeTo = datetime;
 });
 
@@ -801,14 +752,13 @@ $(document).ready(function () {
             var chosenDropdown = event.target.parentElement.parentElement.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
             var filterType = info[chosenDropdown][0] + "=";
             var labelName = info[chosenDropdown][1];
-            var colour = info[chosenDropdown][2];
             $masterDrop.dropdown("add value", filterType + value)//, labelName + ": " + text); //Add the value
             if (chosenDropdown == "habitatDrop") //Only show the first word of the habitat
             {
-                $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text.substr(0, text.indexOf(' ')), colour);
+                $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text.substr(0, text.indexOf(' ')));
             }
             else {
-                $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text, colour); //Add the label
+                $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text); //Add the label
             }
         }
     });
@@ -870,7 +820,6 @@ $(document).ready(function () {
 			var chosenCheck = filterOption.id; //The filter that has been chosen.
 			var filterType = info[chosenCheck][0] + "="; //Name of the filter
 			var labelName = info[chosenCheck][1]; //What goes on the label
-			var colour = info[chosenCheck][2]; //Colour of the label
 			if(enteredValue != "false" && enteredValue != "") //If a value has been chosen
 			{
 				if (prevValues.hasOwnProperty(chosenCheck) == true) //If it is a filter that can only be added once
@@ -884,11 +833,11 @@ $(document).ready(function () {
 				$masterDrop.dropdown("add value", filterType + enteredValue); //Add the value
 				if(filterOption.classList[0] == "filterCheck") //If a checkbox
 				{
-					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": Yes", colour); //Add the label for a checkbox
+					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": Yes"); //Add the label for a checkbox
 				}
 				else //If a form that has a number entered
 				{
-					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue, colour); //Add the label
+					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue); //Add the label
 				}
 				if (prevValues.hasOwnProperty(chosenCheck) == true) //Store the values so any values already there are known so does not put more than one label for categories that are not allowed
 				{
