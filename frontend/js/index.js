@@ -96,9 +96,9 @@ function slideshow(){
     // $("#resultsTable:eq(0) tr").each(function(){
     //   alert( $(this).html());
     // });
-    $("#resultsTable").find('a').attr('href').each(function(){
-        alert($(this));
-    });
+    $("#resultsTable").find('a').each(function() {
+    console.log($(this).attr('href'));
+});
 
     $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
 
