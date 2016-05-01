@@ -93,11 +93,9 @@ $("#slideshowButton").click(function(){
 })
 
 function slideshow(){
-    // $("#resultsTable:eq(0) tr").each(function(){
-    //   alert( $(this).html());
-    // });
-    $("#resultsTable").find('a').each(function() {
+    $("#resultsTable:eq(0) tr").find('a').each(function() {
     console.log($(this).attr('href'));
+
 });
 
     $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
