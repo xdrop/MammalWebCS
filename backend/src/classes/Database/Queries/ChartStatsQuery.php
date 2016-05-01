@@ -45,10 +45,25 @@ class ChartStatsQuery extends Query
                 }
             }
         }
+
         $field = [];
         foreach($map as $entry){
             preg_match("/([\\w\\s]+)\\s?/",$entry['name'],$matches);
             $field[] = ["species"=> $matches[1], "freq" => $entry['freq']];
+        }
+        $sites = [];
+        foreach($field as $last){
+            $sites[] = $last['freq'];
+        }
+
+        foreach($sites as $siteList){
+            foreach($siteList as $site => $val){
+                foreach($field as &$entry){
+                    if(!isset($entry['freq'][$site])){
+                        $entry['freq'][$site] = 0;
+                    }
+                }
+            }
         }
         return $field;
     }
