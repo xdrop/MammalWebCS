@@ -88,15 +88,9 @@ var $speciesExcludeDrop = $("#speciesExcludeDrop");
 var $habitatDrop = $("#habitatDrop");
 var $siteDrop = $("#siteDrop");
 
-$("#slideshowButton").click(function(){
-    slideshow();
-    $('.bxslider').bxSlider(
-    {
-    autoControls: true,
-    auto: true,
-    captions: true
-    });
-})
+// $("#slideshowButton").click(function(){
+
+// })
 
 function slideshow(){
     $("#resultsTable:eq(0) tr").find('a').each(function() {
@@ -617,6 +611,13 @@ $(".tabMenu").click(function(event) {
 	} else if($(this).attr('id') == "chartMenu") {
 		$("#chartTab").addClass('active');
 	} else if ($(this).attr('id') == "statMenu"){
+        slideshow();
+        $('.bxslider').bxSlider(
+        {
+        autoControls: true,
+        auto: true,
+        captions: true
+        });
 		$("#statTab").addClass('active');
 	}
 });
