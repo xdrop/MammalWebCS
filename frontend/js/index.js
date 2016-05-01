@@ -88,6 +88,14 @@ var $speciesExcludeDrop = $("#speciesExcludeDrop");
 var $habitatDrop = $("#habitatDrop");
 var $siteDrop = $("#siteDrop");
 
+function slideshow(){
+    $("#resultsTable:eq(0) tr").each(function(){
+      alert( $(this).find('td:first[rowspan]').html() );
+    });
+    $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
+
+}
+
 function dashboard(id, fData){
     var barColor = '#c10c0c';
     function segColor(c){ return {forest:"#e31f1f", woodland:"#e74242",scrubland:"#ec6464", grassland:"#f08787", swamp:"#f4aaaa", riverbank:"#f9cdcd", garden:"#fdf0f0"}[c]; }
@@ -899,9 +907,9 @@ $(document).ready(function () {
     ,{species:'Grey squirrel',freq:{forest:932, woodland:2149, scrubland:418, grassland:96, swamp:45, riverbank:2458, garden:89}}
     ,{species:'Rabbit',freq:{forest:832, woodland:1152, scrubland:1862, grassland:1022, swamp:458, riverbank:854, garden:125}}
     ,{species:'Red fox',freq:{forest:4481, woodland:3304, scrubland:948, grassland:1742, swamp:1234, riverbank:225, garden:1543}}
-    ,{species:'Roe Deer',freq:{forest:1619, woodland:167, scrubland:1063, grassland:62, swamp:1852, riverbank:2304, garden:1234}}
-    ,{species:'Woodpigeon',freq:{forest:1819, woodland:247, scrubland:1203, grassland:741, swamp:23, riverbank:421, garden:0}}
-    ,{species:'Small rodent',freq:{forest:4498, woodland:3852, scrubland:942, grassland:236, swamp:71, riverbank:98, garden:152}}
+    // ,{species:'Roe Deer',freq:{forest:1619, woodland:167, scrubland:1063, grassland:62, swamp:1852, riverbank:2304, garden:1234}}
+    // ,{species:'Woodpigeon',freq:{forest:1819, woodland:247, scrubland:1203, grassland:741, swamp:23, riverbank:421, garden:0}}
+    // ,{species:'Small rodent',freq:{forest:4498, woodland:3852, scrubland:942, grassland:236, swamp:71, riverbank:98, garden:152}}
     ];
 
     dashboard('#chartTab',freqData);
