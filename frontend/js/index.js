@@ -94,7 +94,7 @@ $("#slideshowButton").click(function(){
 
 function slideshow(){
     $("#resultsTable:eq(0) tr").each(function(){
-      alert( $(this).find('td:first[rowspan]').html() );
+      alert( $(this).html() );
     });
     $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
 
