@@ -38,7 +38,7 @@ class ChartStatsQuery extends Query
                 $map[$species]['freq'] = $habitatCount;
                 $map[$species]['name'] = $species;
             } else{
-                if(!isset($map[$species][$habitat])){
+                if(!isset($map[$species]['freq'][$habitat])){
                     $map[$species]['freq'][$habitat] = 1;
                 } else{
                     $map[$species]['freq'][$habitat] += 1;
