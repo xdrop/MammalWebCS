@@ -392,6 +392,19 @@ function applyFilter(customFilter) //If the filter button is pressed
 
 };
 
+$(".tabMenu").click(function(event) {
+	$(".tabMenu").removeClass('active');
+	$(".tab").removeClass("active");
+	$(this).addClass('active');
+	if ($(this).attr('id') == "resMenu") {
+		$("#tableHeadings").addClass('active');
+	} else if($(this).attr('id') == "chartMenu") {
+		$("#chartTab").addClass('active');
+	} else if ($(this).attr('id') == "statMenu"){
+		$("#statTab").addClass('active');
+	}
+});
+
 function getRecentQueries() {
     $.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function (data) {
         var resQueries = $("#recentQueries");
