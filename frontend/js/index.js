@@ -97,6 +97,12 @@ function slideshow(){
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
         console.log($(this).attr('href'));
 });
+    $('.bxslider').bxSlider(
+    {
+    autoControls: true,
+    auto: true,
+    captions: true
+    });
 }
 
 function dashboard(id, fData){
@@ -918,11 +924,4 @@ $(document).ready(function () {
     ];
 
     dashboard('#chartTab',freqData);
-
-    $('.bxslider').bxSlider(
-    {
-    autoControls: true,
-    auto: true,
-    captions: true
-    });
 });
