@@ -17,7 +17,6 @@ class ChartStatsQuery extends Query
                       ->leftJoin('site ON photo.site_id = site.site_id')
                       ->leftJoin('options AS species ON classified.species = species.option_id')
                       ->limit(10000);
-                      $this->db->debug =true;
 
         $this->addFetchQuery($query);
     }
