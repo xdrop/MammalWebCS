@@ -74,10 +74,21 @@ function slideshow(){
 
 function dashboard(id, fData){
     var barColor = '#c10c0c';
-    function segColor(c){ return {forest:"#e31f1f", woodland:"#e74242",scrubland:"#ec6464", grassland:"#f08787", swamp:"#f4aaaa", riverbank:"#f9cdcd", garden:"#fdf0f0"}[c]; }
+
+    function segColor(c){ return {"River-cam":"#e31f1f", "near Josephine Butler allotment":"#e74242",
+        "Ustinov woods":"#ec6464", "SBBS Little High Wood":"#f08787", "Flass Vale":"#f4aaaa",
+        "Red Burn Meadow":"#f9cdcd", "Rainton Meadows wildlife garden":"#fdf0f0"}[c]; }
 
     // compute total for each species.
-    fData.forEach(function(d){d.total=d.freq.forest+d.freq.woodland+d.freq.scrubland+d.freq.grassland+d.freq.swamp+d.freq.riverbank+d.freq.garden;});
+    fData.forEach(function(d){
+        d.total = 0;
+        var keys = Object.keys(d.freq);
+        for (var i = 0; i < keys.length; i++) {
+            // use val
+            d.total += parseInt(d.freq[keys[i]]);
+        }
+        d.total = Math.log(d.total);
+    });
 
     // function to handle histogram.
     function histoGram(fD){
@@ -119,7 +130,7 @@ function dashboard(id, fData){
             .on("mouseout",mouseout);// mouseout is defined below.
 
         //Create the frequency labels above the rectangles.
-        bars.append("text").text(function(d){ return d3.format(",")(d[1])})
+        bars.append("text").text(function(d){ return d3.format(",")(Math.ceil(Math.pow(Math.E,d[1])))})
             .attr("x", function(d) { return x(d[0])+x.rangeBand()/2; })
             .attr("y", function(d) { return y(d[1])-5; })
             .attr("text-anchor", "middle");
@@ -158,7 +169,7 @@ function dashboard(id, fData){
             bars.select("text").transition().duration(500)
                 .text(function(d){ return d3.format(",")(d[1])})
                 .attr("y", function(d) {return y(d[1])-5; });
-        }
+        };
         return hG;
     }
 
@@ -247,7 +258,7 @@ function dashboard(id, fData){
 
             // update the percentage column.
             l.select(".legendPerc").text(function(d){ return getLegend(d,nD);});
-        }
+        };
 
         function getLegend(d,aD){ // Utility function to compute percentage.
             return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
@@ -257,7 +268,8 @@ function dashboard(id, fData){
     }
 
     // calculate total frequency by segment for all species.
-    var tF = ['forest','woodland','scrubland','grassland','swamp','riverbank','garden'].map(function(d){
+    var tF = ['River-cam','near Josephine Butler allotment','Ustinov woods','SBBS Little High Wood','Flass Vale',
+        'Red Burn Meadow','Rainton Meadows wildlife garden'].map(function(d){
         return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))};
     });
 
@@ -409,6 +421,7 @@ function nextPage() {
         updatePaginationMenu($paginationMenu);
     }
 }
+
 
 //GO TO THE PREVIOUS PAGE
 function prevPage() {
@@ -859,18 +872,12 @@ $(document).ready(function () {
     });
     applyFilter();
 
-    var freqData=[
-    {species:'Badger',freq:{forest:4786, woodland:1319, scrubland:249, grassland:457, swamp:324, riverbank:478, garden:1234}}
-    ,{species:'Blackbird',freq:{forest:1101, woodland:412, scrubland:674, grassland:412, swamp:522, riverbank:1569, garden:135}}
-    ,{species:'Grey squirrel',freq:{forest:932, woodland:2149, scrubland:418, grassland:96, swamp:45, riverbank:2458, garden:89}}
-    ,{species:'Rabbit',freq:{forest:832, woodland:1152, scrubland:1862, grassland:1022, swamp:458, riverbank:854, garden:125}}
-    ,{species:'Red fox',freq:{forest:4481, woodland:3304, scrubland:948, grassland:1742, swamp:1234, riverbank:225, garden:1543}}
-    // ,{species:'Roe Deer',freq:{forest:1619, woodland:167, scrubland:1063, grassland:62, swamp:1852, riverbank:2304, garden:1234}}
-    // ,{species:'Woodpigeon',freq:{forest:1819, woodland:247, scrubland:1203, grassland:741, swamp:23, riverbank:421, garden:0}}
-    // ,{species:'Small rodent',freq:{forest:4498, woodland:3852, scrubland:942, grassland:236, swamp:71, riverbank:98, garden:152}}
-    ];
 
-    dashboard('#chartTab',freqData);
+    $.getJSON("../backend/src/api/internal/list.php?item=species_sites", function (data){
+        dashboard('#chartTab',data);
+    });
+
+
     slider = $('.bxslider').bxSlider(
     {
     autoControls: true,
