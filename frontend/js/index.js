@@ -93,10 +93,11 @@ var $siteDrop = $("#siteDrop");
 // })
 
 function slideshow(){
+    $("#slide").innerHTML="";
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
-        console.log($(this).attr('href'));
 });
+    $("#slide").reloadSlider();
 }
 
 function dashboard(id, fData){
@@ -612,12 +613,6 @@ $(".tabMenu").click(function(event) {
 		$("#chartTab").addClass('active');
 	} else if ($(this).attr('id') == "statMenu"){
         slideshow();
-        $('.bxslider').bxSlider(
-        {
-        autoControls: true,
-        auto: true,
-        captions: true
-        });
 		$("#statTab").addClass('active');
 	}
 });
@@ -925,4 +920,11 @@ $(document).ready(function () {
     ];
 
     dashboard('#chartTab',freqData);
+
+    $('.bxslider').bxSlider(
+    {
+    autoControls: true,
+    auto: true,
+    captions: true
+    });
 });
