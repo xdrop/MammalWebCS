@@ -694,5 +694,6 @@ $(document).ready(function () {
 		}
 		$("#filterModal").modal("hide");
     });
+    applyFilter();
 
 });
