@@ -71,9 +71,9 @@
 </head>
 <body>
 
-<div class="ui top attached secondary pointing menu">
+<div class="ui top attached secondary red pointing menu">
     <a class="active item" href="index.html"><i class="filter icon"></i>Filtering</a>
-    <a class="right item" href="configuration.html"><i class="configure icon"></i>Configuration</a>
+    <a class="right item" href="configuration.html" style="color:#db2828"><i class="configure icon"></i>Configuration</a>
 </div>
 
 <div style="margin-top: 20px;" class="ui grid">
@@ -84,7 +84,6 @@
 		</div>
 		<!-- Main filter and results -->
         <div class="ten wide column">
-
             <!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
             <div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
                 <input name="country" type="hidden" id="filterStore"></input>
@@ -171,7 +170,7 @@
 						<tfoot id="tableFooter">
 						<tr>
 							<th colspan="10">
-								<div class="ui three column grid" style="text-align:center; visibility: hidden;" id="pageInfo">
+								<div class="ui three column grid" style="text-align:center;" id="pageInfo">
 
 									<div class="column middle aligned content">
 										<label style="margin-right: 5px" for="resPerPage">Results per page:</label><select
@@ -288,7 +287,7 @@
             </div>
 		<!--Recent queries-->
         <div class="three wide column">
-            <div class="ui container" style="top: 25%; position: absolute; margin-top: 0! important; width: auto;">
+            <div class="ui container" style="top: 20%; position: static; margin-top: 4%; width: auto;">
                 <div class="ui red dividing header">
                     <i class="history icon"></i>
                     <div style="margin-left: 0%" class="content">
