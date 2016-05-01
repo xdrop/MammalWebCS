@@ -90,6 +90,7 @@ var $siteDrop = $("#siteDrop");
 
 $("#slideshowButton").click(function(){
     slideshow();
+    $("#slideshowModal").modal("show");
 })
 
 function slideshow(){
@@ -515,7 +516,7 @@ function populatePagesDropdown(currentValue) {
 }
 
 $("#moreOptions").click(function () {
-    $('.ui.modal')
+    $('#filterModal')
         .modal('show')
     ;
 })
