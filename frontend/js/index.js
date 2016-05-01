@@ -1,11 +1,4 @@
-/* TO DO:
- - Make filter buttons either not searchable (preferred), or make search work
- */
-/*
- WHEN ADDING A NEW FILTER CATEGORY MUST ADD DATA AT MULTIPLE PLACES - THEY ARE NUMBERED LIKE THIS (1)
- */
-
- var slider;
+var slider;
 
 //FILTER CRITERIA (1)
 var filters = {}; //Stores the filters to be applied. The different filters are ANDed together i.e. badger AND forest. Within filter they are ORed e.g. badger OR fox
@@ -23,7 +16,7 @@ var maxNumClassifications = 0;
 var numClassifications = 0;
 var taken_start = "1970-01-01 00:00:00"; //Must have both dates/time so these are the default values
 var taken_end = "2100-01-01 00:00:00";
-var scientist_dataset = true;
+var scientist_dataset = false;
 
 //RESULTS AND TABLE VARIABLES
 var filterResults = []; //Holds the json of the most recent filter results
@@ -497,6 +490,7 @@ $("#moreOptions").click(function () {
 //APPLY THE FILTER (2)
 function applyFilter(customFilter) //If the filter button is pressed
 {
+	$("#filterLoader").attr("class", "ui active inverted dimmer");
 	//alert("OK");
     if (arguments.length > 0) {
         filters = customFilter;
@@ -549,7 +543,6 @@ function applyFilter(customFilter) //If the filter button is pressed
             filters.scientist_dataset = true;
         }
     }
-	//filters.query = true;
     //alert(JSON.stringify(filters));
     $.ajax({
         url: "../backend/src/api/internal/filter.php",
@@ -557,10 +550,10 @@ function applyFilter(customFilter) //If the filter button is pressed
         data: {"params": JSON.stringify(filters)},
         success: function (json) {
             $("#tableHeadings").attr("style", "visibilty:visible");
-            $("#pageInfo").attr("style", "text-align:center; visibility:visible;");
             resStart = 0; //Start at the first result
             filterResults = json.results; //Store the result
             displayTable(filterResults); //Display the result
+			$("#filterLoader").attr("class", "ui inverted dimmer");
             updatePageNum(); //Update the page numbers
             var tableHeads = $(".tableHead");
             for (var i = 0; i < tableHeads.length; i++) //Remove dropdown arrows from other headings
@@ -574,6 +567,7 @@ function applyFilter(customFilter) //If the filter button is pressed
         },
         error: function () {
             //alert("It does not work...");
+			$("#filterLoader").attr("class", "ui inverted dimmer");
             filterResults = []; //Store the result as empty
             displayTable("NO RESULT");
             updatePageNum();
@@ -587,7 +581,7 @@ $(".tabMenu").click(function(event) {
 	$(".tab").removeClass("active");
 	$(this).addClass('active');
 	if ($(this).attr('id') == "resMenu") {
-		$("#tableHeadings").addClass('active');
+		$("#tableTab").addClass('active');
 	} else if($(this).attr('id') == "chartMenu") {
 		$("#chartTab").addClass('active');
 	} else if ($(this).attr('id') == "statMenu"){
@@ -647,28 +641,6 @@ function populateDropdowns(){
 	});
 }
 
-//WHEN THERE IS A CHANGE IN THE MAIN DROPDOWN (3)
-$("#masterDrop").dropdown({
-    onChange: function (value, text) {
-    		var usesApi = ["speciesIncludeDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
-
-	//The information needed for each dropdown (4)
-	var info = {
-	    "speciesIncludeDrop": ["animal", "Include species", "green", "species"],
-	    "speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
-	    "habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
-	    "siteDrop": ["site", "Site", "yellow", "sites"],
-	    "humanCheck": ["contains_human", "Contains human", "olive"],
-	    "flaggedCheck": ["is_flagged", "Flagged", "orange"],
-	    "numSpecies": ["numSpecies", "Number of species", "black"],
-	    "numClassifications": ["numClassifications", "Number of classifications", "violet"],
-	    "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
-	    "maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
-	    "includeUser": ["includeUser", "Included user", "green"],
-	    "excludeUser": ["excludeUser", "Excluded user", "red"]
-	};
-}
-});
 $("#filterStore").change(function(){
 		$('.filterOpt').dropdown('hide');
         species_include.length = 0; //Resets the array. arr = [] does not work.
@@ -787,7 +759,7 @@ $(document).ready(function () {
             $masterDrop.dropdown("add value", filterType + value)//, labelName + ": " + text); //Add the value
             if (chosenDropdown == "habitatDrop") //Only show the first word of the habitat
             {
-                $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text.substr(0, text.indexOf(' ')), colour);
+                $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text.substr(0, text.indexOf(' ')));
             }
             else {
                 $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text); //Add the label
