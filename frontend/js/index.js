@@ -605,7 +605,7 @@ $(".tabMenu").click(function(event) {
 	$(".tab").removeClass("active");
 	$(this).addClass('active');
 	if ($(this).attr('id') == "resMenu") {
-		$("#tableHeadings").addClass('active');
+		$("#tableTab").addClass('active');
 	} else if($(this).attr('id') == "chartMenu") {
 		$("#chartTab").addClass('active');
 	} else if ($(this).attr('id') == "statMenu"){
