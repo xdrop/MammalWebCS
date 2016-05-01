@@ -88,6 +88,10 @@ var $speciesExcludeDrop = $("#speciesExcludeDrop");
 var $habitatDrop = $("#habitatDrop");
 var $siteDrop = $("#siteDrop");
 
+$("#slideshowButton").click(function(){
+    slideshow();
+})
+
 function slideshow(){
     $("#resultsTable:eq(0) tr").each(function(){
       alert( $(this).find('td:first[rowspan]').html() );
