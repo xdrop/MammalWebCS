@@ -94,12 +94,9 @@ $("#slideshowButton").click(function(){
 
 function slideshow(){
     $("#resultsTable:eq(0) tr").find('a').each(function() {
-    console.log($(this).attr('href'));
-
+        $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
+        console.log($(this).attr('href'));
 });
-
-    $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
-
 }
 
 function dashboard(id, fData){
