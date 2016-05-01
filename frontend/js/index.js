@@ -90,6 +90,12 @@ var $siteDrop = $("#siteDrop");
 
 $("#slideshowButton").click(function(){
     slideshow();
+    $('.bxslider').bxSlider(
+    {
+    autoControls: true,
+    auto: true,
+    captions: true
+    });
 })
 
 function slideshow(){
@@ -918,11 +924,4 @@ $(document).ready(function () {
     ];
 
     dashboard('#chartTab',freqData);
-
-    $('.bxslider').bxSlider(
-    {
-    autoControls: true,
-    auto: true,
-    captions: true
-    });
 });
