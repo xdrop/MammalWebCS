@@ -5,6 +5,8 @@
  WHEN ADDING A NEW FILTER CATEGORY MUST ADD DATA AT MULTIPLE PLACES - THEY ARE NUMBERED LIKE THIS (1)
  */
 
+ var slider;
+
 //FILTER CRITERIA (1)
 var filters = {}; //Stores the filters to be applied. The different filters are ANDed together i.e. badger AND forest. Within filter they are ORed e.g. badger OR fox
 var species_include = []; //Stores the species to be included i.e. photos with any of these animals in
@@ -93,12 +95,6 @@ var $siteDrop = $("#siteDrop");
 // })
 
 function slideshow(){
-    var slider = $('.bxslider').bxSlider(
-    {
-    autoControls: true,
-    auto: true,
-    captions: true
-    });
     $("#slide").empty();
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
@@ -926,4 +922,10 @@ $(document).ready(function () {
     ];
 
     dashboard('#chartTab',freqData);
+    slider = $('.bxslider').bxSlider(
+    {
+    autoControls: true,
+    auto: true,
+    captions: true
+    });
 });
