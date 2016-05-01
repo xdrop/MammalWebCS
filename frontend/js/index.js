@@ -95,7 +95,6 @@ var $siteDrop = $("#siteDrop");
 // })
 
 function slideshow(){
-    $("#slide").empty();
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
 });
