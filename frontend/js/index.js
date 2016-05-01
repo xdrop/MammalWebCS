@@ -550,6 +550,7 @@ function applyFilter(customFilter) //If the filter button is pressed
         data: {"params": JSON.stringify(filters)},
         success: function (json) {
             $("#tableHeadings").attr("style", "visibilty:visible");
+			//$("#pageInfo").attr("style", "text-align:center; visibility:visible;");
             resStart = 0; //Start at the first result
             filterResults = json.results; //Store the result
             displayTable(filterResults); //Display the result
