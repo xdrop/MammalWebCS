@@ -94,7 +94,7 @@ $("#slideshowButton").click(function(){
 
 function slideshow(){
     $("#resultsTable:eq(0) tr").each(function(){
-      alert( $(this).html() );
+      alert( $(this).html().attr('href') );
     });
     $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
 
