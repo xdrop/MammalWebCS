@@ -77,7 +77,6 @@ var info = {
     "includeUser": ["includeUser", "Included user", "green"],
     "excludeUser": ["excludeUser", "Excluded user", "red"]
 };
-=======
 //Page changing
 var currentPage = 1;
 var $paginationMenu = $("#paginationMenu");
@@ -464,7 +463,6 @@ $("#masterDrop").dropdown({
 	    "includeUser": ["includeUser", "Included user", "green"],
 	    "excludeUser": ["excludeUser", "Excluded user", "red"]
 	};
-=======
 $("#filterStore").change(function(){
 		$('.filterOpt').dropdown('hide');
         species_include.length = 0; //Resets the array. arr = [] does not work.
