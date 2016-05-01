@@ -517,6 +517,7 @@ function applyFilter(customFilter) //If the filter button is pressed
 	//alert("OK");
     if (arguments.length > 0) {
         filters = customFilter;
+        filters.query = false;
     } else {
         filters = {}; //reset filters
         if (species_include.length != 0) {
@@ -586,6 +587,7 @@ function applyFilter(customFilter) //If the filter button is pressed
 			//console.log(JSON.stringify(filters));
             //$("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json);
             document.getElementById("csvButton").disabled = false;
+            updatePaginationMenu($paginationMenu);
         },
         error: function () {
             //alert("It does not work...");
