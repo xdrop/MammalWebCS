@@ -919,4 +919,10 @@ $(document).ready(function () {
 
     dashboard('#chartTab',freqData);
 
+    $('.bxslider').bxSlider(
+    {
+    autoControls: true,
+    auto: true,
+    captions: true
+    });
 });
