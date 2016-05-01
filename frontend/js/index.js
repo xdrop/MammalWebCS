@@ -16,7 +16,7 @@ var maxNumClassifications = 0;
 var numClassifications = 0;
 var taken_start = "1970-01-01 00:00:00"; //Must have both dates/time so these are the default values
 var taken_end = "2100-01-01 00:00:00";
-var scientist_dataset = false;
+var scientist_dataset = true;
 
 //RESULTS AND TABLE VARIABLES
 var filterResults = []; //Holds the json of the most recent filter results
@@ -46,7 +46,7 @@ var info = {
     "siteDrop": ["site", "Site", "yellow", "sites"],
     "humanCheck": ["contains_human", "Contains human", "olive"],
     "flaggedCheck": ["is_flagged", "Flagged", "orange"],
-	"scientistCheck":["scientist_dataset", "Scientist dataset", "blue"],
+    "scientistCheck":["scientist_dataset", "Scientist dataset", "blue"],
     "numSpecies": ["numSpecies", "Number of species", "black"],
     "numClassifications": ["numClassifications", "Number of classifications", "violet"],
     "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
