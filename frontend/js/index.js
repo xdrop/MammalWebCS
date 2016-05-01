@@ -68,7 +68,7 @@ var $siteDrop = $("#siteDrop");
 function slideshow(){
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
-});
+    });
     slider.reloadSlider();
 }
 
@@ -94,7 +94,7 @@ function dashboard(id, fData){
     function histoGram(fD){
         var hG={},    hGDim = {t: 60, r: 0, b: 30, l: 0};
         hGDim.w = 500 - hGDim.l - hGDim.r,
-        hGDim.h = 300 - hGDim.t - hGDim.b;
+            hGDim.h = 300 - hGDim.t - hGDim.b;
 
         //create svg for histogram.
         var hGsvg = d3.select(id).append("svg")
@@ -104,7 +104,7 @@ function dashboard(id, fData){
 
         // create function for x-axis mapping.
         var x = d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.1)
-                .domain(fD.map(function(d) { return d[0]; }));
+            .domain(fD.map(function(d) { return d[0]; }));
 
         // Add x-axis to the histogram svg.
         hGsvg.append("g").attr("class", "x axis")
@@ -113,11 +113,11 @@ function dashboard(id, fData){
 
         // Create function for y-axis map.
         var y = d3.scale.linear().range([hGDim.h, 0])
-                .domain([0, d3.max(fD, function(d) { return d[1]; })]);
+            .domain([0, d3.max(fD, function(d) { return d[1]; })]);
 
         // Create bars for histogram to contain rectangles and freq labels.
         var bars = hGsvg.selectAll(".bar").data(fD).enter()
-                .append("g").attr("class", "bar");
+            .append("g").attr("class", "bar");
 
         //create the rectangles.
         bars.append("rect")
@@ -210,7 +210,7 @@ function dashboard(id, fData){
         function mouseout(d){
             // call the update function of histogram with all data.
             hG.update(fData.map(function(v){
-                return [v.species,v.total];}), barColor);
+                return [v.species,Math.ceil(Math.pow(Math.E,v.total))];}), barColor);
         }
         // Animating the pie-slice requiring a custom function which specifies
         // how the intermediate paths should be drawn.
@@ -350,7 +350,7 @@ function displayTable(json) {
             a.href = obj.url; // Insted of calling setAttribute, sets the link to the image
             a.innerHTML = "View"; // <a>INNER_TEXT</a>
 
-			if (obj.flagged == 0) //If not flagged
+            if (obj.flagged == 0) //If not flagged
             {
                 data = "<tr class='center aligned'>";
             }
@@ -503,8 +503,8 @@ $("#moreOptions").click(function () {
 //APPLY THE FILTER (2)
 function applyFilter(customFilter) //If the filter button is pressed
 {
-	$("#filterLoader").attr("class", "ui active inverted dimmer");
-	//alert("OK");
+    $("#filterLoader").attr("class", "ui active inverted dimmer");
+    //alert("OK");
     if (arguments.length > 0) {
         filters = customFilter;
         filters.query = false;
@@ -563,25 +563,25 @@ function applyFilter(customFilter) //If the filter button is pressed
         data: {"params": JSON.stringify(filters)},
         success: function (json) {
             $("#tableHeadings").attr("style", "visibilty:visible");
-			//$("#pageInfo").attr("style", "text-align:center; visibility:visible;");
+            //$("#pageInfo").attr("style", "text-align:center; visibility:visible;");
             resStart = 0; //Start at the first result
             filterResults = json.results; //Store the result
             displayTable(filterResults); //Display the result
-			$("#filterLoader").attr("class", "ui inverted dimmer");
+            $("#filterLoader").attr("class", "ui inverted dimmer");
             updatePageNum(); //Update the page numbers
             var tableHeads = $(".tableHead");
             for (var i = 0; i < tableHeads.length; i++) //Remove dropdown arrows from other headings
             {
                 tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0];
             }
-			//console.log(JSON.stringify(filters));
+            //console.log(JSON.stringify(filters));
             //$("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json);
             document.getElementById("csvButton").disabled = false;
             updatePaginationMenu($paginationMenu);
         },
         error: function () {
             //alert("It does not work...");
-			$("#filterLoader").attr("class", "ui inverted dimmer");
+            $("#filterLoader").attr("class", "ui inverted dimmer");
             filterResults = []; //Store the result as empty
             displayTable("NO RESULT");
             updatePageNum();
@@ -591,17 +591,17 @@ function applyFilter(customFilter) //If the filter button is pressed
 };
 
 $(".tabMenu").click(function(event) {
-	$(".tabMenu").removeClass('active');
-	$(".tab").removeClass("active");
-	$(this).addClass('active');
-	if ($(this).attr('id') == "resMenu") {
-		$("#tableTab").addClass('active');
-	} else if($(this).attr('id') == "chartMenu") {
-		$("#chartTab").addClass('active');
-	} else if ($(this).attr('id') == "statMenu"){
+    $(".tabMenu").removeClass('active');
+    $(".tab").removeClass("active");
+    $(this).addClass('active');
+    if ($(this).attr('id') == "resMenu") {
+        $("#tableTab").addClass('active');
+    } else if($(this).attr('id') == "chartMenu") {
+        $("#chartTab").addClass('active');
+    } else if ($(this).attr('id') == "statMenu"){
         slideshow();
-		$("#statTab").addClass('active');
-	}
+        $("#statTab").addClass('active');
+    }
 });
 
 function getRecentQueries() {
@@ -645,84 +645,84 @@ $(".tableHead").click(function () { //If a column heading clicked
 });
 
 function populateDropdowns(){
-	$.each(usesApi, function( index, dropName ) {
-	  $.getJSON('../backend/src/api/internal/list.php?item=' + info[dropName][3], function(data) {
-		for(var i = 0 ; i < data.length ; i++)
-		{
-			$("#" + dropName).find(".menu").append("<div class='item' data-value=" + data[i].id + ">" + data[i].name + "</div>");
-		}
-	  })
-	});
+    $.each(usesApi, function( index, dropName ) {
+        $.getJSON('../backend/src/api/internal/list.php?item=' + info[dropName][3], function(data) {
+            for(var i = 0 ; i < data.length ; i++)
+            {
+                $("#" + dropName).find(".menu").append("<div class='item' data-value=" + data[i].id + ">" + data[i].name + "</div>");
+            }
+        })
+    });
 }
 
 $("#filterStore").change(function(){
-		$('.filterOpt').dropdown('hide');
-        species_include.length = 0; //Resets the array. arr = [] does not work.
-        species_exclude.length = 0;
-        habitats.length = 0;
-        sites.length = 0;
-        contains_human = false;
-        is_flagged = false;
-        includedUsers.length = 0;
-        excludedUsers.length = 0;
-        numSpecies = 0;
-        minNumClassifications = 0;
-        maxNumClassifications = 0;
-        numClassifications = 0;
-        taken_start = "1970-01-01 00:00:00"; //Set dates to default values
-        taken_end = "2100-01-01 00:00:00";
-        values = $masterDrop.dropdown("get values");
-        for (var i = 0; i < values.length; i++) //Go through everything stored in the main dropdown
-        {
-            var val = values[i].split('=');
-            var filterCategory = val[0]; //The name of the filter category
-            var filterValue = val[1]; //The value of that specific filter
-            //Add the desired filters to their arrays
-            if (filterCategory == "animal") {
-                species_include.push(parseInt(filterValue));
-            }
-            else if (filterCategory == "no_animal") {
-                species_exclude.push(parseInt(filterValue));
-            }
-            else if (filterCategory == "habitat") {
-                habitats.push(parseInt(filterValue));
-            }
-            else if (filterCategory == "site") {
-                sites.push(parseInt(filterValue));
-            }
-            else if (filterCategory == "contains_human") {
-                contains_human = true;
-            }
-            else if (filterCategory == "is_flagged") {
-                is_flagged = true;
-            }
-            else if (filterCategory == "datetimeFrom") {
-                taken_start = filterValue;
-            }
-            else if (filterCategory == "datetimeTo") {
-                taken_end = filterValue;
-            }
-            else if (filterCategory == "numSpecies") {
-                numSpecies = filterValue;
-            }
-            else if (filterCategory == "numClassifications") {
-                numClassifications = filterValue;
-            }
-            else if (filterCategory == "minNumClassifications") {
-                minNumClassifications = filterValue;
-            }
-            else if (filterCategory == "maxNumClassifications") {
-                maxNumClassifications = filterValue;
-            }
-            else if (filterCategory == "includeUser") {
-                includedUsers.push(parseInt(filterValue));
-            }
-            else if (filterCategory == "excludeUser") {
-                excludedUsers.push(parseInt(filterValue));
-            }
+    $('.filterOpt').dropdown('hide');
+    species_include.length = 0; //Resets the array. arr = [] does not work.
+    species_exclude.length = 0;
+    habitats.length = 0;
+    sites.length = 0;
+    contains_human = false;
+    is_flagged = false;
+    includedUsers.length = 0;
+    excludedUsers.length = 0;
+    numSpecies = 0;
+    minNumClassifications = 0;
+    maxNumClassifications = 0;
+    numClassifications = 0;
+    taken_start = "1970-01-01 00:00:00"; //Set dates to default values
+    taken_end = "2100-01-01 00:00:00";
+    values = $masterDrop.dropdown("get values");
+    for (var i = 0; i < values.length; i++) //Go through everything stored in the main dropdown
+    {
+        var val = values[i].split('=');
+        var filterCategory = val[0]; //The name of the filter category
+        var filterValue = val[1]; //The value of that specific filter
+        //Add the desired filters to their arrays
+        if (filterCategory == "animal") {
+            species_include.push(parseInt(filterValue));
         }
-        applyFilter();
-    });
+        else if (filterCategory == "no_animal") {
+            species_exclude.push(parseInt(filterValue));
+        }
+        else if (filterCategory == "habitat") {
+            habitats.push(parseInt(filterValue));
+        }
+        else if (filterCategory == "site") {
+            sites.push(parseInt(filterValue));
+        }
+        else if (filterCategory == "contains_human") {
+            contains_human = true;
+        }
+        else if (filterCategory == "is_flagged") {
+            is_flagged = true;
+        }
+        else if (filterCategory == "datetimeFrom") {
+            taken_start = filterValue;
+        }
+        else if (filterCategory == "datetimeTo") {
+            taken_end = filterValue;
+        }
+        else if (filterCategory == "numSpecies") {
+            numSpecies = filterValue;
+        }
+        else if (filterCategory == "numClassifications") {
+            numClassifications = filterValue;
+        }
+        else if (filterCategory == "minNumClassifications") {
+            minNumClassifications = filterValue;
+        }
+        else if (filterCategory == "maxNumClassifications") {
+            maxNumClassifications = filterValue;
+        }
+        else if (filterCategory == "includeUser") {
+            includedUsers.push(parseInt(filterValue));
+        }
+        else if (filterCategory == "excludeUser") {
+            excludedUsers.push(parseInt(filterValue));
+        }
+    }
+    applyFilter();
+});
 
 //Clear the master dropdown of all labels
 $("#clearMaster").click(function () {
@@ -752,7 +752,7 @@ $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
 });
 
 $(document).ready(function () {
-	applyFilter();
+    applyFilter();
     getRecentQueries();
 
     $('.ui.checkbox').checkbox(); //Initialise checkbox
@@ -766,7 +766,7 @@ $(document).ready(function () {
     //Add dropdown selection to main selection, and populate dropdown with api
     $(".filterOpt").dropdown({
         action: function (text, value) {
-	//When an option from the dropdown is chosen
+            //When an option from the dropdown is chosen
             var chosenDropdown = event.target.parentElement.parentElement.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
             var filterType = info[chosenDropdown][0] + "=";
             var labelName = info[chosenDropdown][1];
@@ -814,61 +814,61 @@ $(document).ready(function () {
     };
 
     $(".filterForm").submit(function (event) {
-		event.preventDefault();
-		for(var e = 0 ; e < 9 ; e++) //Go through all the forms
-		{
-			var filterOption = event.target[e];
-			var enteredValue = "";
-			if(filterOption.classList[0] == "filterField") //If an input field
-			{
-				enteredValue = filterOption.value;
-			}
-			else if(filterOption.classList[0] == "filterCheck") //If a checkbox
-			{
-				if(filterOption.checked)
-				{
-					enteredValue = "true";
-				}
-				else
-				{
-					enteredValue = "false";
-				}
+        event.preventDefault();
+        for(var e = 0 ; e < 9 ; e++) //Go through all the forms
+        {
+            var filterOption = event.target[e];
+            var enteredValue = "";
+            if(filterOption.classList[0] == "filterField") //If an input field
+            {
+                enteredValue = filterOption.value;
+            }
+            else if(filterOption.classList[0] == "filterCheck") //If a checkbox
+            {
+                if(filterOption.checked)
+                {
+                    enteredValue = "true";
+                }
+                else
+                {
+                    enteredValue = "false";
+                }
 
-			}
-			var chosenCheck = filterOption.id; //The filter that has been chosen.
-			var filterType = info[chosenCheck][0] + "="; //Name of the filter
-			var labelName = info[chosenCheck][1]; //What goes on the label
-			if(enteredValue != "false" && enteredValue != "") //If a value has been chosen
-			{
-				if (prevValues.hasOwnProperty(chosenCheck) == true) //If it is a filter that can only be added once
-				{
-					if (prevValues[chosenCheck] != "") //Remove any labels already there
-					{
-						$masterDrop.dropdown("remove value", prevValues[chosenCheck]); //Remove the value
-						$masterDrop.dropdown("remove label", prevValues[chosenCheck]); //Remove the label
-					}
-				}
-				$masterDrop.dropdown("add value", filterType + enteredValue); //Add the value
-				if(filterOption.classList[0] == "filterCheck") //If a checkbox
-				{
-					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": Yes"); //Add the label for a checkbox
-				}
-				else //If a form that has a number entered
-				{
-					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue); //Add the label
-				}
-				if (prevValues.hasOwnProperty(chosenCheck) == true) //Store the values so any values already there are known so does not put more than one label for categories that are not allowed
-				{
-					prevValues[chosenCheck] = filterType + enteredValue;
-				}
-			}
-			else if(filterOption.classList[0] == "filterCheck")
-			{
-				$masterDrop.dropdown("remove label", filterType + "true");
-				$masterDrop.dropdown("remove value", filterType + "true");
-			}
-		}
-		$("#filterModal").modal("hide");
+            }
+            var chosenCheck = filterOption.id; //The filter that has been chosen.
+            var filterType = info[chosenCheck][0] + "="; //Name of the filter
+            var labelName = info[chosenCheck][1]; //What goes on the label
+            if(enteredValue != "false" && enteredValue != "") //If a value has been chosen
+            {
+                if (prevValues.hasOwnProperty(chosenCheck) == true) //If it is a filter that can only be added once
+                {
+                    if (prevValues[chosenCheck] != "") //Remove any labels already there
+                    {
+                        $masterDrop.dropdown("remove value", prevValues[chosenCheck]); //Remove the value
+                        $masterDrop.dropdown("remove label", prevValues[chosenCheck]); //Remove the label
+                    }
+                }
+                $masterDrop.dropdown("add value", filterType + enteredValue); //Add the value
+                if(filterOption.classList[0] == "filterCheck") //If a checkbox
+                {
+                    $masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": Yes"); //Add the label for a checkbox
+                }
+                else //If a form that has a number entered
+                {
+                    $masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue); //Add the label
+                }
+                if (prevValues.hasOwnProperty(chosenCheck) == true) //Store the values so any values already there are known so does not put more than one label for categories that are not allowed
+                {
+                    prevValues[chosenCheck] = filterType + enteredValue;
+                }
+            }
+            else if(filterOption.classList[0] == "filterCheck")
+            {
+                $masterDrop.dropdown("remove label", filterType + "true");
+                $masterDrop.dropdown("remove value", filterType + "true");
+            }
+        }
+        $("#filterModal").modal("hide");
     });
     applyFilter();
 
@@ -879,9 +879,9 @@ $(document).ready(function () {
 
 
     slider = $('.bxslider').bxSlider(
-    {
-    autoControls: true,
-    auto: true,
-    captions: true
-    });
+        {
+            autoControls: true,
+            auto: true,
+            captions: true
+        });
 });
