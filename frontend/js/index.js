@@ -23,7 +23,7 @@ var maxNumClassifications = 0;
 var numClassifications = 0;
 var taken_start = "1970-01-01 00:00:00"; //Must have both dates/time so these are the default values
 var taken_end = "2100-01-01 00:00:00";
-var scientist_dataset = false;
+var scientist_dataset = true;
 
 //RESULTS AND TABLE VARIABLES
 var filterResults = []; //Holds the json of the most recent filter results
@@ -35,25 +35,6 @@ var isAscending = true; //Whether the column being sorted is ascending or descen
 var currentSort = ""; //The attribute (table heading) currently being sorted
 var iconIndex = 0; //The direction of the icon. 0 is down, 1 is up.
 var icons = ['<i class="dropdown icon"></i>', '<i class="dropdown icon vertically flipped"></i>']; //The two icons
-
-//Dropdown population
-var usesApi = ["newSpeciesDrop", "speciesExcludeDrop", "habitatDrop", "siteDrop"]; //The filters that need to be populaed by an api
-//The information needed for each dropdown (4)
-var info = {
-	"newSpeciesDrop": ["animal", "Include species", "green", "species"],
-	"speciesExcludeDrop": ["no_animal", "Exclude species", "red", "species"],
-	"habitatDrop": ["habitat", "Habitat", "teal", "habitats"],
-	"siteDrop": ["site", "Site", "yellow", "sites"],
-	"humanCheck": ["contains_human", "Contains human", "olive"],
-	"flaggedCheck": ["is_flagged", "Flagged", "orange"],
-	"scientistCheck":["scientist_dataset", "Scientist dataset", "blue"],
-	"numSpecies": ["numSpecies", "Number of species", "black"],
-	"numClassifications": ["numClassifications", "Number of classifications", "violet"],
-	"minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
-	"maxNumClassifications": ["maxNumClassifications", "Maximum number of classifications", "yellow"],
-	"includeUser": ["includeUser", "Include user", "green"],
-	"excludeUser": ["excludeUser", "Exclude user", "red"]
-};
 
 //Date/time variables
 var prevDateTimeFrom = ""; //Stores the most recent datetime. Used so can replace datetime if a new one decided.
@@ -72,6 +53,7 @@ var info = {
     "siteDrop": ["site", "Site", "yellow", "sites"],
     "humanCheck": ["contains_human", "Contains human", "olive"],
     "flaggedCheck": ["is_flagged", "Flagged", "orange"],
+	"scientistCheck":["scientist_dataset", "Scientist dataset", "blue"],
     "numSpecies": ["numSpecies", "Number of species", "black"],
     "numClassifications": ["numClassifications", "Number of classifications", "violet"],
     "minNumClassifications": ["minNumClassifications", "Minimum number of classifications", "brown"],
@@ -89,10 +71,6 @@ var $speciesIncludeDrop = $("#speciesIncludeDrop");
 var $speciesExcludeDrop = $("#speciesExcludeDrop");
 var $habitatDrop = $("#habitatDrop");
 var $siteDrop = $("#siteDrop");
-
-// $("#slideshowButton").click(function(){
-
-// })
 
 function slideshow(){
     $("#resultsTable:eq(0) tr").find('a').each(function() {
@@ -470,7 +448,7 @@ function updatePaginationMenu(menu){
     menu.find(".deletable").remove();
     var maxPages = numberOfPages();
     /* Display 2 pages before and 2 pages after the current page */
-    for (var i = 2; i >= -2; i--){
+    for (var i = 1; i >= -1; i--){
         if(currentPage + i >= 1 && currentPage + i <= maxPages){
             var pageLink;
             if(i == 0){
@@ -772,7 +750,7 @@ $('#dateFrom').on('apply.daterangepicker', function (ev, picker) { //Executed wh
     $masterDrop.dropdown("remove value", "datetimeFrom=" + prevDateTimeFrom);
     //Add new datetime
     $masterDrop.dropdown("add value", "datetimeFrom=" + datetime, "Date from: " + datetime);
-    $masterDrop.dropdown("add label", "datetimeFrom=" + datetime, "Date from: " + datetime, "pink");
+    $masterDrop.dropdown("add label", "datetimeFrom=" + datetime, "Date from: " + datetime);
     prevDateTimeFrom = datetime;
 });
 
@@ -783,16 +761,17 @@ $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
     $masterDrop.dropdown("remove label", "datetimeTo=" + prevDateTimeTo);
     $masterDrop.dropdown("remove value", "datetimeTo=" + prevDateTimeTo);
     $masterDrop.dropdown("add value", "datetimeTo=" + datetime, "Date to: " + datetime);
-    $masterDrop.dropdown("add label", "datetimeTo=" + datetime, "Date to: " + datetime, "purple");
+    $masterDrop.dropdown("add label", "datetimeTo=" + datetime, "Date to: " + datetime);
     prevDateTimeTo = datetime;
 });
 
 $(document).ready(function () {
+	applyFilter();
     getRecentQueries();
 
     $('.ui.checkbox').checkbox(); //Initialise checkbox
 
-    $("#resultsTable").html("<tr class='center aligned'><td colspan='11' class='align right'>Results go here...</td></tr>"); //Show were results will go (5)
+    //$("#resultsTable").html("<tr class='center aligned'><td colspan='11' class='align right'>Results go here...</td></tr>"); //Show were results will go (5)
 
     populatePagesDropdown(0); //Make the dropdown have only the value of 0 in. Looks better than a dropdown with nothing
 
@@ -805,14 +784,13 @@ $(document).ready(function () {
             var chosenDropdown = event.target.parentElement.parentElement.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
             var filterType = info[chosenDropdown][0] + "=";
             var labelName = info[chosenDropdown][1];
-            var colour = info[chosenDropdown][2];
             $masterDrop.dropdown("add value", filterType + value)//, labelName + ": " + text); //Add the value
             if (chosenDropdown == "habitatDrop") //Only show the first word of the habitat
             {
                 $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text.substr(0, text.indexOf(' ')), colour);
             }
             else {
-                $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text, colour); //Add the label
+                $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text); //Add the label
             }
         }
     });
@@ -874,7 +852,6 @@ $(document).ready(function () {
 			var chosenCheck = filterOption.id; //The filter that has been chosen.
 			var filterType = info[chosenCheck][0] + "="; //Name of the filter
 			var labelName = info[chosenCheck][1]; //What goes on the label
-			var colour = info[chosenCheck][2]; //Colour of the label
 			if(enteredValue != "false" && enteredValue != "") //If a value has been chosen
 			{
 				if (prevValues.hasOwnProperty(chosenCheck) == true) //If it is a filter that can only be added once
@@ -888,11 +865,11 @@ $(document).ready(function () {
 				$masterDrop.dropdown("add value", filterType + enteredValue); //Add the value
 				if(filterOption.classList[0] == "filterCheck") //If a checkbox
 				{
-					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": Yes", colour); //Add the label for a checkbox
+					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": Yes"); //Add the label for a checkbox
 				}
 				else //If a form that has a number entered
 				{
-					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue, colour); //Add the label
+					$masterDrop.dropdown("add label", filterType + enteredValue, labelName + ": " + enteredValue); //Add the label
 				}
 				if (prevValues.hasOwnProperty(chosenCheck) == true) //Store the values so any values already there are known so does not put more than one label for categories that are not allowed
 				{
