@@ -47,7 +47,7 @@ class ChartStatsQuery extends Query
         }
         $field = [];
         foreach($map as $entry){
-            $field[] = ["name"=> $entry['name'], "freq" => $entry['freq']];
+            $field[] = ["species"=> $entry['name'], "freq" => $entry['freq']];
         }
         return $field;
     }
