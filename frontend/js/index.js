@@ -217,6 +217,12 @@ function dashboard(id, fData){
 
         // create function to update pie-chart. This will be used by histogram.
         pC.update = function(nD){
+            var newData = JSON.parse(JSON.stringify(nD));
+            newData.map(function(d) {
+                d.freq = isNumeric(Math.log(d.freq + 1)) ? Math.log(d.freq + 1) : 0;
+                return d;
+            });
+            nD = newData;
             piesvg.selectAll("path").data(pie(nD)).transition().duration(500)
                 .attrTween("d", arcTween);
         };
