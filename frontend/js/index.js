@@ -159,7 +159,7 @@ function dashboard(id, fData){
         // create function to update the bars. This will be used by pie-chart.
         hG.update = function(nD, color){
             nD = nD.map(function(d) {
-               return [d[0],isNumeric(Math.log(d[1])) ? Math.log(d[1]) : 0];
+               return [d[0],isNumeric(Math.log(d[1] + 1)) ? Math.log(d[1] + 1) : 0];
             });
             // update the domain of the y-axis map to reflect change in frequencies.
             y.domain([0, d3.max(nD, function(d) { return d[1]; })]);
