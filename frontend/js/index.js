@@ -191,6 +191,13 @@ function dashboard(id, fData){
         var pC ={},    pieDim ={w:250, h: 250};
         pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
 
+        var newData = JSON.parse(JSON.stringify(pD));
+        newData.map(function(d) {
+            d.freq = isNumeric(Math.log(d.freq + 1)) ? Math.log(d.freq + 1) : 0;
+            return d;
+        });
+        pD = newData;
+
         // create svg for pie chart.
         var piesvg = d3.select(id).append("svg")
             .attr("width", pieDim.w).attr("height", pieDim.h).append("g")
