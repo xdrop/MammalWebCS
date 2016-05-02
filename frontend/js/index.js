@@ -882,6 +882,9 @@ $(document).ready(function () {
 
 
     $.getJSON("../backend/src/api/internal/list.php?item=species_sites", function (data){
+        var fDat = data.map(function(d){
+           d.species = truncate(d.species,10);
+        });
         dashboard('#chartTab',data);
     });
 
