@@ -175,7 +175,7 @@ function dashboard(id, fData){
 
             // transition the frequency labels location and change value.
             bars.select("text").transition().duration(500)
-                .text(function(d){ return d3.format(",")(Math.floor(Math.pow(Math.E,d[1])) - 1) })
+                .text(function(d){ return d3.format(",")(Math.floor(Math.pow(Math.E,d[1]))) })
                 .attr("y", function(d) {return y(d[1])-5; });
         };
         return hG;
