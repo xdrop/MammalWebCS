@@ -65,6 +65,10 @@ var $speciesExcludeDrop = $("#speciesExcludeDrop");
 var $habitatDrop = $("#habitatDrop");
 var $siteDrop = $("#siteDrop");
 
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 function slideshow(){
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
@@ -83,6 +87,7 @@ function dashboard(id, fData){
     fData.forEach(function(d){
         d.total = 0;
         var keys = Object.keys(d.freq);
+
         for (var i = 0; i < keys.length; i++) {
             // use val
             d.total += parseInt(d.freq[keys[i]]);
@@ -130,7 +135,7 @@ function dashboard(id, fData){
             .on("mouseout",mouseout);// mouseout is defined below.
 
         //Create the frequency labels above the rectangles.
-        bars.append("text").text(function(d){ return d3.format(",")(Math.ceil(Math.pow(Math.E,d[1])))})
+        bars.append("text").text(function(d){ return d3.format(",")(Math.floor(Math.pow(Math.E,d[1])))})
             .attr("x", function(d) { return x(d[0])+x.rangeBand()/2; })
             .attr("y", function(d) { return y(d[1])-5; })
             .attr("text-anchor", "middle");
@@ -153,6 +158,9 @@ function dashboard(id, fData){
 
         // create function to update the bars. This will be used by pie-chart.
         hG.update = function(nD, color){
+            nD = nD.map(function(d) {
+               return [d[0],isNumeric(Math.log(d[1])) ? Math.log(d[1]) : 0];
+            });
             // update the domain of the y-axis map to reflect change in frequencies.
             y.domain([0, d3.max(nD, function(d) { return d[1]; })]);
 
@@ -167,7 +175,7 @@ function dashboard(id, fData){
 
             // transition the frequency labels location and change value.
             bars.select("text").transition().duration(500)
-                .text(function(d){ return d3.format(",")(d[1])})
+                .text(function(d){ return d3.format(",")(Math.floor(Math.pow(Math.E,d[1])) - 1) })
                 .attr("y", function(d) {return y(d[1])-5; });
         };
         return hG;
@@ -199,7 +207,7 @@ function dashboard(id, fData){
         pC.update = function(nD){
             piesvg.selectAll("path").data(pie(nD)).transition().duration(500)
                 .attrTween("d", arcTween);
-        }
+        };
         // Utility function to be called on mouseover a pie slice.
         function mouseover(d){
             // call the update function of histogram with new data.
@@ -210,7 +218,7 @@ function dashboard(id, fData){
         function mouseout(d){
             // call the update function of histogram with all data.
             hG.update(fData.map(function(v){
-                return [v.species,Math.ceil(Math.pow(Math.E,v.total))];}), barColor);
+                return [v.species,Math.floor(Math.pow(Math.E,v.total))];}), barColor);
         }
         // Animating the pie-slice requiring a custom function which specifies
         // how the intermediate paths should be drawn.
