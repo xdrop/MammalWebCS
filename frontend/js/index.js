@@ -536,6 +536,7 @@ function applyFilter(customFilter) //If the filter button is pressed
         filters.query = false;
     } else {
         filters = {}; //reset filters
+        filters.query = true;
         if (species_include.length != 0) {
             filters.species_include = species_include; //Add the included species to filters
         }
@@ -601,7 +602,7 @@ function applyFilter(customFilter) //If the filter button is pressed
                 tableHeads[i].innerHTML = tableHeads[i].innerHTML.split("<")[0];
             }
             //console.log(JSON.stringify(filters));
-            //$("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json);
+            $("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json.id);
             document.getElementById("csvButton").disabled = false;
             updatePaginationMenu($paginationMenu);
         },
