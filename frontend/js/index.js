@@ -70,8 +70,7 @@ function isNumeric(n) {
 }
 
 function slideshow(){
-    $("#statTab").empty();
-    $("#statTab").append('<div id="slides"></div>');
+    $("#slides").empty();
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slides').append("<img src=\'" + $(this).attr('href') +"\' />");
     });
