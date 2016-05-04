@@ -1,4 +1,5 @@
 var myInterval;
+var scientistDataset = true;
 // Gets the current settings
 function getSettings(_callback) {
     $.ajax({
@@ -71,19 +72,22 @@ function updateProgress(){
 // To reclassify data:
 // Get -> Set new settings
 // Rerun classify with new settings
-$("#reclassify").click(function() {
+/*$("#reclassify").click(function() {
     getFields(function(json) {
         setSettings(json);
     });
-});
+});*/
 
-$("#run").click(function(){
+$("#run").click(function(){ // To reclassify data:
+	getFields(function(json) { // Get -> Set new settings
+        setSettings(json); // Rerun classify with new settings
+    });
     $.ajax({
         url:     "../backend/src/api/internal/algorithm.php",
         type:    "POST",
         data:     {
             "action": "run",
-            "scientist_dataset": true
+            "scientist_dataset": scientistDataset
         },
         error:   function () {
             alert("Failed to set settings");
@@ -92,6 +96,11 @@ $("#run").click(function(){
     $("#run").addClass("disabled");
     $("#progress").show();
     myInterval = setInterval(updateProgress, 4000);
+});
+
+$("#scientistData").checkbox({onChange: function(){
+		scientistDataset = !scientistDataset;
+	}	
 });
 
 // Get the current settings and populate the HTML form
