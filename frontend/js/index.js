@@ -16,7 +16,7 @@ var maxNumClassifications = 0;
 var numClassifications = 0;
 var taken_start = "1970-01-01 00:00:00"; //Must have both dates/time so these are the default values
 var taken_end = "2100-01-01 00:00:00";
-var scientist_dataset = true;
+var scientist_dataset = false;
 
 //RESULTS AND TABLE VARIABLES
 var filterResults = []; //Holds the json of the most recent filter results
@@ -70,15 +70,22 @@ function isNumeric(n) {
 }
 
 function slideshow(){
-    $("#slides").empty();
+    $("#statTab").empty();
+    $("#statTab").append('<ul id="slide" class="bxslider"></ul>');
     $("#resultsTable:eq(0) tr").find('a').each(function() {
-        $('#slides').append("<img src=\'" + $(this).attr('href') +"\' />");
+        $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
     });
-    var slides = $('#slides').slidesjs(
+    slider = $('.bxslider').bxSlider(
         {
-            width: 940,
-            height: 528
+            autoControls: true,
+            auto: true,
+            captions: true
         });
+    $("#slide").css('height','447px');
+    $(".bx-viewport").css('height','447px');
+    $('.bx-wrapper').find('li').each(function() {
+        $(this).css('width','795px');
+    });
 }
 
 function dashboard(id, fData){
@@ -610,6 +617,7 @@ function applyFilter(customFilter) //If the filter button is pressed
             $("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json.id);
             document.getElementById("csvButton").disabled = false;
             updatePaginationMenu($paginationMenu);
+			getRecentQueries();
         },
         error: function () {
             //alert("It does not work...");
@@ -639,10 +647,12 @@ $(".tabMenu").click(function(event) {
 function getRecentQueries() {
     $.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function (data) {
         var resQueries = $("#recentQueries");
+		resQueries.empty();
         var total = data.length;
         $.each(data, function (index, value) {
-            var text = "Query #" + value.id + " - " + value.time;
-            var $elem = $('<a class="item">' + text + '</a>');
+            var atext = "Query #" + value.id + " - " + value.time;
+            var $elem = $('<a class="item">' + atext + '</a>');
+			//console.log($elem);
             // On click get the json of the filter and run the filter ajax
             $elem.click(function () {
                 applyFilter(JSON.parse(value.json));

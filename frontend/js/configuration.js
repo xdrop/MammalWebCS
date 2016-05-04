@@ -1,4 +1,5 @@
 var myInterval;
+var scientistDataset = true;
 // Gets the current settings
 function getSettings(_callback) {
     $.ajax({
@@ -53,6 +54,7 @@ function updateProgress(){
         url:     "../backend/src/api/internal/algorithm.php?action=status",
         type:    "GET",
         success: function(json){
+            if(json.started){
             var progress = parseInt(json.progress);
             var total = parseInt(json.total);
             if (progress == total) {
@@ -64,34 +66,38 @@ function updateProgress(){
             $("#progress").progress({
                 percent: Math.floor((progress / total) * 100)
             })
+            } 
+
         }
     });
 }
 
-// To reclassify data:
-// Get -> Set new settings
-// Rerun classify with new settings
-$("#reclassify").click(function() {
-    getFields(function(json) {
-        setSettings(json);
+$("#run").click(function(){ // To reclassify data:
+	getFields(function(json) { // Get -> Set new settings
+        setSettings(json); // Rerun classify with new settings
     });
-});
-
-$("#run").click(function(){
     $.ajax({
         url:     "../backend/src/api/internal/algorithm.php",
         type:    "POST",
         data:     {
             "action": "run",
-            "scientist_dataset": true
+            "scientist_dataset": scientistDataset
+        },
+        success: function(){
+        	$("#run").addClass("disabled");
+    		$("#progress").show();
+    		myInterval = setInterval(updateProgress, 1000);	
         },
         error:   function () {
             alert("Failed to set settings");
         }
     });
-    $("#run").addClass("disabled");
-    $("#progress").show();
-    myInterval = setInterval(updateProgress, 4000);
+    
+});
+
+$("#scientistData").checkbox({onChange: function(){
+		scientistDataset = !scientistDataset;
+	}	
 });
 
 // Get the current settings and populate the HTML form
