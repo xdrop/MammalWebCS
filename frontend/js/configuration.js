@@ -54,9 +54,10 @@ function updateProgress(){
         url:     "../backend/src/api/internal/algorithm.php?action=status",
         type:    "GET",
         success: function(json){
+            if(json.started){
             var progress = parseInt(json.progress);
             var total = parseInt(json.total);
-            if (progress == total && json.started) {
+            if (progress == total) {
                 clearInterval(myInterval);
                 $("#progress").hide();
                 $("#run").removeClass("disabled");
@@ -65,6 +66,8 @@ function updateProgress(){
             $("#progress").progress({
                 percent: Math.floor((progress / total) * 100)
             })
+            } 
+
         }
     });
 }
