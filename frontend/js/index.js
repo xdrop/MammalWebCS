@@ -70,12 +70,17 @@ function isNumeric(n) {
 }
 
 function slideshow(){
-    $("#slide").empty();
+    $("#statTab").empty();
+    $("#statTab").append('<ul id="slide" class="bxslider"></ul>');
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
     });
-    $("#bx-viewport").css('height','auto');
-    slider.reloadSlider();
+    slider = $('.bxslider').bxSlider(
+        {
+            autoControls: true,
+            auto: true,
+            captions: true
+        });
 }
 
 function dashboard(id, fData){
@@ -910,10 +915,5 @@ $(document).ready(function () {
     });
 
 
-    slider = $('.bxslider').bxSlider(
-        {
-            autoControls: true,
-            auto: true,
-            captions: true
-        });
+
 });
