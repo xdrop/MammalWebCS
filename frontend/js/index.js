@@ -71,15 +71,14 @@ function isNumeric(n) {
 
 function slideshow(){
     $("#statTab").empty();
-    $("#statTab").append('<ul id="slide" class="bxslider"></ul>');
+    $("#statTab").append('<div id="slides"></div>');
     $("#resultsTable:eq(0) tr").find('a').each(function() {
-        $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
+        $('#slides').append("<img src=\'" + $(this).attr('href') +"\' />");
     });
-    slider = $('.bxslider').bxSlider(
+    var slides = $('#slides').slidesjs(
         {
-            autoControls: true,
-            auto: true,
-            captions: true
+            width: 940,
+            height: 528
         });
 }
 
