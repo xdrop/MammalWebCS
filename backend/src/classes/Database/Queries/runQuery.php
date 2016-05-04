@@ -1,8 +1,8 @@
 <?php
 require('../../../core.php');
 
-$query = new BatchClassificationQuery();
+$query = new FilterQuery();
 
-$controller = new AlgorithmController();
+$query->with(['no_of_species' => 2])->fetch()->asArray();
 
-$controller->runAlgorithmJobBatch(new JobStatusQuery(),null,false,1,-1);
+
