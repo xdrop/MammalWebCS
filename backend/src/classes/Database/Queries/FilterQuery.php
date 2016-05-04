@@ -92,7 +92,7 @@ class FilterQuery extends PageableQuery
         if($hasNumberOfSpecies){
             $numberOfSpecies = $params["no_of_species"];
             $query->innerJoin("(SELECT ct.photo_id,COUNT(*) as counted from $classifiedTableName AS ct GROUP by photo_id) c ON c.photo_id = classified_tbl.photo_id");
-            $query->having("c.counted = ?",$numberOfSpecies);
+            $query->where("c.counted = ?",$numberOfSpecies);
         }
 
         if($hasPhotoId){
