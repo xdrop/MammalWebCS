@@ -492,7 +492,7 @@ function updatePaginationMenu(menu){
     menu.find(".deletable").remove();
     var maxPages = numberOfPages();
     /* Display 2 pages before and 2 pages after the current page */
-    for (var i = 1; i >= -1; i--){
+    for (var i = 2; i >= -2; i--){
         if(currentPage + i >= 1 && currentPage + i <= maxPages){
             var pageLink;
             if(i == 0){
