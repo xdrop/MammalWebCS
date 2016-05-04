@@ -74,6 +74,7 @@ function slideshow(){
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
     });
     console.log(slider);
+    slider.reloadSlider();
 }
 
 function dashboard(id, fData){
