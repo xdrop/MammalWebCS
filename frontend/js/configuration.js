@@ -56,7 +56,7 @@ function updateProgress(){
         success: function(json){
             var progress = parseInt(json.progress);
             var total = parseInt(json.total);
-            if (progress == total) {
+            if (progress == total && json.started) {
                 clearInterval(myInterval);
                 $("#progress").hide();
                 $("#run").removeClass("disabled");
@@ -80,13 +80,16 @@ $("#run").click(function(){ // To reclassify data:
             "action": "run",
             "scientist_dataset": scientistDataset
         },
+        success: function(){
+        	$("#run").addClass("disabled");
+    		$("#progress").show();
+    		myInterval = setInterval(updateProgress, 1000);	
+        },
         error:   function () {
             alert("Failed to set settings");
         }
     });
-    $("#run").addClass("disabled");
-    $("#progress").show();
-    myInterval = setInterval(updateProgress, 1000);
+    
 });
 
 $("#scientistData").checkbox({onChange: function(){
