@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>Slideshow</title>
+    <style type="text/css">
+        .container{
+            padding-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- jQuery library (served from Google) -->
+<script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
+<script src="js/semantic.js"></script>
+
+<!-- bxSlider Javascript file -->
+<script src="slideshow/js/jquery.bxslider.min.js"></script>
+<!-- bxSlider CSS file -->
+<link href="slideshow/lib/jquery.bxslider.css" rel="stylesheet" />
+
+<div class="ui top attached menu">
+    <div class="ui header item">MammalWeb</div>
+    <a class="ui item" href="index.html">User Filter</a>
+  <a class="ui item" href="indexScientist.html">Scientist Filter</a>
+  <a class="ui item" href="classify.html">Classify</a>
+</div>
+<div class="ui container">
+    <ul id="slide" class="bxslider">
+      </ul>
+</div>
+
+<script>
+$(document).ready(function(){
+  var filter = {
+    "species_include": [],
+    "species_exclude": [86,87],
+    "users_include": [],
+    "users_exclude": [],
+    "limit" : 10,
+    "page" : 1
+};
+  $.ajax({
+      url: "../backend/src/api/internal/filter.php",
+      type: "POST",
+      data: {"params": JSON.stringify(filter)},
+      success: function (json) {
+        for (i = 0; i < 10; i++) {
+          var imageSrc = json.results[i].url;
+          $('#slide').append("<li><img src=\'" + imageSrc +"\' /></li>");
+        }
+        $('.bxslider').bxSlider(
+        {
+        autoControls: true,
+        auto: true,
+        captions: true
+        });
+      },
+      error: function (msg) {
+          alert(JSON.stringify(msg));
+      }
+  });
+
+});
+</script>
+
+
+
+
+</body>
+</html>

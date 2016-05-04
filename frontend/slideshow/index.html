@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Slideshow</title>
+</head>
+
+<body>
+
+<!-- jQuery library (served from Google) -->
+<script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+<!-- bxSlider Javascript file -->
+<script src="js/jquery.bxslider.min.js"></script>
+<!-- bxSlider CSS file -->
+<link href="lib/jquery.bxslider.css" rel="stylesheet" />
+
+<ul class="bxslider">
+  <li><img src="images/1.jpg" title="Leopard" /></li>
+  <li><img src="images/2.jpg" title="Rhino" /></li>
+  <li><img src="images/3.jpg" title="Elephant" /></li>
+  <li><img src="images/4.jpg" title="Giraffe" /></li>
+  <li><img src="images/5.jpg" title="Chimp" /></li>
+  <li><img src="images/6.jpg" title="Panda" /></li>
+</ul>
+
+<script>
+$(document).ready(function(){
+  $('.bxslider').bxSlider(
+  {
+  autoControls: true,
+  auto: true,
+  captions: true
+  });
+});
+</script>
+
+
+
+
+</body>
+</html>
