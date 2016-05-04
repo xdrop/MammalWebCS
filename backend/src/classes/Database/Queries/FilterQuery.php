@@ -105,7 +105,7 @@ class FilterQuery extends PageableQuery
             $query->where('site.habitat_id',$habitatType);
         }
 
-        $this->db->debug = true;
+        //$this->db->debug = true;
 
         if ($hasSpeciesToInclude) {
             $query->where("classified_tbl.species", $speciesToInclude);
