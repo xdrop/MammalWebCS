@@ -1,6 +1,8 @@
 <?php
 require('../../../core.php');
 
-$query = new ChartStatsQuery();
+$query = new BatchClassificationQuery();
 
-print_r($query->with([])->fetch()->asArray());
+$controller = new AlgorithmController();
+
+$controller->runAlgorithmJobBatch(new JobStatusQuery(),null,false,1,-1);
