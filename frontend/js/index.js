@@ -794,7 +794,7 @@ $(document).ready(function () {
     $(".filterOpt").dropdown({
         action: function (text, value) {
             //When an option from the dropdown is chosen
-            var chosenDropdown = event.target.parentElement.parentElement.id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
+            var chosenDropdown = $(this).parent().parent().get(0).id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
             var filterType = info[chosenDropdown][0] + "=";
             var labelName = info[chosenDropdown][1];
             $masterDrop.dropdown("add value", filterType + value)//, labelName + ": " + text); //Add the value
