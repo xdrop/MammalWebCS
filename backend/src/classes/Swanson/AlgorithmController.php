@@ -61,7 +61,7 @@ class AlgorithmController
             $id++;
         }
 
-        $statusQuery->with(["started" => false, "progress" => $to])->update();
+        $statusQuery->with(["started" => false, "progress" => $total])->update();
     }
 
     /**
