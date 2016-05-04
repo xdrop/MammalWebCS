@@ -78,7 +78,7 @@ function updateProgress(){
             }
 
         }
-    });
+    );
 }
 
 $("#run").click(function(){ // To reclassify data:
