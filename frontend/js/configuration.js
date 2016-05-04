@@ -1,5 +1,7 @@
 var myInterval;
 var scientistDataset = true;
+var started = false;
+
 // Gets the current settings
 function getSettings(_callback) {
     $.ajax({
@@ -54,17 +56,25 @@ function updateProgress(){
         url:     "../backend/src/api/internal/algorithm.php?action=status",
         type:    "GET",
         success: function(json){
+            if(json.started || started){
             var progress = parseInt(json.progress);
             var total = parseInt(json.total);
             if (progress == total) {
                 clearInterval(myInterval);
                 $("#progress").hide();
                 $("#run").removeClass("disabled");
+                started = false;
 
             }
+            var percentage = Math.floor((progress / total) * 100);
+            if (percentage > 0){
+            	started = true;
+            }
             $("#progress").progress({
-                percent: Math.floor((progress / total) * 100)
+                percent: percentage
             })
+            } 
+
         }
     });
 }
@@ -80,13 +90,16 @@ $("#run").click(function(){ // To reclassify data:
             "action": "run",
             "scientist_dataset": scientistDataset
         },
+        success: function(){
+        	$("#run").addClass("disabled");
+    		$("#progress").show();
+    		myInterval = setInterval(updateProgress, 1000);	
+        },
         error:   function () {
             alert("Failed to set settings");
         }
     });
-    $("#run").addClass("disabled");
-    $("#progress").show();
-    myInterval = setInterval(updateProgress, 1000);
+    
 });
 
 $("#scientistData").checkbox({onChange: function(){

@@ -536,7 +536,7 @@ $("#moreOptions").click(function () {
     $('.ui.modal')
         .modal('show')
     ;
-})
+});
 
 //APPLY THE FILTER (2)
 function applyFilter(customFilter) //If the filter button is pressed
@@ -641,11 +641,51 @@ $(".tabMenu").click(function(event) {
     } else if ($(this).attr('id') == "statMenu"){
         slideshow();
         $("#statTab").addClass('active');
+    } else if ($(this).attr('id') == "statistics"){
+        $("#statisticsTab").addClass('active');
     }
 });
 
+function numToLetter(num){
+    switch(num){
+        case 0:
+            return "ZERO";
+        case 1:
+            return "ONE";
+        case 2:
+            return "TWO";
+        case 3:
+            return "THREE";
+        case 4:
+            return "FOUR";
+        case 5:
+            return "FIVE";
+        case 6:
+            return "SIX";
+        case 7:
+            return "SEVEN";
+        case 8:
+            return "EIGHT";
+        case 9:
+            return "NINE";
+        case 10:
+            return "TEN";
+    }
+}
+
+function addStatistics() {
+
+    $.getJSON('../backend/src/api/internal/list.php?item=stats', function (data) {
+        $("#speciesStat").html(numToLetter(parseInt(data['speciesCount']))
+            +' <i class="tree icon"></i> <br>' + " DIFFERENT");
+        $("#habitatStat").text(data['habitatCount']);
+        $("#classificationsStat").text(data['classificationsCount']);
+        $("#siteStat").text(data['siteCount']);
+    });
+}
+
 function getRecentQueries() {
-    $.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function (data) {
+    $.getJSON("../backend/src/api/internal/list.php?item=queries", function (data) {
         var resQueries = $("#recentQueries");
 		resQueries.empty();
         var total = data.length;
@@ -796,6 +836,7 @@ $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
 $(document).ready(function () {
     applyFilter();
     getRecentQueries();
+    addStatistics();
 
     $('.ui.checkbox').checkbox(); //Initialise checkbox
 
@@ -809,10 +850,10 @@ $(document).ready(function () {
     $(".filterOpt").dropdown({
         action: function (text, value) {
             //When an option from the dropdown is chosen
-            var chosenDropdown = $(this).parent().parent().get(0).id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
+            var chosenDropdown = $(this).parent().parent().get(0).id ;//The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
             var filterType = info[chosenDropdown][0] + "=";
             var labelName = info[chosenDropdown][1];
-            $masterDrop.dropdown("add value", filterType + value)//, labelName + ": " + text); //Add the value
+            $masterDrop.dropdown("add value", filterType + value); //, labelName + ": " + text); //Add the value
             if (chosenDropdown == "habitatDrop") //Only show the first word of the habitat
             {
                 $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text.substr(0, text.indexOf(' ')));

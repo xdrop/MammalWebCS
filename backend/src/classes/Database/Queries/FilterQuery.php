@@ -91,8 +91,8 @@ class FilterQuery extends PageableQuery
 
         if($hasNumberOfSpecies){
             $numberOfSpecies = $params["no_of_species"];
-            $query->select("(SELECT COUNT(photo_id) FROM classified_tbl ct WHERE ct.photo_id = classified_tbl.photo_id GROUP BY ct.photo_id) as counted");
-            $query->having("counted = ?",$numberOfSpecies);
+            $query->innerJoin("(SELECT ct.photo_id,COUNT(*) as counted from $classifiedTableName AS ct GROUP by photo_id) c ON c.photo_id = classified_tbl.photo_id");
+            $query->where("c.counted = ?",$numberOfSpecies);
         }
 
         if($hasPhotoId){
@@ -104,6 +104,8 @@ class FilterQuery extends PageableQuery
             $habitatType=  $params["habitat_id"];
             $query->where('site.habitat_id',$habitatType);
         }
+
+        //$this->db->debug = true;
 
         if ($hasSpeciesToInclude) {
             $query->where("classified_tbl.species", $speciesToInclude);

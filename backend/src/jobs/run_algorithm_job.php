@@ -29,4 +29,4 @@ ignore_user_abort(true);
 set_time_limit(0);
 
 
-$controller->runAlgorithmJob($st,$settingsObj,$onScientistData,$fromID,$toID);
+$controller->runAlgorithmJobBatch($st,$settingsObj,$onScientistData,$fromID,$toID);

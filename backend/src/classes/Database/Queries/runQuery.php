@@ -1,6 +1,8 @@
 <?php
 require('../../../core.php');
 
-$query = new ChartStatsQuery();
+$query = new FilterQuery();
 
-print_r($query->with([])->fetch()->asArray());
+$query->with(['no_of_species' => 2])->fetch()->asArray();
+
+

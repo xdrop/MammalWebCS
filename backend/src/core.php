@@ -13,6 +13,7 @@ require_once('classes/Database/PageableQuery.php');
 require_once('classes/Database/QueryResults.php');
 require_once('classes/Database/Queries/JobStatusQuery.php');
 require_once('classes/Database/Queries/ClassificationQuery.php');
+require_once('classes/Database/Queries/BatchClassificationQuery.php');
 require_once('classes/Database/Queries/ChartStatsQuery.php');
 require_once('classes/Database/Queries/SpeciesNamesQuery.php');
 require_once('classes/Database/Queries/RecentQueries.php');
