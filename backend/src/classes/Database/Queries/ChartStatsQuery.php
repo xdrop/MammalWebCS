@@ -67,6 +67,9 @@ class ChartStatsQuery extends Query
                 }
             }
         }
+        foreach($field as &$toSort){
+            ksort($toSort["freq"]);
+        }
         return $field;
     }
 
