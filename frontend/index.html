@@ -22,7 +22,7 @@
     <!-- bxSlider Javascript file -->
     <script src="slideshow/js/jquery.bxslider.min.js"></script>
     <!-- bxSlider CSS file -->
-    <link href="slideshow/lib/jquery.bxslider.css" rel="stylesheet" />
+    <link href="slideshow/lib/jquery.bxslider.css" rel="stylesheet"/>
 
     <style type="text/css">
         .ui.button-bold {
@@ -37,34 +37,56 @@
             cursor: hand;
         }
 
-        path {  stroke: #fff; }
-        path:hover {  opacity:0.9; }
-        rect:hover {  fill:red; }
-        .axis {  font: 10px sans-serif; }
-        .legend tr{    border-bottom:1px solid grey; }
-        .legend tr:first-child{    border-top:1px solid grey; }
+        path {
+            stroke: #fff;
+        }
+
+        path:hover {
+            opacity: 0.9;
+        }
+
+        rect:hover {
+            fill: red;
+        }
+
+        .axis {
+            font: 10px sans-serif;
+        }
+
+        .legend tr {
+            border-bottom: 1px solid grey;
+        }
+
+        .legend tr:first-child {
+            border-top: 1px solid grey;
+        }
 
         .axis path,
         .axis line {
-          fill: none;
-          stroke: #000;
-          shape-rendering: crispEdges;
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
         }
 
-        .x.axis path {  display: none; }
-        .legend{
-            margin-bottom:76px;
-            display:inline-block;
+        .x.axis path {
+            display: none;
+        }
+
+        .legend {
+            margin-bottom: 76px;
+            display: inline-block;
             border-collapse: collapse;
             border-spacing: 0px;
         }
-        .legend td{
-            padding:4px 5px;
-            vertical-align:bottom;
+
+        .legend td {
+            padding: 4px 5px;
+            vertical-align: bottom;
         }
-        .legendFreq, .legendPerc{
-            align:right;
-            width:50px;
+
+        .legendFreq, .legendPerc {
+            align: right;
+            width: 50px;
         }
 
     </style>
@@ -73,16 +95,17 @@
 
 <div class="ui top attached secondary red pointing menu">
     <a class="active item" href="index.html"><i class="filter icon"></i>Filtering</a>
-    <a class="right item" href="configuration.html" style="color:#db2828"><i class="configure icon"></i>Configuration</a>
+    <a class="right item" href="configuration.html" style="color:#db2828"><i
+            class="configure icon"></i>Configuration</a>
 </div>
 
 <div style="margin-top: 20px;" class="ui grid">
     <div class="row">
         <!-- TODO: Make dynamic -->
-		<!-- Statistics -->
-		<div class="three wide column">
-		</div>
-		<!-- Main filter and results -->
+        <!-- Statistics -->
+        <div class="three wide column">
+        </div>
+        <!-- Main filter and results -->
         <div class="ten wide column">
             <!-- MAIN DROPDOWN - STORES THE ADDED FILTERS -->
             <div id="masterDrop" class="ui fluid multiple selection dropdown nodrop" style="cursor:default">
@@ -92,7 +115,8 @@
                 <div class="menu"></div>
             </div>
             <div class="ui red segment" style="padding-left:0; padding-right:0;">
-                <div style="margin: 0px; min-height: 2em; box-shadow: none; border: none;" class="ui stackable seven item text menu">
+                <div style="margin: 0px; min-height: 2em; box-shadow: none; border: none;"
+                     class="ui stackable seven item text menu">
                     <div id="speciesIncludeDrop" class="filterOpt apiSpecies ui scrolling dropdown item">
                         <span class="text">Species Include<i class="dropdown icon" style="margin-right:0%;"></i></span>
                         <div class="menu">
@@ -130,162 +154,203 @@
                     </div>
                 </div>
             </div>
-                <div class="ui top attached three item red secondary pointing menu">
-                  <a id="resMenu" class="tabMenu item active">
+            <div class="ui top attached four item red secondary pointing menu">
+                <a id="resMenu" class="tabMenu item active">
                     Results
-                  </a>
-                  <a id="chartMenu" class="tabMenu item">
+                </a>
+                <a id="chartMenu" class="tabMenu item">
                     Interactive Chart
-                  </a>
-                  <a id="statMenu" class="tabMenu item">
+                </a>
+                <a id="statMenu" class="tabMenu item">
                     Slideshow
-                  </a>
-                </div>
+                </a>
+                <a id="statistics" class="tabMenu item">
+                    Statistics
+                </a>
+            </div>
 
             <div id="tableTab" class="ui  segment tab active">
-            <!-- TABLE OF RESULTS -->
-				<div class="dimmable">
-					<div class="ui active inverted dimmer"  id="filterLoader">
-						<div class="ui loader">
-						</div>
-					</div>
-            <table class="ui bottom attached selectable sortable celled table" style="visibility: visible;" id="tableHeadings">
-                <thead>
-                <tr>
-                    <th></th>
+                <!-- TABLE OF RESULTS -->
+                <div class="dimmable">
+                    <div class="ui active inverted dimmer" id="filterLoader">
+                        <div class="ui loader">
+                        </div>
+                    </div>
+                    <table class="ui bottom attached selectable sortable celled table" style="visibility: visible;"
+                           id="tableHeadings">
+                        <thead>
+                        <tr>
+                            <th></th>
 
-							<!--<th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>-->
-							<th class="center aligned tableHead" value="species_name" id="tableSpecies">Species</th>
-							<th class="center aligned tableHead" value="time_classified" id="tableTime">Time Classified</th>
-							<th class="center aligned tableHead" value="taken" id="tableTaken">Time Taken</th>
-							<th class="center aligned tableHead" value="person_id" id="tablePerson">User ID</th>
-							<th class="center aligned tableHead" value="site_name" id="tableSite">Site</th>
-							<th class="center aligned tableHead" value="habitat_name" id="tableHabitat">Habitat</th>
-							<th class="center aligned tableHead" value="evenness_species" id="tableEvennessSpecies">Species evenness</th>
-							<th class="center aligned tableHead" value="evenness_count" id="tableEvennessCount">Evenness count</th>
-						</tr>
-						</thead>
-						<tbody id="resultsTable">
-						</tbody>
-						<tfoot id="tableFooter">
-						<tr>
-							<th colspan="10">
-								<div class="ui three column grid" style="text-align:center;" id="pageInfo">
+                            <!--<th class="collapsed center aligned tableHead" value="flagged" id="tableStatus">Status</th>-->
+                            <th class="center aligned tableHead" value="species_name" id="tableSpecies">Species</th>
+                            <th class="center aligned tableHead" value="time_classified" id="tableTime">Time
+                                Classified
+                            </th>
+                            <th class="center aligned tableHead" value="taken" id="tableTaken">Time Taken</th>
+                            <th class="center aligned tableHead" value="person_id" id="tablePerson">User ID</th>
+                            <th class="center aligned tableHead" value="site_name" id="tableSite">Site</th>
+                            <th class="center aligned tableHead" value="habitat_name" id="tableHabitat">Habitat</th>
+                            <th class="center aligned tableHead" value="evenness_species" id="tableEvennessSpecies">
+                                Species evenness
+                            </th>
+                            <th class="center aligned tableHead" value="evenness_count" id="tableEvennessCount">Evenness
+                                count
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="resultsTable">
+                        </tbody>
+                        <tfoot id="tableFooter">
+                        <tr>
+                            <th colspan="10">
+                                <div class="ui three column grid" style="text-align:center;" id="pageInfo">
 
-									<div class="column middle aligned content">
-										<label style="margin-right: 5px" for="resPerPage">Results per page:</label><select
-											class="ui compact dropdown" id="resPerPage" onchange="updateResPerPage(this.value)">
-										<option value="10">10</option>
-										<option value="25">25</option>
-										<option value="50">50</option>
-										<option value="100">100</option>
-										<option value="500">500</option>
-										<option value="All">All</option>
-									</select>
-									</div>
-									<div style="transform: translateY(17%);" class="column" id="pageNum">Showing page 0 of 0</div>
+                                    <div class="column middle aligned content">
+                                        <label style="margin-right: 5px" for="resPerPage">Results per
+                                            page:</label><select
+                                            class="ui compact dropdown" id="resPerPage"
+                                            onchange="updateResPerPage(this.value)">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="500">500</option>
+                                        <option value="All">All</option>
+                                    </select>
+                                    </div>
+                                    <div style="transform: translateY(17%);" class="column" id="pageNum">Showing page 0
+                                        of 0
+                                    </div>
 
 
-									<div class="column">
-										<div id="paginationMenu" class="ui right floated pagination menu ">
-											<a onclick="firstPage()" class="icon item">
-												<i class="angle double left icon"></i>
-											</a>
-											<a id="prevPageBtn" onclick="prevPage()" class="icon item">
-												<i class="angle left icon"></i>
-											</a>
-											<a onclick="nextPage()" class="icon item">
-												<i class="angle right icon"></i>
-											</a>
-											<a onclick="lastPage()" class="icon item">
-												<i class="angle double right icon"></i>
-											</a>
-										</div>
-									</div>
+                                    <div class="column">
+                                        <div id="paginationMenu" class="ui right floated pagination menu ">
+                                            <a onclick="firstPage()" class="icon item">
+                                                <i class="angle double left icon"></i>
+                                            </a>
+                                            <a id="prevPageBtn" onclick="prevPage()" class="icon item">
+                                                <i class="angle left icon"></i>
+                                            </a>
+                                            <a onclick="nextPage()" class="icon item">
+                                                <i class="angle right icon"></i>
+                                            </a>
+                                            <a onclick="lastPage()" class="icon item">
+                                                <i class="angle double right icon"></i>
+                                            </a>
+                                        </div>
+                                    </div>
 
-								</div>
+                                </div>
 
-							</th>
+                            </th>
 
-                </tr>
-                </tfoot>
-            </table>
-			</div>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
             <div id="chartTab" class="ui bottom segment tab">
             </div>
             <div id="statTab" class="ui bottom tab basic segment">
-            <ul id="slide" class="bxslider">
-              </ul>
+                <ul id="slide" class="bxslider">
+                </ul>
             </div>
-
-            <a href="" id="downloadCSVLink"><button id="csvButton" class="ui hidden bottom attached fluid basic primary labelled icon button">
-            <i class="Download icon"></i>
-            Download CSV</button></a>
-
-        </div>
-			<!-- Modal -->
-            <div class="ui small basic modal" id="filterModal">
-                <div class="content">
-                    <form class="ui large equal width inverted form filterForm">
-                        <div class="fields">
-                            <div class="field">
-                                <!-- <label>Number of Species</label> -->
-                                <input id="numSpecies" type="number" name="num-species" placeholder="Number of species" class="filterField">
-                            </div>
-                            <div class="field">
-                                <!-- <label>Number of classifications</label> -->
-                                <input id="numClassifications" type="number" name="num-classifications"
-                                       placeholder="Number of Classifications" class="filterField">
-                            </div>
-                        </div>
-                        <div class="fields">
-                            <div class="field">
-                                <!-- <label>Minimum number of classifications</label> -->
-                                <input id="minNumClassifications" type="number" name="min-num-classifications"
-                                       placeholder="Minimum number of Classifications" class="filterField">
-                            </div>
-                            <div class="field">
-                                <!-- <label>Maximim number of classifications</label> -->
-                                <input id="maxNumClassifications" type="number" name="max-num-classifications"
-                                       placeholder="Maximum number of Classifications" class="filterField">
-                            </div>
-                        </div>
-                        <div class="fields">
-                            <div class="field">
-                                <!-- <label>Include user</label> -->
-                                <input id="includeUser" type="number" name="include-user" placeholder="Include user" class="filterField">
-                            </div>
-                            <div class="field">
-                                <!-- <label>Include user</label> -->
-                                <input id="excludeUser" type="number" name="exclude-user" placeholder="Exclude user" class="filterField">
-                            </div>
-                        </div>
-                        <div class="fields">
-                            <div class="field">
-                                <div class="ui checkbox">
-                                    <input id="humanCheck" type="checkbox" tabindex="0" class="filterCheck hidden">
-                                    <label>Contains human</label>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="ui checkbox">
-                                    <input id="flaggedCheck" type="checkbox" tabindex="0" class="filterCheck hidden">
-                                    <label>Flagged</label>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="ui checkbox">
-                                    <input id="scientistCheck" type="checkbox" tabindex="0" class="filterCheck hidden" checked="unchecked">
-                                    <label>Apply to scientist dataset</label>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="ui large fluid inverted green button" type="submit">Save</button>
-                    </form>
+            <div id="statisticsTab" class="ui bottom tab segment">
+                <div class="ui four statistics">
+                    <div class="statistic">
+                        <div id="classificationsStat" class="value"></div>
+                        <div class="label"> Classifications</div>
+                    </div>
+                    <div class="statistic">
+                        <div id="speciesStat" class="text value"> ELEVEN <br> DIFERENT</div>
+                        <div class="label">Species</div>
+                    </div>
+                    <div class="statistic">
+                        <div class="value"><i class="tree icon"></i> 6</div>
+                        <div id="habitatStat" class="label">Habitats</div>
+                    </div>
+                    <div class="statistic">
+                        <div class="value"> 12</div>
+                        <div id="siteStat" class="label">Sites</div>
+                    </div>
                 </div>
             </div>
-		<!--Recent queries-->
+
+            <a href="" id="downloadCSVLink">
+                <button id="csvButton" class="ui hidden bottom attached fluid basic primary labelled icon button">
+                    <i class="Download icon"></i>
+                    Download CSV
+                </button>
+            </a>
+
+        </div>
+        <!-- Modal -->
+        <div class="ui small basic modal" id="filterModal">
+            <div class="content">
+                <form class="ui large equal width inverted form filterForm">
+                    <div class="fields">
+                        <div class="field">
+                            <!-- <label>Number of Species</label> -->
+                            <input id="numSpecies" type="number" name="num-species" placeholder="Number of species"
+                                   class="filterField">
+                        </div>
+                        <div class="field">
+                            <!-- <label>Number of classifications</label> -->
+                            <input id="numClassifications" type="number" name="num-classifications"
+                                   placeholder="Number of Classifications" class="filterField">
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <div class="field">
+                            <!-- <label>Minimum number of classifications</label> -->
+                            <input id="minNumClassifications" type="number" name="min-num-classifications"
+                                   placeholder="Minimum number of Classifications" class="filterField">
+                        </div>
+                        <div class="field">
+                            <!-- <label>Maximim number of classifications</label> -->
+                            <input id="maxNumClassifications" type="number" name="max-num-classifications"
+                                   placeholder="Maximum number of Classifications" class="filterField">
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <div class="field">
+                            <!-- <label>Include user</label> -->
+                            <input id="includeUser" type="number" name="include-user" placeholder="Include user"
+                                   class="filterField">
+                        </div>
+                        <div class="field">
+                            <!-- <label>Include user</label> -->
+                            <input id="excludeUser" type="number" name="exclude-user" placeholder="Exclude user"
+                                   class="filterField">
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input id="humanCheck" type="checkbox" tabindex="0" class="filterCheck hidden">
+                                <label>Contains human</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input id="flaggedCheck" type="checkbox" tabindex="0" class="filterCheck hidden">
+                                <label>Flagged</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input id="scientistCheck" type="checkbox" tabindex="0" class="filterCheck hidden"
+                                       checked="unchecked">
+                                <label>Apply to scientist dataset</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="ui large fluid inverted green button" type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+        <!--Recent queries-->
         <div class="three wide column">
             <div class="ui container" style="top: 20%; position: static; margin-top: 4%; width: auto;">
                 <div class="ui red dividing header">
@@ -300,15 +365,15 @@
 
             </div>
         </div>
-	</div>
+    </div>
 </div>
 
-    <!-- Index.js -->
-    <script src="js/index.js" type="text/javascript"></script>
+<!-- Index.js -->
+<script src="js/index.js" type="text/javascript"></script>
 
-	<!--Lightbox (used for viewing images, must be at bottom of this page to work)-->
-    <link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
-    <script src="lib/lightbox/js/lightbox.js"></script>
+<!--Lightbox (used for viewing images, must be at bottom of this page to work)-->
+<link href="lib/lightbox/css/lightbox.css" rel="stylesheet">
+<script src="lib/lightbox/js/lightbox.js"></script>
 </body>
 </html>
 

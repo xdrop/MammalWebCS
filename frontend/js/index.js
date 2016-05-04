@@ -536,7 +536,7 @@ $("#moreOptions").click(function () {
     $('.ui.modal')
         .modal('show')
     ;
-})
+});
 
 //APPLY THE FILTER (2)
 function applyFilter(customFilter) //If the filter button is pressed
@@ -641,11 +641,23 @@ $(".tabMenu").click(function(event) {
     } else if ($(this).attr('id') == "statMenu"){
         slideshow();
         $("#statTab").addClass('active');
+    } else if ($(this).attr('id') == "Statistics"){
+        $("#Statistics").addClass('active');
     }
 });
 
+
+function addStatistics() {
+    $.getJSON('../backend/src/api/internal/list.php?item=queries', function (data) {
+        $("#speciesStat").val(data.speciesCount);
+        $("#habitatStat").val(data.habitatCount);
+        $("#classificationsStat").val(data.classificationsCount);
+        $("#siteStat").val(data.siteCount);
+    });
+}
+
 function getRecentQueries() {
-    $.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function (data) {
+    $.getJSON("../backend/src/api/internal/list.php?item=queries", function (data) {
         var resQueries = $("#recentQueries");
 		resQueries.empty();
         var total = data.length;
@@ -796,6 +808,7 @@ $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
 $(document).ready(function () {
     applyFilter();
     getRecentQueries();
+    addStatistics();
 
     $('.ui.checkbox').checkbox(); //Initialise checkbox
 
@@ -809,10 +822,10 @@ $(document).ready(function () {
     $(".filterOpt").dropdown({
         action: function (text, value) {
             //When an option from the dropdown is chosen
-            var chosenDropdown = $(this).parent().parent().get(0).id //The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
+            var chosenDropdown = $(this).parent().parent().get(0).id ;//The dropdown that has been chosen. Got by looking through parents of the item chosen from the dropdown
             var filterType = info[chosenDropdown][0] + "=";
             var labelName = info[chosenDropdown][1];
-            $masterDrop.dropdown("add value", filterType + value)//, labelName + ": " + text); //Add the value
+            $masterDrop.dropdown("add value", filterType + value); //, labelName + ": " + text); //Add the value
             if (chosenDropdown == "habitatDrop") //Only show the first word of the habitat
             {
                 $masterDrop.dropdown("add label", filterType + value, labelName + ": " + text.substr(0, text.indexOf(' ')));
