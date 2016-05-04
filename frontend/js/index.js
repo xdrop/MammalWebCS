@@ -75,6 +75,7 @@ function slideshow(){
     });
     console.log(slider);
     slider.reloadSlider();
+    slider.redrawSlider();
 }
 
 function dashboard(id, fData){
