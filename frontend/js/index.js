@@ -498,6 +498,12 @@ function updatePaginationMenu(menu){
             $("#prevPageBtn").after(pageLink);
         }
     }
+    var    slider = $('.bxslider').bxSlider(
+        {
+            autoControls: true,
+            auto: true,
+            captions: true
+        });
 }
 
 //POPULATE THE PAGE CHANGE DROPDOWN WITH THE POSSIBLE PAGE NUMBERS
