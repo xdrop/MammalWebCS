@@ -641,6 +641,7 @@ function getRecentQueries() {
     $.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function (data) {
         var resQueries = $("#recentQueries");
         var total = data.length;
+        resQueries.empty();
         $.each(data, function (index, value) {
             var text = "Query #" + value.id + " - " + value.time;
             var $elem = $('<a class="item">' + text + '</a>');
@@ -786,7 +787,6 @@ $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
 
 $(document).ready(function () {
     applyFilter();
-    getRecentQueries();
 
     $('.ui.checkbox').checkbox(); //Initialise checkbox
 
