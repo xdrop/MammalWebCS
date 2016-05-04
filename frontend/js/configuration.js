@@ -69,15 +69,6 @@ function updateProgress(){
     });
 }
 
-// To reclassify data:
-// Get -> Set new settings
-// Rerun classify with new settings
-/*$("#reclassify").click(function() {
-    getFields(function(json) {
-        setSettings(json);
-    });
-});*/
-
 $("#run").click(function(){ // To reclassify data:
 	getFields(function(json) { // Get -> Set new settings
         setSettings(json); // Rerun classify with new settings
@@ -95,7 +86,7 @@ $("#run").click(function(){ // To reclassify data:
     });
     $("#run").addClass("disabled");
     $("#progress").show();
-    myInterval = setInterval(updateProgress, 4000);
+    myInterval = setInterval(updateProgress, 1000);
 });
 
 $("#scientistData").checkbox({onChange: function(){
