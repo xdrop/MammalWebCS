@@ -642,7 +642,7 @@ $(".tabMenu").click(function(event) {
         slideshow();
         $("#statTab").addClass('active');
     } else if ($(this).attr('id') == "Statistics"){
-        $("#Statistics").addClass('active');
+        $("#statisticsTab").addClass('active');
     }
 });
 
