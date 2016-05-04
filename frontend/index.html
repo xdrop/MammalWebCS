@@ -21,8 +21,11 @@
 
     <!-- bxSlider Javascript file -->
     <script src="slideshow/js/jquery.bxslider.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slidesjs/3.0/jquery.slides.min.js"></script>
     <!-- bxSlider CSS file -->
     <link href="slideshow/lib/jquery.bxslider.css" rel="stylesheet" />
+
+
 
     <style type="text/css">
         .ui.button-bold {
@@ -35,6 +38,10 @@
 
         .pageChange {
             cursor: hand;
+        }
+
+        #slides {
+          display:none;
         }
 
         path {  stroke: #fff; }
@@ -215,8 +222,7 @@
             <div id="chartTab" class="ui bottom segment tab">
             </div>
             <div id="statTab" class="ui bottom tab basic segment">
-            <ul id="slide" class="bxslider">
-              </ul>
+                
             </div>
 
             <a href="" id="downloadCSVLink"><button id="csvButton" class="ui hidden bottom attached fluid basic primary labelled icon button">
