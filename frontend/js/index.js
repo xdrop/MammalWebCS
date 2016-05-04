@@ -73,7 +73,7 @@ function slideshow(){
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
     });
-    slider.reloadSlider();
+    $('#slide').reloadSlider();
 }
 
 function dashboard(id, fData){
