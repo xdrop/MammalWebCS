@@ -16,7 +16,7 @@ var maxNumClassifications = 0;
 var numClassifications = 0;
 var taken_start = "1970-01-01 00:00:00"; //Must have both dates/time so these are the default values
 var taken_end = "2100-01-01 00:00:00";
-var scientist_dataset = true;
+var scientist_dataset = false;
 
 //RESULTS AND TABLE VARIABLES
 var filterResults = []; //Holds the json of the most recent filter results
@@ -565,6 +565,7 @@ function applyFilter(customFilter) //If the filter button is pressed
             //$("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json);
             document.getElementById("csvButton").disabled = false;
             updatePaginationMenu($paginationMenu);
+			getRecentQueries();
         },
         error: function () {
             //alert("It does not work...");
@@ -594,10 +595,12 @@ $(".tabMenu").click(function(event) {
 function getRecentQueries() {
     $.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function (data) {
         var resQueries = $("#recentQueries");
+		resQueries.empty();
         var total = data.length;
         $.each(data, function (index, value) {
-            var text = "Query #" + value.id + " - " + value.time;
-            var $elem = $('<a class="item">' + text + '</a>');
+            var atext = "Query #" + value.id + " - " + value.time;
+            var $elem = $('<a class="item">' + atext + '</a>');
+			//console.log($elem);
             // On click get the json of the filter and run the filter ajax
             $elem.click(function () {
                 applyFilter(JSON.parse(value.json));
