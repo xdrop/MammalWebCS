@@ -70,15 +70,22 @@ function isNumeric(n) {
 }
 
 function slideshow(){
-    $("#slides").empty();
+    $("#statTab").empty();
+    $("#statTab").append('<ul id="slide" class="bxslider"></ul>');
     $("#resultsTable:eq(0) tr").find('a').each(function() {
-        $('#slides').append("<img src=\'" + $(this).attr('href') +"\' />");
+        $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
     });
-    var slides = $('#slides').slidesjs(
+    slider = $('.bxslider').bxSlider(
         {
-            width: 940,
-            height: 528
+            autoControls: true,
+            auto: true,
+            captions: true
         });
+    $("#slide").css('height','447px');
+    $(".bx-viewport").css('height','447px');
+    $('.bx-wrapper').find('li').each(function() {
+        $(this).css('width','795px');
+    });
 }
 
 function dashboard(id, fData){
@@ -610,7 +617,6 @@ function applyFilter(customFilter) //If the filter button is pressed
             $("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json.id);
             document.getElementById("csvButton").disabled = false;
             updatePaginationMenu($paginationMenu);
-            getRecentQueries();
         },
         error: function () {
             //alert("It does not work...");
@@ -641,7 +647,6 @@ function getRecentQueries() {
     $.getJSON("http://164.132.197.56/mammalwebcs/backend/src/api/internal/list.php?item=queries", function (data) {
         var resQueries = $("#recentQueries");
         var total = data.length;
-        resQueries.empty();
         $.each(data, function (index, value) {
             var text = "Query #" + value.id + " - " + value.time;
             var $elem = $('<a class="item">' + text + '</a>');
@@ -787,6 +792,7 @@ $('#dateTo').on('apply.daterangepicker', function (ev, picker) {
 
 $(document).ready(function () {
     applyFilter();
+    getRecentQueries();
 
     $('.ui.checkbox').checkbox(); //Initialise checkbox
 
