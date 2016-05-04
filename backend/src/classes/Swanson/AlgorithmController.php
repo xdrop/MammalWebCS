@@ -19,7 +19,7 @@ class AlgorithmController
         if ($to < 0) {
             $to = $this->getMaxImageId();
         }
-        $statusQuery->with(["started" => true, "total" => $to])->update();
+        $statusQuery->with(["started" => true,'progress' => 0, "total" => $to])->update();
         while ($id <= $to) {
             if ($id % 500 == 0) {
                 $statusQuery->with(["started" => true, "progress" => $id])->update();
@@ -29,7 +29,7 @@ class AlgorithmController
         }
         $statusQuery->with(["started" => false, "progress" => $to])->update();
     }
-    
+
     /**
      * @param $imageId integer Run the algorithm on a single image
      * @param boolean $store Store the result
