@@ -3,7 +3,7 @@ function dashboard(id, fData){
 
     function segColor(c){ return {"Flass Vale":"#e31f1f", "Rainton Meadows wildlife garden":"#e74242",
         "Red Burn Meadow":"#ec6464", "River-cam":"#f08787", "SBBS Little High Wood":"#f4aaaa",
-        "Ustinov Woods":"#f9cdcd", "near Josephine Butler allotment":"#fdf0f0"}[c]; }
+        "Ustinov woods":"#f9cdcd", "near Josephine Butler allotment":"#fdf0f0"}[c]; }
 
     // compute total for each species.
     fData.forEach(function(d){
