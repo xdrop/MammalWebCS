@@ -676,7 +676,7 @@ function numToLetter(num){
 function addStatistics() {
 
     $.getJSON('../backend/src/api/internal/list.php?item=stats', function (data) {
-        $("#speciesStat").text(numToLetter(parseInt(data['speciesCount'])) + " DIFFERENT");
+        $("#speciesStat").html(numToLetter(parseInt(data['speciesCount'])) +'<br>' + " DIFFERENT");
         $("#habitatStat").text(data['habitatCount']);
         $("#classificationsStat").text(data['classificationsCount']);
         $("#siteStat").text(data['siteCount']);
