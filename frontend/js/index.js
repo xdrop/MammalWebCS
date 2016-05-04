@@ -74,9 +74,8 @@ function slideshow(){
     $("#resultsTable:eq(0) tr").find('a').each(function() {
         $('#slide').append("<li><img src=\'" + $(this).attr('href') +"\' /></li>");
     });
-    console.log(slider);
+    $("#bx-viewport").css('height','auto');
     slider.reloadSlider();
-    slider.redrawSlider();
 }
 
 function dashboard(id, fData){
