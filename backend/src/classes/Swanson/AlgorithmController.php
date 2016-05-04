@@ -50,7 +50,8 @@ class AlgorithmController
             $to = $this->getMaxImageId();
         }
         $classifications = $classQuery->with(['from' => $from, 'to' => $to])->fetch()->asArray();
-        $statusQuery->with(["started" => true,'progress' => 0, "total" => $to])->update();
+        $total = count($classifications);
+        $statusQuery->with(["started" => true,'progress' => 0, "total" => $total])->update();
 
         foreach($classifications as $class){
             if ($id % 500 == 0) {
