@@ -216,8 +216,9 @@ function dashboard(id, fData){
     }
 
     // calculate total frequency by segment for all species.
-    var tF = ['River-cam','near Josephine Butler allotment','Ustinov woods','SBBS Little High Wood','Flass Vale',
-        'Red Burn Meadow','Rainton Meadows wildlife garden'].map(function(d){
+    var tF = ['Flass Vale','Rainton Meadows wildlife garden','Red Burn Meadow', 'River-cam',
+        'SBBS Little High Wood','Ustinov woods','near Josephine Butler allotment'
+        ].map(function(d){
         return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))};
     });
 
