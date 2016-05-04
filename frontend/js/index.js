@@ -677,8 +677,8 @@ function addStatistics() {
 
     $.getJSON('../backend/src/api/internal/list.php?item=stats', function (data) {
         $("#speciesStat").html(numToLetter(parseInt(data['speciesCount']))
-            +' <i class="tree icon"></i> <br>' + " DIFFERENT");
-        $("#habitatStat").text(data['habitatCount']);
+            +' <br>' + " DIFFERENT");
+        $("#habitatStat").html('<i class="tree icon"></i>' + data['habitatCount']);
         $("#classificationsStat").text(data['classificationsCount']);
         $("#siteStat").text(data['siteCount']);
     });
