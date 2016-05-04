@@ -48,7 +48,9 @@ function getFields(_callback) {
     json.unreasonable_number_of_species_in_image = $("input[name='unreasonable'").val();
     json.evenness_threshold_species = $("input[name='evenness_species'").val();
     json.evenness_threshold_count = $("input[name='evenness_count'").val();
-    _callback(json);
+    id_from = $("input[name='id_from'").val();
+    id_to = $("input[name='id_to'").val();
+    _callback(json, id_from, id_to);
 }
 
 function updateProgress(){
@@ -73,38 +75,45 @@ function updateProgress(){
             $("#progress").progress({
                 percent: percentage
             })
-            } 
+            }
 
         }
     });
 }
 
 $("#run").click(function(){ // To reclassify data:
-	getFields(function(json) { // Get -> Set new settings
+    var fromID = 0;
+    var toID = 0;
+
+	getFields(function(json, from_id, to_id) { // Get -> Set new settings
         setSettings(json); // Rerun classify with new settings
+        fromID = from_id;
+        toID = to_id;
     });
     $.ajax({
         url:     "../backend/src/api/internal/algorithm.php",
         type:    "POST",
         data:     {
             "action": "run",
+            "from_id" : fromID,
+            "to_id" : toID,
             "scientist_dataset": scientistDataset
         },
         success: function(){
         	$("#run").addClass("disabled");
     		$("#progress").show();
-    		myInterval = setInterval(updateProgress, 1000);	
+    		myInterval = setInterval(updateProgress, 1000);
         },
         error:   function () {
             alert("Failed to set settings");
         }
     });
-    
+
 });
 
 $("#scientistData").checkbox({onChange: function(){
 		scientistDataset = !scientistDataset;
-	}	
+	}
 });
 
 // Get the current settings and populate the HTML form
