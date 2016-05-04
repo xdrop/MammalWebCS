@@ -648,7 +648,7 @@ $(".tabMenu").click(function(event) {
 
 
 function addStatistics() {
-    $.getJSON('../backend/src/api/internal/list.php?item=queries', function (data) {
+    $.getJSON('../backend/src/api/internal/list.php?item=stats', function (data) {
         $("#speciesStat").val(data.speciesCount);
         $("#habitatStat").val(data.habitatCount);
         $("#classificationsStat").val(data.classificationsCount);
