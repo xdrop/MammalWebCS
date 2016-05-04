@@ -610,6 +610,7 @@ function applyFilter(customFilter) //If the filter button is pressed
             $("#downloadCSVLink").attr("href", "../backend/src/api/internal/csv.php?id=" + json.id);
             document.getElementById("csvButton").disabled = false;
             updatePaginationMenu($paginationMenu);
+            getRecentQueries();
         },
         error: function () {
             //alert("It does not work...");
