@@ -1,9 +1,9 @@
 function dashboard(id, fData){
     var barColor = '#c10c0c';
 
-    function segColor(c){ return {"River-cam":"#e31f1f", "near Josephine Butler allotment":"#e74242",
-        "Ustinov woods":"#ec6464", "SBBS Little High Wood":"#f08787", "Flass Vale":"#f4aaaa",
-        "Red Burn Meadow":"#f9cdcd", "Rainton Meadows wildlife garden":"#fdf0f0"}[c]; }
+    function segColor(c){ return {"Flass Vale":"#e31f1f", "Rainton Meadows wildlife garden":"#e74242",
+        "Red Burn Meadow":"#ec6464", "River-cam":"#f08787", "SBBS Little High Wood":"#f4aaaa",
+        "Ustinov Woods":"#f9cdcd", "near Josephine Butler allotment":"#fdf0f0"}[c]; }
 
     // compute total for each species.
     fData.forEach(function(d){
