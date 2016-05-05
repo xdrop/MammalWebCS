@@ -50,6 +50,10 @@ function getFields(_callback) {
     json.evenness_threshold_count = $("input[name='evenness_count'").val();
     id_from = $("input[name='id_from'").val();
     id_to = $("input[name='id_to'").val();
+    if(id_to == 0){
+    	// -1 means run until end
+    	id_to = -1;
+    }
     _callback(json, id_from, id_to);
 }
 
@@ -58,26 +62,23 @@ function updateProgress(){
         url:     "../backend/src/api/internal/algorithm.php?action=status",
         type:    "GET",
         success: function(json){
-            if(json.started || started){
             var progress = parseInt(json.progress);
             var total = parseInt(json.total);
             if (progress == total) {
                 clearInterval(myInterval);
                 $("#run").removeClass("disabled");
-                started = false;
-
+            } else{
+            	$("#progress").show();
+            	$("#run").addClass("disabled");
             }
             var percentage = Math.floor((progress / total) * 100);
-            if (percentage > 0){
-            	started = true;
-            }
             $("#progress").progress({
                 percent: percentage
             })
             }
 
         }
-    });
+    );
 }
 
 $("#run").click(function(){ // To reclassify data:
