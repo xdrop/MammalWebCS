@@ -65,7 +65,7 @@ function updateProgress(){
             var progress = parseInt(json.progress);
             var total = parseInt(json.total);
             if (progress == total) {
-                $("#progress").hide();
+                clearInterval(myInterval);
                 $("#run").removeClass("disabled");
             } else{
             	$("#progress").show();
