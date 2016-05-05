@@ -91,6 +91,11 @@ class MammalClassifier
         return $this;
     }
 
+    public function onDataSetID(&$dataset,$id){
+        $this->imageId = $id;
+        return $this->onDataSet($dataset);
+    }
+
     public function on($imageId)
     {
         $this->imageId = $imageId;

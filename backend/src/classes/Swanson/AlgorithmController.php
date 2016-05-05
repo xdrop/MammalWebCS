@@ -45,6 +45,7 @@ class AlgorithmController
         $classifier = new MammalClassifier($settings,$scientistDataset);
         $classQuery = new BatchClassificationQuery();
 
+
         $id = $from;
         if ($to < 0) {
             $to = $this->getMaxImageId();
@@ -53,11 +54,11 @@ class AlgorithmController
         $total = count($classifications);
         $statusQuery->with(["started" => true,'progress' => 0, "total" => $total])->update();
 
-        foreach($classifications as $class){
+        foreach($classifications as $key => $class){
             if ($id % 500 == 0) {
                 $statusQuery->with(["started" => true, "progress" => $id])->update();
             }
-            $this->runOnClassification($id, true, $classifier,$class);
+            $this->runOnClassification($key, true, $classifier,$class);
             $id++;
         }
 
@@ -103,9 +104,9 @@ class AlgorithmController
         }
         try {
             if ($store) {
-                return $classifier->onDataSet($classification)->classify()->store()->getResult();
+                return $classifier->onDataSetID($classification, $imageId)->classify()->store()->getResult();
             } else {
-                return $classifier->onDataSet($classification)->classify()->getResult();
+                return $classifier->onDataSetID($classification, $imageId)->classify()->getResult();
             }
         } catch (Exception $e) {
             return "No classifications.";
